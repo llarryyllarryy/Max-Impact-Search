@@ -69,14 +69,12 @@ PopupBlocker will block it, add an exception please
                     <input type=text id="reg"> 
 <script>
  function 			 open4() {
+			var locs = ['site.com','site2.com','site3.com'] 
 
+			for (let i = 0; i < locs.length; i++) {
+				window.open(locs[i])}
 
-var x=document.getElementById('reg').value;
-			 window.open("https://www.ecosia.org/search?q="+x);
-window.open("https://trueheart.com/results/all?q="+x);
-window.open("https://oceanhero.today/web?q="+x);
-window.open("https://elliotforwater.com/search?type=web&query="+x);
-			 }</script>
+	 }</script>
 
 
 <div class="white-button first-button scroll-to-section">
