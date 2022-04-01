@@ -1,2 +1,2 @@
-Opens 5 different impact search engines at once:
-ecosia, oceanhero, trueheart, youcare and elliotforwater
+Opens 4 different impact search engines at once:
+ecosia, oceanhero, youcare and elliotforwater
