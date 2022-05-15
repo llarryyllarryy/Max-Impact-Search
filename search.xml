@@ -5,5 +5,5 @@
 <Url type="text/html" template="https://llarryyllarryy.github.io/Max-Impact-Search/">
 <Param name="search" value="{searchTerms}"/>
 </Url>
-<moz:SearchForm>https://llarryyllarryy.github.io/Max-Impact-Search/?</moz:SearchForm>
+<moz:SearchForm>https://llarryyllarryy.github.io/Max-Impact-Search/</moz:SearchForm>
 </OpenSearchDescription>
