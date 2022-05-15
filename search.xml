@@ -1,6 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-    <ShortName>Max Impact Search</ShortName>
-    <Description>Search web while supporting people and planet</Description>
-    <Url type="text/html" template="https://llarryyllarryy.github.io/Max-Impact-Search/?search={searchTerms}"/>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Max Impact Search</ShortName>
+<Description>Search web while supporting people and planet</Description>
+<InputEncoding>[UTF-8]</InputEncoding>
+<Url type="text/html" template="https://llarryyllarryy.github.io/Max-Impact-Search/">
+<Param name="search" value="{searchTerms}"/>
+</Url>
+<moz:SearchForm>https://llarryyllarryy.github.io/Max-Impact-Search/?</moz:SearchForm>
 </OpenSearchDescription>
