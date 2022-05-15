@@ -20,11 +20,8 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <!--
-
 TemplateMo 570 Chain App Dev
-
 https://templatemo.com/tm-570-chain-app-dev
-
 -->
 
     <!-- Additional CSS Files -->
@@ -32,6 +29,7 @@ https://templatemo.com/tm-570-chain-app-dev
     <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
     <link rel="stylesheet" href="assets/css/animated.css">
     <link rel="stylesheet" href="assets/css/owl.css">
+<link rel="search" type="application/opensearchdescription+xml" href="https://llarryyllarryy.github.io/Max-Impact-Search/search.xml" title="Max Impact Search">
 
   </head>
 
@@ -82,7 +80,10 @@ If you want to maximize your Impact further, add an popupblocker exception for o
 
                     <div id="header"><h2>Search with max impact</h2></div>
 
-
+<div id="text">
+  Search web while supporting people and planet<br />
+Its meant to maximize donations
+</div>
 
                   <div class="col-lg-12">
 
@@ -93,13 +94,12 @@ If you want to maximize your Impact further, add an popupblocker exception for o
                   <a id="submit" onclick="javascript:open4()">Preload</a></form>
 <br />
 <br />
+
                     </div>
 
                   </div>
  
 <div id="text">
-  Search web while supporting people and planet<br />
-Its meant to maximize donations
 <br /><a href="https://github.com/llarryyllarryy/Max-Impact-Search/">Worried about security? Check our code</a>
 </div>
 
@@ -185,10 +185,16 @@ open4();
     }
 
 
-if (get(search) == null){ } 
+if (get("search") == null){ } 
 else {
-document.getElementById("reg").value = get(search);
+document.getElementById("reg").value = get("search");
 open4();
+}
+
+
+
+
+
 }
 
 
