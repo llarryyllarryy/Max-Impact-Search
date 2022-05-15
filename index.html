@@ -94,7 +94,10 @@ Its meant to maximize donations
                   <a id="submit" onclick="javascript:open4()">Preload</a></form>
 <br />
 <br />
-
+<hr><hr>
+Direct Access to search results? <br />Use this link as custom search engine<br />
+<code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
+<hr><hr>
                     </div>
 
                   </div>
@@ -185,22 +188,22 @@ open4();
     }
 
 
+
+
+
+
+
+
+}
 if (get("search") == null){ } 
 else {
 document.getElementById("reg").value = get("search");
-open4();
-}
-
-
-
-
+setTimeout(function(){ open4(); }, 2000);
 
 }
-
 
 
 </script>
-
 
 
   
