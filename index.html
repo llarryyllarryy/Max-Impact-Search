@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+        <script type="text/javascript"  src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
     <title>Max Impact Search - Change world for the better</title>
 
@@ -61,53 +62,143 @@ https://templatemo.com/tm-570-chain-app-dev
               <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
                 <div class="row">
                   <div class="col-lg-12">
-                    <h2>Search with max impact</h2>  
-  Search web while supporting people and planet<br />
-Its meant to maximize donations and you should just use one of the opening windows once they are loaded<br />
-PopupBlocker will block it, add an exception please - may not work in firefox
-<br /><a href="https://github.com/llarryyllarryy/Max-Impact-Search/">Worried about security? Check our code</a>
-
-              </div>
-  
-                  <div class="col-lg-12">
-<form id="submit" onsubmit="javascript:open4()">
-                    <input type=text id="reg"> 
-<script>
- function 			 open4() {
 
 
-var x=document.getElementById('reg').value;
-			 window.open("https://www.ecosia.org/search?q="+x);
-window.open("https://youcare.world/all?q="+x);
-window.open("https://oceanhero.today/web?q="+x);
-window.open("https://elliotforwater.com/search?type=web&query="+x);
-window.open("https://rapusia.org/?q="+x);
-window.open("https://ekoru.org/?q="+x);
-window.open("https://search.givewater.com/serp?q="+x);
-window.open("https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+x);
-	 
-	 
-
-
-
-
-			 }</script>
-
-
+<div id="submit2" style="display:none;">
+<hr><hr>
 <div class="white-button first-button scroll-to-section">
-                  <a onclick="javascript:open4()">Submit</a></form>
+                  <a onclick="javascript:open5()">Proceed to Search</a>
+<hr><hr>
 <br />
 <br />
                     </div>
+</div>
+
+<div id="text2" style="display:none;"><h2><font color="red">Why not proceeding directly?</font></h2><br />
+Some Websites dont alow us to load them inside this page, they must be opened directly.
+If you want to maximize your Impact further, add an popupblocker exception for our site
+</div>
+
+
+                    <div id="header"><h2>Search with max impact</h2></div>
+
+
+
+                  <div class="col-lg-12">
+
+
+                    <input type=text id="reg" onkeypress="clickPress(event)"> 
+
+<div class="white-button first-button scroll-to-section" id="submit">
+                  <a id="submit" onclick="javascript:open4()">Preload</a></form>
+<br />
+<br />
+                    </div>
+
                   </div>
+ 
+<div id="text">
+  Search web while supporting people and planet<br />
+Its meant to maximize donations
+<br /><a href="https://github.com/llarryyllarryy/Max-Impact-Search/">Worried about security? Check our code</a>
+</div>
+
+
+              </div>
+
+
+
+<script>
+
+
+
+ function 			 open4() {
+
+document.getElementById("frames").style.display = "block";
+document.getElementById("image").style.display = "none";
+document.getElementById("text").style.display = "none";
+document.getElementById("submit").style.display = "none";
+document.getElementById("reg").style.display = "none";
+document.getElementById("header").style.display = "none";
+document.getElementById("submit2").style.display = "block";
+document.getElementById("text2").style.display = "block";
+
+	 var new_url = $("#reg").val();
+
+                    // Checks that the user typed "http://" or not
+                    if(new_url.substr(0,7)!="http://")
+                        new_url1 = "https://ekoru.org/?q="+new_url;
+
+                    $("#main_frame").attr("src", new_url1);
+
+                        new_url3 = "https://youcare.world/all?q="+new_url;
+
+                    $("#main_frame3").attr("src", new_url3);
+
+                        new_url4 = "https://elliotforwater.com/search?type=web&query="+new_url;
+
+                    $("#main_frame4").attr("src", new_url4);
+
+                        new_url5 = "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+new_url;
+
+                    $("#main_frame5").attr("src", new_url5);
+
+                        new_url6 = "https://search.givewater.com/serp?q="+new_url;
+
+                    $("#main_frame6").attr("src", new_url6);
+
+			 }
+
+function open5() {
+
+document.getElementById("frames").style.display = "none";
+document.getElementById("image").style.display = "block";
+document.getElementById("text").style.display = "block";
+document.getElementById("submit").style.display = "block";
+document.getElementById("reg").style.display = "block";
+document.getElementById("header").style.display = "block";
+document.getElementById("submit2").style.display = "none";
+document.getElementById("text2").style.display = "none";
+
+	 var x = $("#reg").val();
+window.open("https://www.ecosia.org/search?q="+x);
+window.open("https://oceanhero.today/web?q="+x);
+window.open("https://rapusia.org/?q="+x);
+}
+
+function clickPress(event) {
+    if (event.keyCode == 13) {
+open4();
+    }
+
+}
+
+</script>
+
+
+
+  
+
+
                 </div>
               </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" id="image">
               <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
                 <img src="assets/images/slider-dec.png" alt="">
               </div>
-            </div></div></div></div>
+            </div>
+
+            <div class="col-lg-6" id="frames" style="display:none;">
+              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <iframe height="14%" width="100%" id="main_frame3" frameBorder="0" scrolling="no"></iframe>
+                <iframe height="8%" width="100%" id="main_frame4" frameBorder="0" scrolling="no"></iframe>
+                <iframe height="8%" width="100%" id="main_frame5" frameBorder="0" scrolling="no"></iframe>
+                <iframe height="10%" width="100%" id="main_frame6" frameBorder="0" scrolling="no"></iframe>
+                <iframe height="6%" width="100%" id="main_frame" frameBorder="0" scrolling="no"></iframe>
+</div></div>
+
+</div></div></div>
   
         <div class="col-lg-12">
           <div class="copyright-text">
