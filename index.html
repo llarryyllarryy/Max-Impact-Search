@@ -35,9 +35,9 @@ https://templatemo.com/tm-570-chain-app-dev
 
 <body>
 
-  <!-- ***** Preloader Start ***** -->
-  <div id="js-preloader" class="js-preloader">
-    <div class="preloader-inner">
+  <!-- ***** Pre readyer Start ***** -->
+  <div id="js-pre readyer" class="js-pre readyer">
+    <div class="pre readyer-inner">
       <span class="dot"></span>
       <div class="dots">
         <span></span>
@@ -46,7 +46,7 @@ https://templatemo.com/tm-570-chain-app-dev
       </div>
     </div>
   </div>
-  <!-- ***** Preloader End ***** -->
+  <!-- ***** Pre readyer End ***** -->
 
   
 <br /><br />
@@ -61,7 +61,15 @@ https://templatemo.com/tm-570-chain-app-dev
                 <div class="row">
                   <div class="col-lg-12">
 
-
+<div id="submitwait" style="display:none;">
+<hr><hr>
+<div class="white-button first-button scroll-to-section">
+<a><font color="grey"><div id="count">10</div></font></a>
+<hr><hr>
+<br />
+<br />
+                    </div>
+</div>
 <div id="submit2" style="display:none;">
 <hr><hr>
 <div class="white-button first-button scroll-to-section">
@@ -73,7 +81,7 @@ https://templatemo.com/tm-570-chain-app-dev
 </div>
 
 <div id="text2" style="display:none;"><h2><font color="red">Why not proceeding directly?</font></h2><br />
-Some Websites dont alow us to load them inside this page, they must be opened directly.
+Some Websites dont alow us to  ready them inside this page, they must be opened directly.
 If you want to maximize your Impact further, add an popupblocker exception for our site
 </div>
 
@@ -82,7 +90,7 @@ If you want to maximize your Impact further, add an popupblocker exception for o
 
 <div id="text">
   Search web while supporting people and planet<br />
-Step 1: Page loads sites in background that donate money for the good<br />Step 2: Display Search results
+Its meant to maximize donations
 </div>
 
                   <div class="col-lg-12">
@@ -91,10 +99,12 @@ Step 1: Page loads sites in background that donate money for the good<br />Step 
                     <input type=text id="reg" onkeypress="clickPress(event)"> 
 
 <div class="white-button first-button scroll-to-section" id="submit">
-                  <a id="submit" onclick="javascript:open4()" href="#submit2">Start Search</a></form>
+                  <a id="submit" onclick="javascript:open4()">Start Search</a></form>
+<br />
 <br />
 <hr><hr>
-<a href="#search">Find out how to add this search engine below</a> 
+Direct Access to search results? <br />Use this link as custom search engine<br />
+<code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
 <hr><hr>
                     </div>
 
@@ -110,16 +120,7 @@ Step 1: Page loads sites in background that donate money for the good<br />Step 
 
 
 <script>
-function get(parameterName) {
-    var result = null,
-        tmp = [];
-    var items = location.search.substr(1).split("&");
-    for (var index = 0; index < items.length; index++) {
-        tmp = items[index].split("=");
-        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
-    }
-    return result;
-}
+
 
 
 
@@ -132,34 +133,69 @@ document.getElementById("text").style.display = "none";
 document.getElementById("submit").style.display = "none";
 document.getElementById("reg").style.display = "none";
 document.getElementById("header").style.display = "none";
-document.getElementById("submit2").style.display = "block";
+document.getElementById("submitwait").style.display = "block";
 document.getElementById("text2").style.display = "block";
 
 	 var new_url = $("#reg").val();
+var new_url = encodeURIComponent(new_url);
 
                     // Checks that the user typed "http://" or not
                     if(new_url.substr(0,7)!="http://")
                         new_url1 = "https://ekoru.org/?q="+new_url;
 
                     $("#main_frame").attr("src", new_url1);
+    var frame = jQuery('main_frame').attr("src");
 
                         new_url3 = "https://youcare.world/all?q="+new_url;
 
                     $("#main_frame3").attr("src", new_url3);
+    var frame3 = jQuery('main_frame3').attr("src");
 
                         new_url4 = "https://elliotforwater.com/search?type=web&query="+new_url;
 
                     $("#main_frame4").attr("src", new_url4);
+     var frame4 = jQuery('main_frame4').attr("src");
 
                         new_url5 = "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+new_url;
 
-                    $("#main_frame5").attr("src", new_url5);
+                     $("#main_frame5").attr("src", new_url5);
+    var frame5 = jQuery('main_frame5').attr("src");
 
                         new_url6 = "https://search.givewater.com/serp?q="+new_url;
 
-                    $("#main_frame6").attr("src", new_url6);
+                     $("#main_frame6").attr("src", new_url6);
+    var frame6 = jQuery('main_frame6').attr("src");
+
+
+
 
 			 }
+
+
+$(document).ready(function() {
+
+
+    var obj = document.getElementById("count");
+    var current = parseInt(obj.innerHTML);
+
+    setInterval(function(){
+        current--;
+        // Update the contents of the element
+        obj.innerHTML = current;
+
+if(current == "0") {
+
+document.getElementById("submit2").style.display = "block";
+document.getElementById("submitwait").style.display = "none";
+
+}
+
+    },1000);
+
+
+
+
+});
 
 function open5() {
 
@@ -173,6 +209,7 @@ document.getElementById("submit2").style.display = "none";
 document.getElementById("text2").style.display = "none";
 
 	 var x = $("#reg").val();
+var x = encodeURIComponent(x);
 window.open("https://www.ecosia.org/search?q="+x);
 window.open("https://oceanhero.today/web?q="+x);
 window.open("https://rapusia.org/?q="+x);
@@ -201,6 +238,8 @@ setTimeout(function(){ open4(); }, 2000);
 }
 
 
+
+
 </script>
 
 
@@ -225,14 +264,6 @@ setTimeout(function(){ open4(); }, 2000);
                 <iframe width="100%" id="main_frame" frameBorder="0" scrolling="no"></iframe>
 </div></div>
 
-
-<hr><hr>
-<div id="search">
-Use this link as custom search engine<br />
-<code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
-</div>
-<hr><hr>
-
 </div></div></div>
   
         <div class="col-lg-12">
@@ -254,7 +285,7 @@ Use this link as custom search engine<br />
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
   <script src="assets/js/animation.js"></script>
-  <script src="assets/js/imagesloaded.js"></script>
+  <script src="assets/js/images readyed.js"></script>
   <script src="assets/js/popup.js"></script>
   <script src="assets/js/custom.js"></script>
 </body>
