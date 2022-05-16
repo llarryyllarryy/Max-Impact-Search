@@ -101,15 +101,15 @@ Step 1: Page loads sites in background that donate money for the good<br />Step 
                     <input type=text id="reg" onkeypress="clickPress(event)"> 
 
 <div class="white-button first-button scroll-to-section" id="submit">
-                  <a id="submit" onclick="javascript:open4()" href="#header">Start Search</a></form>
+                  <a id="submit" onclick="javascript:open4()" href="#header">Start Search</a>
 <hr>
-<br />
+
                     </div>
 
                   </div>
  
 <div id="text">
-<br /><a href="https://github.com/llarryyllarryy/Max-Impact-Search/"><font color="green">Worried about security? Check our code</font></a>
+<a href="https://github.com/llarryyllarryy/Max-Impact-Search/"><font color="green">Worried about security? Check our code</font></a>
 </div>
 
 
@@ -197,7 +197,7 @@ if(current == "0") {
 document.getElementById("submit2").style.display = "block";
 document.getElementById("submitwait").style.display = "none";
     clearInterval(int);
-obj.text = "4";
+obj.innerHTML = "4";
 }
 
     },1000);
@@ -225,6 +225,9 @@ document.getElementById("text2").style.display = "none";
 window.open("https://www.ecosia.org/search?q="+x);
 window.open("https://oceanhero.today/web?q="+x);
 window.open("https://rapusia.org/?q="+x);
+
+
+
 }
 
 
