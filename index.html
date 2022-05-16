@@ -102,15 +102,14 @@ Step 1: Page loads sites in background that donate money for the good<br />Step 
                   <a id="submit" onclick="javascript:open4()" href="#header">Start Search</a></form>
 <br />
 <br />
-<hr><hr>
-<a href="#search">Find out how to add this search engine below</a> 
-<hr><hr>
+<a href="#search"><font color="blue">Find out how to add this search engine below</font></a> 
+
                     </div>
 
                   </div>
  
 <div id="text">
-<br /><a href="https://github.com/llarryyllarryy/Max-Impact-Search/">Worried about security? Check our code</a>
+<br /><a href="https://github.com/llarryyllarryy/Max-Impact-Search/"><code>Worried about security? Check our code</code></a>
 </div>
 
 
@@ -158,37 +157,37 @@ document.getElementById("text2").style.display = "block";
 
 
                     // Checks that the user typed "http://" or not
-                    if(new_url.substr(0,7)!="http://")
+
                         new_url1 = "https://ekoru.org/?q="+new_url;
 
                     $("#main_frame").attr("src", new_url1);
-    var frame = jQuery('main_frame').attr("src");
+
 
                         new_url3 = "https://youcare.world/all?q="+new_url;
 
                     $("#main_frame3").attr("src", new_url3);
-    var frame3 = jQuery('main_frame3').attr("src");
+
 
                         new_url4 = "https://elliotforwater.com/search?type=web&query="+new_url;
 
                     $("#main_frame4").attr("src", new_url4);
-     var frame4 = jQuery('main_frame4').attr("src");
+
 
                         new_url5 = "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+new_url;
 
                      $("#main_frame5").attr("src", new_url5);
-    var frame5 = jQuery('main_frame5').attr("src");
+
 
                         new_url6 = "https://search.givewater.com/serp?q="+new_url;
 
                      $("#main_frame6").attr("src", new_url6);
-    var frame6 = jQuery('main_frame6').attr("src");
+
 
 
     var obj = document.getElementById("count");
     var current = parseInt(obj.innerHTML);
 
-    setInterval(function(){
+    var int = setInterval(function(){
         current--;
         // Update the contents of the element
         obj.innerHTML = current;
@@ -197,7 +196,7 @@ if(current == "0") {
 
 document.getElementById("submit2").style.display = "block";
 document.getElementById("submitwait").style.display = "none";
-
+    clearInterval(int);
 }
 
     },1000);
