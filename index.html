@@ -130,6 +130,12 @@ function get(parameterName) {
     return result;
 }
 
+	if (get("search") == null){ } 
+else {
+document.getElementById("reg").value = get("search");
+setTimeout(function(){ open4(); }, 2000);
+
+}
 
 
 
