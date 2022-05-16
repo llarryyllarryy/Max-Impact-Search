@@ -131,12 +131,13 @@ function get(parameterName) {
 }
 
 if (get("search").substr(0,1) == null){
-var encode = encodeURIComponent(get("search"));
-document.getElementById("reg").value = encode;
-setTimeout(function(){ open4(); }, 2000);
+
 
  } 
 else {
+var encode = encodeURIComponent(get("search"));
+document.getElementById("reg").value = encode;
+setTimeout(function(){ open4(); }, 2000);
 
 }
 
