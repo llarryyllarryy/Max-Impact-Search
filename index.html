@@ -49,7 +49,7 @@ https://templatemo.com/tm-570-chain-app-dev
   <!-- ***** Pre readyer End ***** -->
 
   
-<br />
+<br /><br />
     <div class="container" align="center">
       <div class="row">
         <div class="col-lg-12">
@@ -69,16 +69,19 @@ Step 1: Page loads sites in background that donate money for the good<br />Step 
 <div id="submitwait" style="display:none;">
 <hr><hr>
 <div class="white-button first-button scroll-to-section">
-<a><font color="grey"><div id="count">4</div></font></a>
+<a><font color="grey"><div id="count" style="color:white;">4</div></font></a>
 <hr><hr>
 <br />
 <br />
                     </div>
 </div>
+
+
+
 <div id="submit2" style="display:none;">
 <hr><hr>
 <div class="white-button first-button scroll-to-section">
-                  <a onclick="javascript:open5()">Proceed to Results</a>
+                  <a onclick="javascript:open5()" href="#header">Proceed to Results</a>
 <hr><hr>
 <br />
 <br />
@@ -96,18 +99,20 @@ If you want to maximize your Impact further, add an popupblocker exception for o
 <div id="text">
 
 <a href="#search"><font color="blue">>How to add this search engine below<</font></a><br />
+</div>
 
-
+<div id="submit">
                   <div class="col-lg-12">
 
 <hr><hr>
                     <input type=text id="reg" onkeypress="clickPress(event)"> 
 
-<div class="white-button first-button scroll-to-section" id="submit">
+<div class="white-button first-button scroll-to-section">
                   <a id="submit" onclick="javascript:open4()" href="#header">Start Search</a>
 <hr><hr>
 
                     </div>
+</div>
 
                   </div>
  
@@ -147,6 +152,10 @@ setTimeout(function(){ open4(); }, 2000);
 
  function 			 open4() {
 
+var reg = document.getElementById("reg").value;
+var encode2 = encodeURIComponent(reg);
+document.getElementById("reg").value = encode2;
+
 document.getElementById("frames").style.display = "block";
 document.getElementById("image").style.display = "none";
 document.getElementById("text").style.display = "none";
@@ -160,7 +169,7 @@ document.getElementById("text2").style.display = "block";
 
 
                     // Checks that the user typed "http://" or not
-
+                    if(new_url.substr(0,7)!="http://")
                         new_url1 = "https://ekoru.org/?q="+new_url;
 
                     $("#main_frame").attr("src", new_url1);
@@ -229,6 +238,8 @@ window.open("https://www.ecosia.org/search?q="+x);
 window.open("https://oceanhero.today/web?q="+x);
 window.open("https://rapusia.org/?q="+x);
 
+document.getElementById("reg").value = "";
+
 
 
 }
@@ -279,8 +290,10 @@ open4();
 
 
 <hr><hr>
+<div id="search">
 Use this link as custom search engine<br />
 <code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
+</div>
 <hr><hr>
 
 </div></div></div>
