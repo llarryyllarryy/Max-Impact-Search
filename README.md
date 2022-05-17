@@ -2,6 +2,8 @@
 <b>Opens multiple different impact search engines at once</b>
 
 - ⚡ [Start the Search Engine](https://llarryyllarryy.github.io/Max-Impact-Search/?)
+- ⚡ [Start Donating for Free](https://llarryyllarryy.github.io/nocostdonate/)
+
 <p align="center">
  <img src="https://komarev.com/ghpvc/?username=llarryyllarryy&label=Profile%20views&color=0e75b6&style=flat" alt="llarryyllarryy" /> </p>
 
