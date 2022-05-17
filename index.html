@@ -137,24 +137,32 @@ function get(parameterName) {
     return result;
 }
 
-if (get("search").substr(0,1) == null){
 
+if (get("search") == null){
 
  } 
 else {
-var encode = get("search");
+var encode = encodeURIComponent(get("search"));
 document.getElementById("reg").value = encode;
 setTimeout(function(){ open4(); }, 2000);
 
 }
 
 
-
  function 			 open4() {
+
+if (get("search") == null){
 
 var reg = document.getElementById("reg").value;
 var encode2 = encodeURIComponent(reg);
 document.getElementById("reg").value = encode2;
+
+ } 
+
+
+
+
+
 
 document.getElementById("frames").style.display = "block";
 document.getElementById("image").style.display = "none";
