@@ -142,7 +142,7 @@ if (get("search").substr(0,1) == null){
 
  } 
 else {
-var encode = encodeURIComponent(get("search"));
+var encode = get("search");
 document.getElementById("reg").value = encode;
 setTimeout(function(){ open4(); }, 2000);
 
