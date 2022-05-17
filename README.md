@@ -1,4 +1,4 @@
-![Header](./header.png)
+![Header](./header.png)<br />
 <b>Opens multiple different impact search engines at once</b>
 
 - ⚡ [Start the Search Engine](https://llarryyllarryy.github.io/Max-Impact-Search/?)
