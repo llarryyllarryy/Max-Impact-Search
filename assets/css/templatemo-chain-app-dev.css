@@ -207,7 +207,7 @@ body {
 .white-button a {
   display: inline-block !important;
   padding: 10px 20px !important;
-  color: #4b8ef1 !important;
+  color: #ffffff !important;
   text-transform: capitalize;
   font-size: 15px;
   background-color: #fff;
@@ -215,6 +215,7 @@ body {
   font-weight: 500 !important;
   letter-spacing: 0.3px !important;
   transition: all .5s;
+  background-color: #4b8ef1;
 }
 
 .white-button a i {
@@ -223,8 +224,8 @@ body {
 }
 
 .white-button a:hover {
-  background-color: #4b8ef1;
-  color: #fff !important;
+  background-color: lightgrey;
+  color: #000 !important;
 }
 
 .text-button a {
