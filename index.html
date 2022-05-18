@@ -97,7 +97,6 @@ If you want to maximize your Impact further, add an popupblocker exception for o
                     <div id="header"><h2>Search web while supporting people and planet</h2></div>
 
 <div id="text">
-
 <a href="#search"><font color="blue">>How to add this search engine below<</font></a><br />
 </div>
 
@@ -114,6 +113,7 @@ If you want to maximize your Impact further, add an popupblocker exception for o
                     </div>
 </div>
 
+
                   </div>
  
 <div id="text">
@@ -121,11 +121,47 @@ If you want to maximize your Impact further, add an popupblocker exception for o
 </div>
 
 
+
+<div id="mobile-sel" style="display:none;">
+<hr><hr>
+<select id="menu" onchange="run()"> 
+<option value="1">YouCare</option>
+<option value="2">ElliotForWater</option>
+<option value="3">Gexsi</option>
+<option value="4">Givewater</option>
+<option value="5">Ekoru</option>
+</select>
+<div class="white-button first-button scroll-to-section">
+<div id="url">
+                  <a>Proceed to Results</a>
+</div>
+<hr><hr>
+<br />
+<br />
+</div>
+</div>
+
               </div>
 
 
 
 <script>
+
+
+function run() {
+
+
+            var v1 = document.getElementById("menu").value;
+
+            if (v1=="1") {window.open(new_url3, '_self')}
+            if (v1=="2") {window.open(new_url4, '_self')}
+            if (v1=="3") {window.open(new_url5, '_self')}
+            if (v1=="4") {window.open(new_url6, '_self')}
+            if (v1=="5") {window.open(new_url1, '_self')}
+
+
+}
+
 function get(parameterName) {
     var result = null,
         tmp = [];
@@ -224,7 +260,32 @@ obj.innerHTML = "4";
 
     },1000);
 
+
+if (get("mobile") == "true"){
+
+
+        
+$(this).find(":selected").text("YouCare").val(new_url1);
+
+
+
+
+
+$("#mobile_frame").attr("src", new_url3);
+    var obj2 = document.getElementById("submit2");
+var obj5 = document.getElementById("mobile-sel");
+obj2.innerHTML = obj5.innerHTML;
+
+
+}
+
+
 			 }
+
+
+
+
+
 
 
 
@@ -262,14 +323,11 @@ function clickPress(event) {
 open4();
     }
 
-
-
-
-
-
-
-
 }
+
+
+
+
 
 
 
