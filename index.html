@@ -125,15 +125,13 @@ If you want to maximize your Impact further, add an popupblocker exception for o
 <div id="mobile-sel" style="display:none;">
 <hr><hr>
 <select id="menu" onchange="run()"> 
-<option value="1">YouCare</option>
-<option value="2">ElliotForWater</option>
-<option value="3">Gexsi</option>
-<option value="4">Givewater</option>
-<option value="5">Ekoru</option>
+<option value="1">Ecosia</option>
+<option value="2">Oceanhero</option>
+<option value="3">Rapusia</option>
 </select>
 <div class="white-button first-button scroll-to-section">
 <div id="url">
-                  <a>Proceed to Results</a>
+                  <a>Select preferred Results</a>
 </div>
 <hr><hr>
 <br />
@@ -148,19 +146,7 @@ If you want to maximize your Impact further, add an popupblocker exception for o
 <script>
 
 
-function run() {
 
-
-            var v1 = document.getElementById("menu").value;
-
-            if (v1=="1") {window.open(new_url3, '_self')}
-            if (v1=="2") {window.open(new_url4, '_self')}
-            if (v1=="3") {window.open(new_url5, '_self')}
-            if (v1=="4") {window.open(new_url6, '_self')}
-            if (v1=="5") {window.open(new_url1, '_self')}
-
-
-}
 
 function get(parameterName) {
     var result = null,
@@ -185,6 +171,9 @@ document.getElementById("reg").value = encode;
 setTimeout(function(){ open4(); }, 2000);
 
 }
+
+
+
 
 
  function 			 open4() {
@@ -287,7 +276,8 @@ obj2.innerHTML = obj5.innerHTML;
 
 
 
-
+	 var x = $("#reg").val();
+var x = decodeURIComponent(x);
 
 
 
@@ -303,8 +293,7 @@ document.getElementById("header").style.display = "block";
 document.getElementById("submit2").style.display = "none";
 document.getElementById("text2").style.display = "none";
 
-	 var x = $("#reg").val();
-var x = decodeURIComponent(x);
+
 
 window.open("https://www.ecosia.org/search?q="+x);
 window.open("https://oceanhero.today/web?q="+x);
@@ -312,6 +301,23 @@ window.open("https://rapusia.org/?q="+x);
 
 document.getElementById("reg").value = "";
 
+
+
+
+
+}
+
+
+function run() {
+
+
+            var v1 = document.getElementById("menu").value;
+
+
+
+            if (v1=="1") {window.open('https://www.ecosia.org/search?q='+x, '_self')}
+            if (v1=="2") {window.open('https://oceanhero.today/web?q='+x, '_self')}
+            if (v1=="3") {window.open('https://rapusia.org/?q='+x, '_self')}
 
 
 }
