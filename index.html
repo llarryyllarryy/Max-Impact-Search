@@ -293,7 +293,8 @@ document.getElementById("header").style.display = "block";
 document.getElementById("submit2").style.display = "none";
 document.getElementById("text2").style.display = "none";
 
-
+	 var x = $("#reg").val();
+var x = decodeURIComponent(x);
 
 window.open("https://www.ecosia.org/search?q="+x);
 window.open("https://oceanhero.today/web?q="+x);
