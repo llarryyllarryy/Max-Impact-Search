@@ -30,12 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-        webView.loadUrl("https://llarryyllarryy.github.io/Max-Impact-Search/?mobile=true");
-    }
+webView.loadUrl("file:///android_asset/index.html"); 
+   }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
