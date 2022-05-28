@@ -19,6 +19,12 @@
 
 - 📝 I regularly write articles on [http://llarryysblog.tumblr.com](http://llarryysblog.tumblr.com)
 
+- Online Radio for [Youtube](https://www.youtube.com/channel/UCyc2T7knpQdlopgfMCwR_eA/playlists) or [Spotify](https://www.sharedplaylists.com/u/llarryyllarryy/playlists)
+
+<!--VosCast.com HTML5 Player-->
+<script type="text/javascript" src="//cdn.voscast.com/player/?key=895f8e6b3518c2269b63308d3c0429ff"></script>
+<!--End Player-->
+
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
@@ -29,4 +35,3 @@
 <h3 align="left">Languages and Tools:</h3>
 <p align="left"> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://www.php.net" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="php" width="40" height="40"/> </a> </p>
 
-<img src='https://random-memer.herokuapp.com/' title="Meme" alt="Please refresh the page if the meme doesn't show up.">
