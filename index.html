@@ -134,7 +134,7 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
 function gtag_report_conversion(url) {
   var callback = function () {
     if (typeof(url) != 'undefined') {
-      window.open = url;
+
     }
   };
   gtag('event', 'conversion', {
@@ -146,7 +146,7 @@ function gtag_report_conversion(url) {
 </script>
 	
 <div id="text">
-<a onclick="javascript:gtag_report_conversion(https://github.com/llarryyllarryy/Max-Impact-Search/)" href="https://github.com/llarryyllarryy/Max-Impact-Search/"><font color="green" target="_blank">Worried about security? Check our code</font></a>
+<a onmouseover="javascript:gtag_report_conversion()" href="https://github.com/llarryyllarryy/Max-Impact-Search/"><font color="green">Worried about security? Check our code</font></a>
 </div>
 
 
