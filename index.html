@@ -348,7 +348,9 @@ open4();
 
 
 
-
+$.getJSON("https://api.countapi.xyz/hit/mysite.com/visits", function(response) {
+	$("#visits").text(response.value);
+});
 
 
 </script>
@@ -382,6 +384,8 @@ Use this link as custom search engine<br />
 <code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
 </div>
 <hr><hr>
+<br /><br />
+<div id="visits"></div>
 
 </div></div></div>
   
