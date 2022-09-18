@@ -3,24 +3,7 @@
 <html lang="en">
 
   <head>
-<!-- Event snippet for Anruf conversion page
-In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
-<script>
-function gtag_report_conversion(url) {
-  var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
-    }
-  };
-  gtag('event', 'conversion', {
-      'send_to': 'AW-748796968/oPaWCOnvn98DEKj4huUC',
-      'value': 1.0,
-      'currency': 'EUR',
-      'event_callback': callback
-  });
-  return false;
-}
-</script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -396,10 +379,9 @@ open4();
 
 <hr><hr>
 <div id="search">
-<div id="ad" onclick="return gtag_report_conversion('https://llarryyllarryy.github.io/Max-Impact-Search/#search')">
 
 Use this link as custom search engine<br />
-</div>
+
 <code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
 </div>
 <hr><hr>
@@ -459,14 +441,3 @@ Use this link as custom search engine<br />
     content_ids: 'ad',
   });
 </script>
-
-<!-- Global site tag (gtag.js) - Google Ads: 748796968 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-748796968"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-748796968');
-</script>
-
