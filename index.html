@@ -298,19 +298,10 @@ document.getElementById("text2").style.display = "none";
 var x = decodeURIComponent(x);
 
 window.open("https://www.ecosia.org/search?q="+x);
-Window.focus();
-setTimeout(function(){ test1(); }, 2000);
-Function test1(){
-
-window.open("https://oceanhero.today/web?q="+x);
-Window.focus();
-setTimeout(function(){ test2(); }, 2000);
-}
-
-Function test2(){
+Window.open("https://oceanhero.today/web?q="+x);
 window.open("https://rapusia.org/?q="+x);
-Window.focus();
-}
+
+
 document.getElementById("reg").value = "";
 
 
