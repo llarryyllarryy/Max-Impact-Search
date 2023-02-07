@@ -108,7 +108,7 @@ If you want to maximize your Impact further, add an popupblocker exception for o
                     <input type=text id="reg" onkeypress="clickPress(event)"> 
 
 <div class="white-button first-button scroll-to-section">
-                  <a id="submit" onclick="javascript:open4()" href="#header">Start Search</a>
+                  <a id="submit" onclick="javascript:open5()" href="#header">Start Search</a>
 <hr><hr>
 
                     </div>
@@ -297,9 +297,15 @@ document.getElementById("text2").style.display = "none";
 	 var x = $("#reg").val();
 var x = decodeURIComponent(x);
 
-window.open("https://www.ecosia.org/search?q="+x);
-Window.open("https://oceanhero.today/web?q="+x);
-window.open("https://rapusia.org/?q="+x);
+
+function openRandomLink(links) {
+  var randomIndex = Math.floor(Math.random() * links.length);
+  window.open(links[randomIndex], "_blank");
+}
+
+var links = [  "https://www.ecosia.org/search?q="+x,  "https://oceanhero.today/web?q="+x,  "https://rapusia.org/?q="+x,  "https://ekoru.org/?q="+x,  "https://youcare.world/all?q="+x,  "https://elliotforwater.com/search?type=web&query="+x,  "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+x, "https://search.givewater.com/serp?q="+x];
+
+openRandomLink(links);
 
 
 document.getElementById("reg").value = "";
