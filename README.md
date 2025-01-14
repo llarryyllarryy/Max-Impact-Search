@@ -19,8 +19,7 @@
 
 - 📝 I regularly write articles on [http://llarryysblog.tumblr.com](http://llarryysblog.tumblr.com)
 
-- [Online Radio](https://station.voscast.com/62927054b6621/) for [Youtube](https://www.youtube.com/channel/UCyc2T7knpQdlopgfMCwR_eA/playlists) or [Spotify](https://www.sharedplaylists.com/u/llarryyllarryy/playlists)
-
+- [Online Radio](https://station.voscast.com/62927054b6621/) for [Youtube](https://www.youtube.com/channel/UCyc2T7knpQdlopgfMCwR_eA/playlists) or [Spotify] ([https://open.spotify.com/user/313iaxo6czaeitorqteioznc5zty?si=hmcEMAH5SvqMP2mdWP7gBg])
 
 
 <h3 align="left">Connect with me:</h3>
