@@ -4,6 +4,7 @@
 - ⚡ [Start the Search Engine](https://llarryyllarryy.github.io/Max-Impact-Search/?)
 - ⚡ [Start Donating for Free](https://llarryyllarryy.github.io/nocostdonate/)
 - ⚡ Download Android App: [Playstore](https://play.google.com/store/apps/details?id=com.larry.maximpactsearch) | [Github](https://github.com/llarryyllarryy/Max-Impact-Search/raw/main/androidapp/bin/app-release.apk)
+- ⚡ Test App in [Browser](https://appetize.io/app/android/com.larry.maximpactsearch?device=pixel7&osVersion=13.0)
 
 <p align="center">
  <img src="https://komarev.com/ghpvc/?username=llarryyllarryy&label=Profile%20views&color=0e75b6&style=flat" alt="llarryyllarryy" /> </p>
