@@ -92,10 +92,10 @@
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-lg mx-auto">
                 <input type="text" id="reg" placeholder="What you wanna search today and do good?" 
                        class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400" onkeypress="clickPress(event)">
-                <a id="submit" onclick="javascript:open5()"
+                <button onclick="javascript:open5()"
                         class="bg-yellow-400 hover:bg-yellow-500 text-indigo-800 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 w-full sm:w-auto">
                     Search & Donate
-                </a>
+                </button>
             </div>
             <p class="text-sm mt-4 opacity-80">
                 All Adrevenue will be sponsored to charity Organizations
@@ -231,6 +231,8 @@
     </div>
     <script>
 
+
+
 function get(parameterName) {
     var result = null,
         tmp = [];
@@ -256,6 +258,10 @@ setTimeout(function(){ open5(); }, 2000);
 }
 function open5() {
 
+var x = $("#reg").val();
+var x = decodeURIComponent(x);
+
+
 function openRandomLink(links) {
   var randomIndex = Math.floor(Math.random() * links.length);
   window.open(links[randomIndex], "_blank");
@@ -264,6 +270,9 @@ function openRandomLink(links) {
 var links = [  "https://www.ecosia.org/search?q="+x,  "https://oceanhero.today/web?q="+x,  "https://rapusia.org/?q="+x,  "https://ekoru.org/?q="+x,  "https://youcare.world/all?q="+x,  "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+x];
 
 openRandomLink(links);
+
+document.getElementById("reg").value = "";
+
 }
 
 function clickPress(event) {
