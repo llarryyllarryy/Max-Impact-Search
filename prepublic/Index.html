@@ -274,50 +274,6 @@ open5();
 }
 
 
-        // Funktion zum Anzeigen der Nachrichtenbox
-        function showMessageBox(message) {
-            const messageBox = document.getElementById('message-box');
-            const messageText = document.getElementById('message-text');
-            messageText.textContent = message;
-            messageBox.classList.remove('opacity-0', 'translate-y-full');
-            messageBox.classList.add('opacity-100', 'translate-y-0');
-            // Nachricht nach 3 Sekunden ausblenden
-            setTimeout(() => {
-                hideMessageBox();
-            }, 3000);
-        }
-
-        // Funktion zum Ausblenden der Nachrichtenbox
-        function hideMessageBox() {
-            const messageBox = document.getElementById('message-box');
-            messageBox.classList.remove('opacity-100', 'translate-y-0');
-            messageBox.classList.add('opacity-0', 'translate-y-full');
-        }
-
-        // Dummy-Funktion für die Suche
-        function performSearch() {
-            const searchInput = document.getElementById('search-input');
-            const query = searchInput.value.trim();
-
-            if (query) {
-                // Hier würden Sie normalerweise die Suchanfrage an Ihr Backend senden
-                // und die Ergebnisse anzeigen. Für diese Demo simulieren wir dies.
-                showMessageBox(`Search over "${query}" submited! A little value will get donated`);
-                updateDonationAmount(); // Spendenbetrag aktualisieren
-                searchInput.value = ''; // Suchfeld leeren
-            } else {
-                showMessageBox("Please enter a searchterm.");
-            }
-        }
-
-                // Event Listener für Enter-Taste im Suchfeld
-        document.getElementById('search-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Verhindert das Standardverhalten (z.B. Formular-Submit)
-                performSearch();
-            }
-        });
-
         // Mobiles Menü umschalten
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
