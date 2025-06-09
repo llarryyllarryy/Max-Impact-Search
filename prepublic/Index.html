@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search. Find. Donate. – Your Search Engina for a good Deed</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Grundschriftart für die gesamte Seite */
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-50 text-gray-800; /* Heller Hintergrund, dunkler Text */
+        }
+        /* Benutzerdefinierte Scrollbar-Styles für Webkit-Browser */
+        ::-webkit-scrollbar {
+            width: 8px; /* Breite der Scrollbar */
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Hintergrund der Scrollbar-Spur */
+            border-radius: 10px; /* Abgerundete Ecken */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Farbe des Scrollbar-Daumens */
+            border-radius: 10px; /* Abgerundete Ecken */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Farbe des Scrollbar-Daumens beim Hover */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Sektion -->
+    <header class="bg-white shadow-sm py-4">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-indigo-600 rounded-lg p-2 hover:bg-indigo-50 transition duration-300">
+                <!-- SVG Herz-Icon für das Logo -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>MaxImpactSearch</span>
+            </a>
+
+            <!-- Navigationsmenü (Desktop) -->
+            <ul class="hidden md:flex space-x-8">
+                <li><a href="#hero" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Startseite</a></li>
+                <li><a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Wie es funktioniert</a></li>
+                <li><a href="#impact" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Unsere Wirkung</a></li>
+                <li><a href="#transparency" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Transparenz</a></li>
+                <li><a href="#cta" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Jetzt starten</a></li>
+            </ul>
+
+            <!-- Hamburger-Menü (Mobile) -->
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobiles Navigationsmenü (ausgeblendet) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white mt-2 border-t border-gray-100">
+            <ul class="flex flex-col items-center py-4 space-y-4">
+                <li><a href="#hero" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Startseite</a></li>
+                <li><a href="#how-it-works" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Wie es funktioniert</a></li>
+                <li><a href="#impact" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Unsere Wirkung</a></li>
+                <li><a href="#transparency" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Transparenz</a></li>
+                <li><a href="#cta" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Jetzt starten</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Sektion -->
+    <section id="hero" class="relative bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-20 md:py-32 flex-grow flex items-center justify-center">
+        <!-- Hintergrundmuster (optional, für visuelle Attraktivität) -->
+        <div class="absolute inset-0 z-0 opacity-10" style="background-image: url('https://placehold.co/1200x800/FFFFFF/000000?text=BackgroundPattern'); background-size: cover; background-position: center;"></div>
+        
+        <div class="container mx-auto px-4 text-center z-10 relative">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+                Search. Find. <span class="text-yellow-300">Donate.</span>
+            </h1>
+            <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto opacity-90">
+                Make a good Deed with every search - for free and simple. Your Search Engine that changes the world.
+            </p>
+            
+            <!-- Suchleiste -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-lg mx-auto">
+                <input type="text" id="search-input" placeholder="What you wanna search today and do good?" 
+                       class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400">
+                <button onclick="performSearch()"
+                        class="bg-yellow-400 hover:bg-yellow-500 text-indigo-800 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 w-full sm:w-auto">
+                    Search & Donate
+                </button>
+            </div>
+            <p class="text-sm mt-4 opacity-80">
+                All Adrevenue will be sponsored to charity Organizations
+            </p>
+        </div>
+    </section>
+
+    <!-- Wie es funktioniert Sektion -->
+    <section id="how-it-works" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">How it works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Schritt 1 -->
+                <div class="flex flex-col items-center p-8 rounded-xl shadow-lg bg-indigo-50 border border-indigo-100 transition duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="bg-indigo-600 text-white rounded-full p-4 mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">1. You search</h3>
+                    <p class="text-gray-600 leading-relaxed">Use MaxImpactSearch for your daily search submissions, like any other search engine.</p>
+                </div>
+                <!-- Schritt 2 -->
+                <div class="flex flex-col items-center p-8 rounded-xl shadow-lg bg-yellow-50 border border-yellow-100 transition duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="bg-yellow-500 text-white rounded-full p-4 mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 20c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">2. Revenue generated</h3>
+                    <p class="text-gray-600 leading-relaxed">Ads next to your search results generate revenue - without further costs for you</p>
+                </div>
+                <!-- Schritt 3 -->
+                <div class="flex flex-col items-center p-8 rounded-xl shadow-lg bg-green-50 border border-green-100 transition duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="bg-green-600 text-white rounded-full p-4 mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">3. They spend</h3>
+                    <p class="text-gray-600 leading-relaxed">A big portion of this revenue gets donated to legit charity and environmental organizations</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Unsere Wirkung Sektion -->
+    <section id="impact" class="py-16 md:py-24 bg-gray-100">
+
+            <h3 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-8 mt-12">Shared Projects and Partners</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Beispiel-Projekt 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
+                    <img src="https://placehold.co/100x100/A78BFA/FFFFFF?text=Environmental" alt="Umweltschutz-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">Environmental Protection</h4>
+                    <p class="text-gray-600 text-sm">Support of Projects to <a href="https://de.blog.ecosia.org/ecosia-finanzberichte-baumplanzbelege/" target="_blank">rebuild forests</a> and <a href="https://oceanhero.today/about-us/certificates" target="_blank">Ocean Rescue</a> - <a href="https://ekoru.org/cause/" target="_blank">combined efforts</a></p>
+                </div>
+                <!-- Beispiel-Projekt 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
+                    <img src="https://placehold.co/100x100/60A5FA/FFFFFF?text=Education" alt="Bildungs-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">Education for Kids</h4>
+                    <p class="text-gray-600 text-sm"><a href="https://rapusia.org/projects/" target="_blank">Financing</a> School materials and <a href="https://good-search.org/about/projekte/" target="_blank">opportunities to education</a> in third world countries.</p>
+                </div>
+                <!-- Beispiel-Projekt 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
+                    <img src="https://placehold.co/100x100/F472B6/FFFFFF?text=Medicinical Support" alt="Medizinische Versorgung-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">Medicinical Support</h4>
+                    <p class="text-gray-600 text-sm">Offering of <a href="https://youcare.world/transparency/certificates?f=type:coronavirus" target="_blank">Medicaments and charity</a> help in crisis places</p>
+                </div>
+            </div>
+            <!-- Hier könnten mehr Partnerlogos oder eine Galerie sein -->
+        </div>
+    </section>
+
+    <!-- Transparenz Sektion -->
+    <section id="transparency" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 text-center max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Transparency and Trust</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                We honor Trust and Open Data. Thats why we publicate our <a href="https://github.com/llarryyllarryy/Max-Impact-Search/blob/main/README.md" target="_blank">SourceCode on Github</a>
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-8 mb-12">
+                <div class="p-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100 text-left">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">We take privacy seriously</h3>
+                    <p class="text-gray-600">Your searches are private. We dont collect any Data and we dont sell informations.</p>
+                    
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100 text-left">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Financial Overview</h3>
+                    <p class="text-gray-600">You can look at all financial date over the linked deeds and projects previously linked.</p>
+                    
+                </div>
+            </div>
+            <p class="text-base text-gray-500 italic">
+                MaxImpactSeerch is a initiativ of a person that believes technology has to be used for good deeds.
+            </p>
+        </div>
+    </section>
+
+    <!-- Call to Action Sektion -->
+    <section id="cta" class="py-16 md:py-24 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold mb-6">Make every search a good deed!</h2>
+            <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90">
+                Its time to transform your digital footprint. Change now to MaxImpactSearch and begin to donate for free- with every single search.
+            </p>
+            <a class="bg-yellow-400 hover:bg-yellow-500 text-indigo-800 font-bold py-4 px-10 rounded-full shadow-xl text-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300">
+              https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="red">Searchterm</font>
+            </a>
+            <p class="text-sm mt-6 opacity-70">
+                Use this link as custom search engine.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer Sektion -->
+    <footer class="bg-gray-800 text-gray-300 py-10">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm">
+            <div class="mb-4 md:mb-0 text-center md:text-left">
+                <p>&copy; 2022 MaxImpactSearch. Alle Rechte vorbehalten.</p>
+                <p>Eine Initiative für eine bessere Welt.</p>
+            </div>
+                  </div>
+    </footer>
+
+    <!-- Nachrichtbox für Suchergebnisse (ersetzt alert()) -->
+    <div id="message-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-lg z-50 transition-all duration-300 opacity-0 transform translate-y-full">
+        <p id="message-text"></p>
+        <button onclick="hideMessageBox()" class="absolute top-1 right-2 text-gray-400 hover:text-white text-lg font-bold">&times;</button>
+    </div>
+
+    <script>
+
+function get(parameterName) {
+    var result = null,
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+}
+
+
+if (get("search") == null){
+
+ } 
+else {
+
+
+var encode = encodeURIComponent(get("search"));
+document.getElementById("reg").value = encode;
+setTimeout(function(){ open5(); }, 2000);
+
+}
+function open5() {
+
+function openRandomLink(links) {
+  var randomIndex = Math.floor(Math.random() * links.length);
+  window.open(links[randomIndex], "_blank");
+}
+
+var links = [  "https://www.ecosia.org/search?q="+x,  "https://oceanhero.today/web?q="+x,  "https://rapusia.org/?q="+x,  "https://ekoru.org/?q="+x,  "https://youcare.world/all?q="+x,  "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+x];
+
+openRandomLink(links);
+}
+
+function clickPress(event) {
+    if (event.keyCode == 13) {
+open5();
+    }
+
+}
+
+
+        // Funktion zum Anzeigen der Nachrichtenbox
+        function showMessageBox(message) {
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+            messageText.textContent = message;
+            messageBox.classList.remove('opacity-0', 'translate-y-full');
+            messageBox.classList.add('opacity-100', 'translate-y-0');
+            // Nachricht nach 3 Sekunden ausblenden
+            setTimeout(() => {
+                hideMessageBox();
+            }, 3000);
+        }
+
+        // Funktion zum Ausblenden der Nachrichtenbox
+        function hideMessageBox() {
+            const messageBox = document.getElementById('message-box');
+            messageBox.classList.remove('opacity-100', 'translate-y-0');
+            messageBox.classList.add('opacity-0', 'translate-y-full');
+        }
+
+        // Dummy-Funktion für die Suche
+        function performSearch() {
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput.value.trim();
+
+            if (query) {
+                // Hier würden Sie normalerweise die Suchanfrage an Ihr Backend senden
+                // und die Ergebnisse anzeigen. Für diese Demo simulieren wir dies.
+                showMessageBox(`Search over "${query}" submited! A little value will get donated`);
+                updateDonationAmount(); // Spendenbetrag aktualisieren
+                searchInput.value = ''; // Suchfeld leeren
+            } else {
+                showMessageBox("Please enter a searchterm.");
+            }
+        }
+
+                // Event Listener für Enter-Taste im Suchfeld
+        document.getElementById('search-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Verhindert das Standardverhalten (z.B. Formular-Submit)
+                performSearch();
+            }
+        });
+
+        // Mobiles Menü umschalten
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Menü schließen, wenn ein Link im mobilen Menü geklickt wird
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
