@@ -251,7 +251,7 @@ if (get("search") == null){
 else {
 
 
-var encode = encodeURIComponent(get("search"));
+var encode = get("search");
 document.getElementById("reg").value = encode;
 setTimeout(function(){ open5(); }, 2000);
 
