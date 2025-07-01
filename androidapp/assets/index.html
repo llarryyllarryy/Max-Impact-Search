@@ -1,151 +1,235 @@
-
-<!DOCTYPE html>
-<html lang="en">
-
-  <head>
-
+  <!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Search the web while supporting people and planet">
-    <meta name="author" content="larry">
-<meta name="msvalidate.01" content="1A9D973BCBCE1384AA5E8A3E03D49392" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search. Find. Donate. – Your Search Engina for a good Deed</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="vendor/style.js"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Grundschriftart für die gesamte Seite */
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-50 text-gray-800; /* Heller Hintergrund, dunkler Text */
+        }
+        /* Benutzerdefinierte Scrollbar-Styles für Webkit-Browser */
+        ::-webkit-scrollbar {
+            width: 8px; /* Breite der Scrollbar */
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Hintergrund der Scrollbar-Spur */
+            border-radius: 10px; /* Abgerundete Ecken */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Farbe des Scrollbar-Daumens */
+            border-radius: 10px; /* Abgerundete Ecken */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Farbe des Scrollbar-Daumens beim Hover */
+        }
+    </style>
         <script type="text/javascript"  src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+   <script src="vendor/jquery/jquery.min.js"></script>
+</head>
+<body class="min-h-screen flex flex-col">
 
-    <title>Max Impact Search - Change world for the better</title>
+    <!-- Header Sektion -->
+    <header class="bg-white shadow-sm py-4">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-indigo-600 rounded-lg p-2 hover:bg-indigo-50 transition duration-300">
+                <!-- SVG Herz-Icon für das Logo -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>MaxImpactSearch</span>
+            </a>
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+            <!-- Navigationsmenü (Desktop) -->
+            <ul class="hidden md:flex space-x-8">
+                <li><a href="#hero" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Homepage</a></li>
+                <li><a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">How it works</a></li>
+                <li><a href="#impact" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Our Impact</a></li>
+                <li><a href="#transparency" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Transparency</a></li>
+                <li><a href="#cta" class="text-gray-600 hover:text-indigo-600 font-medium transition duration-300">Start now</a></li>
+            </ul>
 
-<!--
-TemplateMo 570 Chain App Dev
-https://templatemo.com/tm-570-chain-app-dev
--->
+            <!-- Hamburger-Menü (Mobile) -->
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
-    <link rel="stylesheet" href="assets/css/animated.css">
-    <link rel="stylesheet" href="assets/css/owl.css">
-<link rel="search" type="application/opensearchdescription+xml" href="https://llarryyllarryy.github.io/Max-Impact-Search/search.xml" title="Max Impact Search">
+        <!-- Mobiles Navigationsmenü (ausgeblendet) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white mt-2 border-t border-gray-100">
+            <ul class="flex flex-col items-center py-4 space-y-4">
+                <li><a href="#hero" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Homepage</a></li>
+                <li><a href="#how-it-works" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">How it works</a></li>
+                <li><a href="#impact" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Our Impact</a></li>
+                <li><a href="#transparency" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Transparency</a></li>
+                <li><a href="#cta" class="block py-2 px-4 text-gray-700 hover:bg-indigo-50 rounded-md w-full text-center transition duration-300">Start now</a></li>
+            </ul>
+        </div>
+    </header>
 
-  </head>
+    <!-- Hero Sektion -->
+    <section id="hero" class="relative bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-20 md:py-32 flex-grow flex items-center justify-center">
+        <!-- Hintergrundmuster (optional, für visuelle Attraktivität) -->
+        <div class="absolute inset-0 z-0 opacity-10" style="background-image: url('https://placehold.co/1200x800/FFFFFF/000000?text=MaxImpactSearch'); background-size: cover; background-position: center;"></div>
+        
+        <div class="container mx-auto px-4 text-center z-10 relative">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+                Search. Find. <span class="text-yellow-300">Donate.</span>
+            </h1>
+            <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto opacity-90">
+                Make a good Deed with every search - for free and simple. Your Search Engine that changes the world.
+            </p>
+            
+            <!-- Suchleiste -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-lg mx-auto">
+                <input type="text" id="reg" placeholder="What you wanna search today and do good?" 
+                       class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400" onkeypress="clickPress(event)">
+                <button onclick="javascript:open5()"
+                        class="bg-yellow-400 hover:bg-yellow-500 text-indigo-800 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 w-full sm:w-auto">
+                    Search & Donate
+                </button>
+            </div>
+            <p class="text-sm mt-4 opacity-80">
+                All Adrevenue will be sponsored to charity Organizations
+            </p>
+        </div>
+    </section>
 
-<body>
-
-  <!-- ***** Pre readyer Start ***** -->
-  <div id="js-preloader" class="js-preloader">
-    <div class="preloader-inner">
-      <span class="dot"></span>
-      <div class="dots">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-  </div>
-  <!-- ***** Pre readyer End ***** -->
-
-  
-<br /><br />
-    <div class="container" align="center">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="row">
-
-
-            <div class="col-lg-6 align-self-center">
-              <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
-                <div class="row">
-                  <div class="col-lg-12">
-
-<div id="text2" style="display:none;">
-
-Step 1: Page loads sites in background that donate money for the good<br />Step 2: Display Search results
-</div>
-
-<div id="submitwait" style="display:none;">
-<hr><hr>
-<div class="white-button first-button scroll-to-section">
-<a><font color="grey"><div id="count" style="color:lightgrey;">4</div></font></a>
-<hr><hr>
-<br />
-<br />
+    <!-- Wie es funktioniert Sektion -->
+    <section id="how-it-works" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">How it works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Schritt 1 -->
+                <div class="flex flex-col items-center p-8 rounded-xl shadow-lg bg-indigo-50 border border-indigo-100 transition duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="bg-indigo-600 text-white rounded-full p-4 mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
                     </div>
-</div>
-
-
-
-<div id="submit2" style="display:none;">
-<hr><hr>
-<div class="white-button first-button scroll-to-section">
-                  <a onclick="javascript:open5()" href="#header">Proceed to Results</a>
-<hr><hr>
-<br />
-<br />
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">1. You search</h3>
+                    <p class="text-gray-600 leading-relaxed">Use MaxImpactSearch for your daily search submissions, like any other search engine.</p>
+                </div>
+                <!-- Schritt 2 -->
+                <div class="flex flex-col items-center p-8 rounded-xl shadow-lg bg-yellow-50 border border-yellow-100 transition duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="bg-yellow-500 text-white rounded-full p-4 mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 20c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2z" />
+                        </svg>
                     </div>
-</div>
-
-<div id="text2" style="display:none;"><h2><font color="red">Why not proceeding directly?</font></h2><br />
-Some Websites dont alow us to load them inside this page, they must be opened directly.
-If you want to maximize your Impact further, add an popupblocker exception for our site
-</div>
-
-
-                    <div id="header"><h2>Search web while supporting people and planet</h2></div>
-
-<div id="text" style="display:none;">
-<a href="#search"><font color="blue">>How to add this search engine below<</font></a><br />
-</div>
-
-<div id="submit">
-                  <div class="col-lg-12">
-
-<hr><hr>
-                    <input type=text id="reg" onkeypress="clickPress(event)"> 
-
-<div class="white-button first-button scroll-to-section">
-                  <a id="submit" onclick="javascript:open4()" href="#header">Start Search</a>
-<hr><hr>
-
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">2. Revenue generated</h3>
+                    <p class="text-gray-600 leading-relaxed">Ads next to your search results generate revenue - without further costs for you</p>
+                </div>
+                <!-- Schritt 3 -->
+                <div class="flex flex-col items-center p-8 rounded-xl shadow-lg bg-green-50 border border-green-100 transition duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="bg-green-600 text-white rounded-full p-4 mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
                     </div>
-</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">3. They spend</h3>
+                    <p class="text-gray-600 leading-relaxed">A big portion of this revenue gets donated to legit charity and environmental organizations</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Unsere Wirkung Sektion -->
+    <section id="impact" class="py-16 md:py-24 bg-gray-100">
 
+            <h3 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-8 mt-12">Shared Projects and Partners</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Beispiel-Projekt 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
+                    <img src="https://placehold.co/100x100/A78BFA/FFFFFF?text=Environmental" alt="Umweltschutz-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">Environmental Protection</h4>
+                    <p class="text-gray-600 text-sm">Support of Projects to <a href="https://de.blog.ecosia.org/ecosia-finanzberichte-baumplanzbelege/" target="_blank"><font color="green">rebuild forests</font></a> and <a href="https://oceanhero.today/about-us/certificates" target="_blank"><font color="green">Ocean Rescue</font></a> - <a href="https://ekoru.org/cause/" target="_blank"><font color="green">combined efforts</font></a></p>
+                </div>
+                <!-- Beispiel-Projekt 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
+                    <img src="https://placehold.co/100x100/60A5FA/FFFFFF?text=Education" alt="Bildungs-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">Education for Kids</h4>
+                    <p class="text-gray-600 text-sm"><a href="https://rapusia.org/projects/" target="_blank"><font color="green">Financing</font></a> School materials and <a href="https://good-search.org/about/projekte/" target="_blank"><font color="green">opportunities to education</font></a> in third world countries.</p>
+                </div>
+                <!-- Beispiel-Projekt 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
+                    <img src="https://placehold.co/100x100/F472B6/FFFFFF?text=Medicinical Support" alt="Medizinische Versorgung-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">Medicinical Support</h4>
+                    <p class="text-gray-600 text-sm">Offering of <a href="https://youcare.world/transparency/certificates?f=type:coronavirus" target="_blank"><font color="green">Medicaments and charity</font></a> help in crisis places</p>
+                </div>
+            </div>
+            <!-- Hier könnten mehr Partnerlogos oder eine Galerie sein -->
+        </div>
+    </section>
+
+    <!-- Transparenz Sektion -->
+    <section id="transparency" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 text-center max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Transparency and Trust</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                We honor Trust and Open Data. Thats why we publicate our <a href="https://github.com/llarryyllarryy/Max-Impact-Search/blob/main/README.md" target="_blank"><font color="green">SourceCode on Github</font></a>
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-8 mb-12">
+                <div class="p-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100 text-left">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">We take privacy seriously</h3>
+                    <p class="text-gray-600">Your searches are private. We dont collect any Data and we dont sell informations.</p>
+                    
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100 text-left">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Financial Overview</h3>
+                    <p class="text-gray-600">You can look at all financial date over the linked deeds and projects previously linked.</p>
+                    
+                </div>
+            </div>
+            <p class="text-base text-gray-500 italic">
+                MaxImpactSearch is a initiativ of a person that believes technology has to be used for good deeds.
+            </p>
+        </div>
+    </section>
+
+    <!-- Call to Action Sektion -->
+    <section id="cta" class="py-16 md:py-24 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold mb-6">Make every search a good deed!</h2>
+            <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90">
+                Its time to transform your digital footprint. Change now to MaxImpactSearch and begin to donate for free- with every single search.
+            </p>
+            <a>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="red">Searchterm</font>
+            </a>
+            <p class="text-sm mt-6 opacity-70">
+                Use this link as custom search engine.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer Sektion -->
+    <footer class="bg-gray-800 text-gray-300 py-10">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm">
+            <div class="mb-4 md:mb-0 text-center md:text-left">
+                <p>&copy; 2022 MaxImpactSearch. Alle Rechte vorbehalten.</p>
+                <p>Eine Initiative für eine bessere Welt.</p>
+            </div>
                   </div>
- 
-<div id="text">
-<a href="https://github.com/llarryyllarryy/Max-Impact-Search/"><font color="green">Worried about security? Check our code</font></a>
-</div>
+    </footer>
 
-
-
-<div id="mobile-sel" style="display:none;">
-<hr><hr>
-<select id="menu" onchange="run()">
-<option>Which Engine has to display your results?</option> 
-<option value="1">Ecosia</option>
-<option value="2">Oceanhero</option>
-<option value="3">Rapusia</option>
-</select>
-<div class="white-button first-button scroll-to-section">
-<div id="url">
-                  <a>Select preferred Results</a>
-</div>
-<hr><hr>
-<br />
-<br />
-</div>
-</div>
-
-              </div>
-
-
-
-<script>
-
+    <!-- Nachrichtbox für Suchergebnisse (ersetzt alert()) -->
+    <div id="message-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-lg z-50 transition-all duration-300 opacity-0 transform translate-y-full">
+        <p id="message-text"></p>
+        <button onclick="hideMessageBox()" class="absolute top-1 right-2 text-gray-400 hover:text-white text-lg font-bold">&times;</button>
+    </div>
+    <script>
 
 
 
@@ -167,244 +251,54 @@ if (get("search") == null){
 else {
 
 
-var encode = encodeURIComponent(get("search"));
+var encode = get("search");
 document.getElementById("reg").value = encode;
-setTimeout(function(){ open4(); }, 2000);
+setTimeout(function(){ open5(); }, 2000);
 
 }
-
-
-
-
-
- function 			 open4() {
-
-if (get("search") == null){
-
-var reg = document.getElementById("reg").value;
-var encode2 = encodeURIComponent(reg);
-document.getElementById("reg").value = encode2;
-
- } 
-
-
-
-
-
-
-document.getElementById("frames").style.display = "block";
-document.getElementById("image").style.display = "none";
-document.getElementById("text").style.display = "none";
-document.getElementById("submit").style.display = "none";
-document.getElementById("reg").style.display = "none";
-document.getElementById("header").style.display = "none";
-document.getElementById("submitwait").style.display = "block";
-document.getElementById("text2").style.display = "block";
-
-	 var new_url = $("#reg").val();
-var new_url = decodeURIComponent(new_url);
-
-                    // Checks that the user typed "http://" or not
-                    if(new_url.substr(0,7)!="http://")
-                        new_url1 = "https://ekoru.org/?q="+new_url;
-
-                    $("#main_frame").attr("src", new_url1);
-
-
-                        new_url3 = "https://youcare.world/all?q="+new_url;
-
-                    $("#main_frame3").attr("src", new_url3);
-
-
-                        new_url4 = "https://elliotforwater.com/search?type=web&query="+new_url;
-
-                    $("#main_frame4").attr("src", new_url4);
-
-
-                        new_url5 = "https://search.gexsi.com/search/?gx1=ge&gx2=we&gx3=hp&q="+new_url;
-
-                     $("#main_frame5").attr("src", new_url5);
-
-
-                        new_url6 = "https://search.givewater.com/serp?q="+new_url;
-
-                     $("#main_frame6").attr("src", new_url6);
-
-
-
-    var obj = document.getElementById("count");
-    var current = parseInt(obj.innerHTML);
-
-    var int = setInterval(function(){
-        current--;
-        // Update the contents of the element
-        obj.innerHTML = current;
-
-if(current == "0") {
-
-document.getElementById("submit2").style.display = "block";
-document.getElementById("submitwait").style.display = "none";
-    clearInterval(int);
-obj.innerHTML = "4";
-}
-
-    },1000);
-
-
-
-
-        
-$(this).find(":selected").text("YouCare").val(new_url1);
-
-
-
-
-
-$("#mobile_frame").attr("src", new_url3);
-    var obj2 = document.getElementById("submit2");
-var obj5 = document.getElementById("mobile-sel");
-obj2.innerHTML = obj5.innerHTML;
-
-
-}
-
-
-			 
-
-
-
-
-
-
-
-
 function open5() {
 
-document.getElementById("frames").style.display = "none";
-document.getElementById("image").style.display = "block";
-document.getElementById("text").style.display = "block";
-document.getElementById("submit").style.display = "block";
-document.getElementById("reg").style.display = "block";
-document.getElementById("header").style.display = "block";
-document.getElementById("submit2").style.display = "none";
-document.getElementById("text2").style.display = "none";
-
-	 var x = $("#reg").val();
-var x = decodeURIComponent(x);
-
-window.open("https://www.ecosia.org/search?q="+x);
-window.open("https://oceanhero.today/web?q="+x);
-window.open("https://rapusia.org/?q="+x);
-
-document.getElementById("reg").value = "";
+var x = $("#reg").val();
+var x = encodeURIComponent(x);
 
 
-
-
-
+function openRandomLink(links) {
+  var randomIndex = Math.floor(Math.random() * links.length);
+  window.open(links[randomIndex], "_blank");
 }
 
+var links = [  "https://www.ecosia.org/search?q="+x,  "https://oceanhero.today/web?q="+x,  "https://rapusia.org/?q="+x,  "https://ekoru.org/?q="+x,  "https://youcare.world/all?q="+x,  "https://gexsi.com/search/?q="+x+"#gsc.tab=0&gsc.q="+x+"&gsc.page=1"];
 
-function run() {
-
-
-            var v1 = document.getElementById("menu").value;
-	 var x = $("#reg").val();
-var x = decodeURIComponent(x);
-
-
-            if (v1=="1") {window.open('https://www.ecosia.org/search?q='+x, '_self')}
-            if (v1=="2") {window.open('https://oceanhero.today/web?q='+x, '_self')}
-            if (v1=="3") {window.open('https://rapusia.org/?q='+x, '_self')}
-
-document.getElementById("frames").style.display = "none";
-document.getElementById("image").style.display = "block";
-document.getElementById("text").style.display = "block";
-document.getElementById("submit").style.display = "block";
-document.getElementById("reg").style.display = "block";
-document.getElementById("header").style.display = "block";
-document.getElementById("submit2").style.display = "none";
-document.getElementById("text2").style.display = "none";
+openRandomLink(links);
 
 document.getElementById("reg").value = "";
 
 }
-
-
 
 function clickPress(event) {
     if (event.keyCode == 13) {
-open4();
+open5();
     }
 
 }
 
 
 
+        // Mobiles Menü umschalten
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
 
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
+        // Menü schließen, wenn ein Link im mobilen Menü geklickt wird
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
 
-
-
-
-</script>
-
-
-  
-
-
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6" id="image">
-              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <img src="assets/images/slider-dec.png" alt="">
-              </div>
-            </div>
-
-            <div class="col-lg-6" id="frames" style="display:none;">
-              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <iframe width="100%" id="main_frame3" frameBorder="0" scrolling="no"></iframe>
-                <iframe width="100%" id="main_frame4" frameBorder="0" scrolling="no"></iframe>
-                <iframe width="100%" id="main_frame5" frameBorder="0" scrolling="no"></iframe>
-                <iframe width="100%" id="main_frame6" frameBorder="0" scrolling="no"></iframe>
-                <iframe width="100%" id="main_frame" frameBorder="0" scrolling="no"></iframe>
-</div></div>
-
-
-<hr><hr>
-<div id="search">
-Use this link as custom search engine<br />
-<code>https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=<font color="green">Searchterm</font></code>
-</div>
-<hr><hr>
-
-</div></div></div>
-  
-        <div class="col-lg-12">
-          <div class="copyright-text">
-            <p>Copyright © 2022 Chain App Dev Company. All Rights Reserved. 
-          <br>Design: <a href="https://templatemo.com/" target="_blank" title="css templates">TemplateMo</a><br>
-        
-          Distributed By: <a href="https://themewagon.com/" target="_blank" title="Bootstrap Template World">ThemeWagon</a>
-        </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </footer>
-
-<div id="search"></div>
-
-
-  <!-- Scripts -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/owl-carousel.js"></script>
-  <script src="assets/js/animation.js"></script>
-  <script src="assets/js/imagesloaded.js"></script>
-  <script src="assets/js/popup.js"></script>
-  <script src="assets/js/custom.js"></script>
 </body>
 </html>
