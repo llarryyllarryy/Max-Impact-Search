@@ -7,6 +7,7 @@
 
 - if you dont like the design you can use this page [Groovia](https://github.com/Noorendra9778/Groovia/blob/main/README.md)
 
+- ⚡ [Book Summary Page] (https://wowtop.eu/test/book/index.php)
 
 <p align="center">
  <img src="https://komarev.com/ghpvc/?username=llarryyllarryy&label=Profile%20views&color=0e75b6&style=flat" alt="llarryyllarryy" /> </p>
