@@ -9,9 +9,6 @@
 
 - ⚡ [Book Summary Page](https://wowtop.eu/test/book/index.php)
 
-<p align="center">
- <img src="https://komarev.com/ghpvc/?username=llarryyllarryy&label=Profile%20views&color=0e75b6&style=flat" alt="llarryyllarryy" /> </p>
-
 <!-- Markdown -->
 
 ![Jokes Card](https://readme-jokes.vercel.app/api)
