@@ -24,6 +24,7 @@
 
 
 <h3 align="left">Connect with me:</h3>
+[Twitch](https://twitch.tv/llarryyllarryy)
 <p align="left">
 <a href="https://actionablethinking.substack.com/feed" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/rss.svg" alt="https://anchor.fm/s/939602ec/podcast/rss" height="30" width="40" /></a>
 </p>
