@@ -282,50 +282,26 @@ var links = [
   "https://gexsi.com/search/?q="+x+"#gsc.tab=0&gsc.q="+x+"&gsc.page=1"
 ];
 
-// Run after the DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
 
- // Target your form(s) – replace '#myForm' with the actual ID or class
+  document.addEventListener('DOMContentLoaded', function() {
  const form = document.querySelector('#myForm');
- if (!form) return;
+ const input = document.querySelector('#reg');
 
- form.addEventListener('submit', function(event) {
-
- // Select all text inputs, textareas, and search fields inside the form
- const textFields = form.querySelectorAll('input type="text", input type="search", textarea');
-
- let hasEmpty = false;
-
- textFields.forEach(function(field) {
- const value = field.value.trim();
-
- if (value === '') {
- hasEmpty = true;
- // Optional: highlight the empty field
- field.classList.add('border-red-500', 'focus:ring-red-500');
- } else {
- // Remove error styling if previously marked
- 
+ if (form && input) {
+ form.addEventListener('submit', function(e) {
+ if (input.value.trim() === '') {
+ e.preventDefault();
+ input.focus();
+ input.classList.add('border-red-500');
+ alert('This field cannot be empty.');
+ }
+   else {
 openRandomLink(links);
-   field.classList.remove('border-red-500', 'focus:ring-red-500');
- }
+   }
  });
-
- if (hasEmpty) {
- event.preventDefault(); // Stop form from submitting
- alert('Please fill in all text fields before submitting.');
  }
- });
-
- // Optional: clear error styling when user starts typing
- form.addEventListener('input', function(event) {
- if (event.target.matches('input type="text", input type="search", textarea')) {
- event.target.classList.remove('border-red-500', 'focus:ring-red-500');
- }
- });
-
 });
-  
+
 
 document.getElementById("reg").value = "";
 
