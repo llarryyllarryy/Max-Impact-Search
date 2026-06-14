@@ -8,7 +8,6 @@
 - if you dont like the design you can use this page [Groovia](https://github.com/Noorendra9778/Groovia/blob/main/README.md)
 
 - ⚡ [Book Summary Page](https://wowtop.eu/test/book/index.php)
-- ⚡ [Blog Aggregator](https://wowtop.eu/test/aggregator/)
 
 <!-- Markdown -->
 
