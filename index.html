@@ -14,7 +14,7 @@
 
 /* ---------- Cookie notice ---------- */
   #cookie-notice{
-    position:fixed; left:20px; bottom:20px; z-index:180;
+    position:fixed; left:78px; bottom:20px; z-index:180;
     max-width:280px; background:var(--paper); 
     border:1px solid var(--line); border-radius:14px;
     padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
@@ -31,8 +31,26 @@
   }
   #cookie-notice button:hover{ transform:translateY(-1px); }
   @media (max-width:600px){
-    #cookie-notice{ left:14px; right:14px; bottom:14px; max-width:none; }
+    #cookie-notice{ left:14px; right:14px; bottom:70px; max-width:none; }
   }
+  
+
+/* ---------- Animation toggle ---------- */
+ #anim-toggle{
+   position:fixed; left:20px; bottom:20px; z-index:190;
+   width:46px; height:46px; border-radius:50%;
+   background:var(--paper); border:1px solid var(--line);
+   display:flex; align-items:center; justify-content:center;
+   cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,.12);
+   transition:transform .25s ease, background .25s ease, border-color .25s ease;
+ }
+ #anim-toggle:hover{ transform:translateY(-2px); }
+ #anim-toggle svg{ width:20px; height:20px; color:var(--ink); }
+ #anim-toggle.active{ background:var(--forest); border-color:var(--forest); }
+ #anim-toggle.active svg{ color:var(--paper); }
+ @media (max-width:600px){
+   #anim-toggle{ left:14px; bottom:14px; width:42px; height:42px; }
+ }
 
   :root{
     --cream:#F7F4EC;
@@ -381,6 +399,17 @@ color:white;
     *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
   }
 
+/* ---------- Disable all animations (toggle-controlled) ---------- */
+ body.no-animations *,
+ body.no-animations *::before,
+ body.no-animations *::after{
+   animation-duration:.01ms !important;
+   animation-iteration-count:1 !important;
+   transition-duration:.01ms !important;
+   scroll-behavior:auto !important;
+ }
+
+
   /* ---------- Scroll progress bar ---------- */
   #progress-bar{
     position:fixed; top:0; left:0; height:3px; width:0%;
@@ -397,7 +426,7 @@ color:white;
     left:0; top:0; opacity:0;
   }
   @media (hover:hover){ #cursor-glow.active{opacity:1;} }
-
+body.no-animations #cursor-glow{ display:none !important; }
   
 
   /* ---------- Tilt cards ---------- */
@@ -762,7 +791,7 @@ color:white;
 </section>
 
 <div class="wave-divider">
-  <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+ <svg id="waveSvg" viewBox="0 0 1440 100" preserveAspectRatio="none">
     <path>
       <animate attributeName="d" dur="10s" repeatCount="indefinite"
         values="M0,40 C300,10 900,70 1440,30 L1440,100 L0,100 Z;
@@ -1005,6 +1034,10 @@ color:white;
   <button id="cookieNoticeDismiss">Got it</button>
 </div>
 
+ <button id="anim-toggle" title="Turn off animations" aria-pressed="false">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+ </button>
+
 <button id="back-to-top" title="Back to top">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
@@ -1074,6 +1107,32 @@ color:white;
     setCookie('cookie_notice_dismissed', '1', 365);
   });
 
+// Animation toggle — disables all motion sitewide, remembered via cookie
+ const animToggle = document.getElementById('anim-toggle');
+ const animIconPause = 'M6 4h4v16H6zM14 4h4v16h-4z';
+ const animIconPlay = 'M5 3l14 9-14 9V3z';
+const waveSvg = document.getElementById('waveSvg');
+  
+ let animationsDisabled = false;
+ function setAnimationsDisabled(disabled){
+   animationsDisabled = disabled;
+   document.body.classList.toggle('no-animations', disabled);
+   animToggle.classList.toggle('active', disabled);
+   animToggle.setAttribute('aria-pressed', String(disabled));
+   animToggle.title = disabled ? 'Turn animations back on' : 'Turn off animations';
+   animToggle.querySelector('path').setAttribute('d', disabled ? animIconPlay : animIconPause);
+// SVG SMIL <animate> ignores CSS entirely — must be paused via the SVG DOM API
+   if(waveSvg && waveSvg.pauseAnimations){
+     disabled ? waveSvg.pauseAnimations() : waveSvg.unpauseAnimations();
+   }
+ }
+ animToggle.addEventListener('click', () => {
+   const next = !animationsDisabled;
+   setAnimationsDisabled(next);
+   setCookie('animations_disabled', next ? '1' : '0', 365);
+ });
+ setAnimationsDisabled(getCookie('animations_disabled') === '1');
+
 
   // --- Original design: faithful reproduction of its search-and-redirect behavior ---
   function origOpen5(){
@@ -1100,6 +1159,7 @@ color:white;
   }
 
   window.addEventListener('scroll', () => {
+if(animationsDisabled) return;
   const scrollY = window.scrollY;
   const fade = Math.max(0, 1 - scrollY / 500);
   
@@ -1211,6 +1271,7 @@ color:white;
   const heroEl = document.querySelector('.hero');
   const blobs = document.querySelectorAll('.blob');
   heroEl.addEventListener('mousemove', (e) => {
+if(animationsDisabled) return;
     const {innerWidth:w, innerHeight:h} = window;
     const dx = (e.clientX - w/2) / w;
     const dy = (e.clientY - h/2) / h;
@@ -1223,6 +1284,7 @@ color:white;
   // Ripple effect on click
   document.querySelectorAll('.ripple-btn').forEach(btn => {
     btn.addEventListener('click', function(e){
+if(animationsDisabled) return;
       const rect = btn.getBoundingClientRect();
       const ripple = document.createElement('span');
       ripple.className = 'ripple';
@@ -1238,6 +1300,7 @@ color:white;
   // 3D tilt on step cards
   document.querySelectorAll('.tilt').forEach(card => {
     card.addEventListener('mousemove', (e) => {
+if(animationsDisabled) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -1256,6 +1319,7 @@ color:white;
   ];
   let phIndex = 0, charIndex = 0, deleting = false;
   function typeLoop(){
+if(animationsDisabled){ setTimeout(typeLoop, 500); return; }
     if(document.activeElement === heroSearchInput){ setTimeout(typeLoop, 400); return; }
     const current = placeholders[phIndex];
     if(!deleting){
@@ -1274,6 +1338,7 @@ color:white;
   // Leaf rain burst
   const rainEmoji = ['🍃','🌿','🍂'];
   function leafRain(count){
+if(animationsDisabled) return;
     for(let i=0;i<count;i++){
       const leaf = document.createElement('span');
       leaf.className = 'falling-leaf';
@@ -1306,6 +1371,8 @@ color:white;
   const scrambleChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   function scrambleText(el){
     const finalText = el.textContent;
+if(animationsDisabled){ el.textContent = finalText; return; }
+
     let frame = 0;
     const totalFrames = 18;
     const interval = setInterval(() => {
@@ -1356,6 +1423,15 @@ color:white;
         const target = parseInt(el.dataset.target, 10);
         const ring = el.parentElement.querySelector('.ring-fg');
         const maxForRing = target === 100 ? 100 : (target === 0 ? 1 : Math.max(target, 10));
+if(animationsDisabled){
+         el.textContent = target;
+         if(ring){
+           const pct = target === 0 ? 0 : Math.min(1, target / maxForRing);
+           ring.style.strokeDashoffset = 283 - (pct * 283);
+         }
+         statIO.unobserve(el);
+         return;
+       }
         let current = 0;
         const step = Math.max(1, target / 40);
         const timer = setInterval(() => {
@@ -1381,6 +1457,7 @@ color:white;
   // Confetti burst
   const confettiColors = ['#E8A33D','#2D6A83','#2D6A4F','#F7F4EC'];
   function confetti(count){
+if(animationsDisabled) return;
     for(let i=0;i<count;i++){
       const piece = document.createElement('span');
       piece.className = 'confetti-piece';
