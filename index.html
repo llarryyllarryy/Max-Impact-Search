@@ -15,7 +15,7 @@
 /* ---------- Cookie notice ---------- */
   #cookie-notice{
     position:fixed; left:20px; bottom:20px; z-index:180;
-    max-width:280px; background:var(--paper); color:var(--ink);
+    max-width:280px; background:var(--paper); 
     border:1px solid var(--line); border-radius:14px;
     padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
     font-size:.82rem; line-height:1.5;
@@ -25,7 +25,7 @@
   #cookie-notice.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
   #cookie-notice p{ margin:0 0 10px; }
   #cookie-notice button{
-    background:var(--forest); color:var(--paper); border:none;
+    background:var(--forest); color:white; border:none;
     padding:6px 14px; border-radius:100px; font-size:.78rem; font-weight:600;
     cursor:pointer; transition:transform .2s ease, background .2s ease;
   }
@@ -81,17 +81,19 @@
     backdrop-filter:blur(10px);
     box-shadow:0 1px 0 var(--line);
     padding:12px 5vw;
+color:black;
   }
   .logo{
     font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem;
     display:flex; align-items:center; gap:8px;
+color:blue;
   }
   .logo svg{width:22px;height:22px;}
   .nav-links{
     display:flex; gap:34px; list-style:none; margin:0; padding:0;
   }
   .nav-links a{
-    color:var(--ink); text-decoration:none; font-size:.92rem; font-weight:500;
+    text-decoration:none; font-size:.92rem; font-weight:500;
     position:relative; padding-bottom:4px;
   }
   .nav-links a::after{
