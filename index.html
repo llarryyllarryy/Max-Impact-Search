@@ -86,8 +86,25 @@ color:black;
   .logo{
     font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem;
     display:flex; align-items:center; gap:8px;
-color:blue;
+   color:white;
+   transition:color .3s ease;
   }
+body[data-theme="light"] .logo{
+color:blue;
+}
+body[data-theme="original"] .logo{
+color:blue;
+}
+body[data-theme="dark"] .logo{
+color:white;
+}
+body[data-theme="ocean"] .logo{
+color:white;
+}
+body[data-theme="forest"] .logo{
+color:white;
+}
+
   .logo svg{width:22px;height:22px;}
   .nav-links{
     display:flex; gap:34px; list-style:none; margin:0; padding:0;
@@ -159,32 +176,13 @@ color:blue;
     #nav-actions .nav-cta{ display:none; }
     #hamburger{ display:block; }
     nav{ padding:16px 5vw; }
+.logo{ color:var(--gold); }
   }
   @media (min-width: 881px){
     #mobile-menu{ display:none; }
   }
 
-  /* ---------- Vine signature (scroll growth) ---------- */
-  #vine-wrap{
-    position:fixed; left:24px; top:0; bottom:0; width:60px; z-index:5;
-    pointer-events:none; display:flex; align-items:stretch;
-  }
-  #vine-wrap svg{height:100%; width:100%; overflow:visible;}
-  .vine-path{
-    fill:none; stroke:var(--forest-light); stroke-width:2.5;
-    stroke-linecap:round;
-    stroke-dasharray:3000;
-    stroke-dashoffset:3000;
-    transition:stroke-dashoffset .1s linear;
-  }
-  .leaf{
-    opacity:0; transform:scale(.3);
-    transform-origin:center;
-    transition:opacity .6s ease, transform .6s cubic-bezier(.34,1.56,.64,1);
-  }
-  .leaf.bloom{opacity:1; transform:scale(1);}
-  @media (max-width: 900px){ #vine-wrap{display:none;} }
-
+  
   /* ---------- Hero ---------- */
   .hero{
     position:relative;
@@ -400,10 +398,7 @@ color:blue;
   }
   @media (hover:hover){ #cursor-glow.active{opacity:1;} }
 
-  /* ---------- Magnetic buttons ---------- */
-  .magnetic{ transition:transform .2s cubic-bezier(.22,1,.36,1); will-change:transform; 
-color:white;
-}
+  
 
   /* ---------- Tilt cards ---------- */
   .tilt{ transform-style:preserve-3d; will-change:transform; }
@@ -483,20 +478,7 @@ color:white;
     100%{opacity:0; visibility:hidden; pointer-events:none;}
   }
 
-  /* ---------- Custom cursor ---------- */
-  #cursor-dot, #cursor-ring{
-    position:fixed; top:0; left:0; pointer-events:none; z-index:250;
-    border-radius:50%; transform:translate(-50%,-50%);
-  }
-  #cursor-dot{ width:6px; height:6px; background:var(--gold); opacity:0; transition:opacity .3s ease; }
-  #cursor-ring{
-    width:32px; height:32px; border:1.5px solid rgba(27,67,50,.45);
-    opacity:0; transition:opacity .3s ease, width .25s ease, height .25s ease, background .25s ease, border-color .25s ease;
-  }
-  #cursor-ring.active, #cursor-dot.active{ opacity:1; }
-  #cursor-ring.grow{ width:54px; height:54px; background:rgba(232,163,61,.12); border-color:var(--gold); }
-  @media (hover:none){ #cursor-dot, #cursor-ring{ display:none; } }
-
+  
   /* ---------- Ambient fireflies ---------- */
   #fireflies{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
   .firefly{
@@ -626,11 +608,9 @@ color:white;
     box-shadow:0 1px 0 rgba(0,0,0,.08); padding:10px 5vw !important;
   }
   body[data-theme="original"] #fireflies,
-  body[data-theme="original"] #cursor-dot,
-  body[data-theme="original"] #cursor-ring,
+  ,
   body[data-theme="original"] #cursor-glow,
   body[data-theme="original"] #grain,
-  body[data-theme="original"] #vine-wrap,
   body[data-theme="original"] #progress-bar,
   body[data-theme="original"] #back-to-top{ display:none !important; }
 
@@ -710,7 +690,7 @@ color:white;
 
 <nav id="nav">
   <div class="logo">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 6 8 6 13a6 6 0 0012 0c0-5-6-11-6-11z" fill="#1B4332"/></svg>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 6 8 6 13a6 6 0 0012 0c0-5-6-11-6-11z" fill="currentColor"/></svg>
     MaxImpactSearch
   </div>
   <ul class="nav-links" id="navLinks">
@@ -721,7 +701,7 @@ color:white;
     <span id="nav-indicator"></span>
   </ul>
   <div id="nav-actions">
-    <button class="nav-cta magnetic ripple-btn" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})"><font color="white">Start now</font></button>
+    <button class="nav-cta ripple-btn" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})"><font color="white">Start now</font></button>
     <select id="theme-select" title="Choose a design">
       <option value="light">Light</option>
       <option value="dark">Dark</option>
@@ -750,20 +730,11 @@ color:white;
 </div>
 <div id="progress-bar"></div>
 <div id="cursor-glow"></div>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
+
 <div id="fireflies"></div>
 <div id="grain"></div>
 
-<div id="vine-wrap">
-  <svg viewBox="0 0 60 4000" preserveAspectRatio="none">
-    <path class="vine-path" id="vinePath" d="M30,0 C10,200 50,400 30,600 C10,800 50,1000 30,1200 C10,1400 50,1600 30,1800 C10,2000 50,2200 30,2400 C10,2600 50,2800 30,3000 C10,3200 50,3400 30,3600 C10,3800 50,3900 30,4000"/>
-    <g class="leaf" id="leaf1" transform="translate(30,600)"><path d="M0,0 C10,-8 18,-2 14,10 C10,18 -2,16 -4,6 C-6,-2 -4,-4 0,0Z" fill="#E8A33D"/></g>
-    <g class="leaf" id="leaf2" transform="translate(30,1500)"><path d="M0,0 C-10,-8 -18,-2 -14,10 C-10,18 2,16 4,6 C6,-2 4,-4 0,0Z" fill="#2D6A4F"/></g>
-    <g class="leaf" id="leaf3" transform="translate(30,2400)"><path d="M0,0 C10,-8 18,-2 14,10 C10,18 -2,16 -4,6 C-6,-2 -4,-4 0,0Z" fill="#2D6A83"/></g>
-    <g class="leaf" id="leaf4" transform="translate(30,3300)"><path d="M0,0 C-10,-8 -18,-2 -14,10 C-10,18 2,16 4,6 C6,-2 4,-4 0,0Z" fill="#E8A33D"/></g>
-  </svg>
-</div>
+
 
 <section class="hero" id="hero">
   <div class="blob blob1"></div>
@@ -773,7 +744,7 @@ color:white;
   <div class="hero-content">
     <div class="eyebrow">Your search engine for a good deed</div>
     <h1><span>Search.</span> <span>Find.</span> <span class="shimmer-word">Donate.</span></h1>
-    <p class="lede">Make a good deed with every search — free and simple. The search engine that turns everyday clicks into real-world change.</p>
+    <p class="lede" align="center">Make a good deed with every search — free and simple. The search engine that turns everyday clicks into real-world change.</p>
 
     <br /><br />
   </div>
@@ -781,9 +752,9 @@ color:white;
 
 <div class="search-wrap" id="wrap">
       <form class="search-bar" id="searchForm" style="position:relative;">
-        <input type="text" placeholder="Search & Donate — try anything…" id="searchInput">
+        <input type="text" placeholder="Search & Donate" id="searchInput">
         <span class="kbd-hint" id="kbdHint">/</span>
-        <button onclick="javascript:open5()" type="submit" class="magnetic ripple-btn">Search</button>
+        <button onclick="javascript:open5()" type="submit" class="ripple-btn">Search</button>
       </form>
       <div class="subnote">All ad revenue is donated to charity organizations. 🌍</div>
     </div>
@@ -1047,36 +1018,6 @@ color:white;
   const introVeil = document.getElementById('intro-veil');
   setTimeout(() => introVeil && introVeil.remove(), 1600);
 
-  // Custom cursor dot + ring
-  const cursorDot = document.getElementById('cursor-dot');
-  const cursorRing = document.getElementById('cursor-ring');
-  if(matchMedia('(hover:hover)').matches){
-    let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      cursorDot.style.left = mouseX + 'px';
-      cursorDot.style.top = mouseY + 'px';
-      cursorDot.classList.add('active');
-      cursorRing.classList.add('active');
-    });
-    window.addEventListener('mouseleave', () => {
-      cursorDot.classList.remove('active');
-      cursorRing.classList.remove('active');
-    });
-    function ringLoop(){
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      cursorRing.style.left = ringX + 'px';
-      cursorRing.style.top = ringY + 'px';
-      requestAnimationFrame(ringLoop);
-    }
-    ringLoop();
-    document.querySelectorAll('a, button, input').forEach(el => {
-      el.addEventListener('mouseenter', () => cursorRing.classList.add('grow'));
-      el.addEventListener('mouseleave', () => cursorRing.classList.remove('grow'));
-    });
-  }
-
   // Ambient fireflies
   const fireflyLayer = document.getElementById('fireflies');
   for(let i=0;i<18;i++){
@@ -1279,17 +1220,6 @@ color:white;
     });
   });
 
-  // Magnetic buttons
-  document.querySelectorAll('.magnetic').forEach(btn => {
-    btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width/2;
-      const y = e.clientY - rect.top - rect.height/2;
-      btn.style.transform = `translate(${x*0.25}px, ${y*0.4}px)`;
-    });
-    btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
-  });
-
   // Ripple effect on click
   document.querySelectorAll('.ripple-btn').forEach(btn => {
     btn.addEventListener('click', function(e){
@@ -1414,28 +1344,7 @@ color:white;
   }, {threshold:.5, rootMargin:'-40% 0px -50% 0px'});
   spySections.forEach(s => spyIO.observe(s));
 
-  // Vine growth tied to scroll progress
-  const vinePath = document.getElementById('vinePath');
-  const vineLength = vinePath.getTotalLength();
-  vinePath.style.strokeDasharray = vineLength;
-  vinePath.style.strokeDashoffset = vineLength;
-  const leaves = [
-    document.getElementById('leaf1'),
-    document.getElementById('leaf2'),
-    document.getElementById('leaf3'),
-    document.getElementById('leaf4'),
-  ];
-  function updateVine(){
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = Math.min(1, window.scrollY / scrollable);
-    vinePath.style.strokeDashoffset = vineLength * (1 - progress);
-    leaves.forEach((leaf, i) => {
-      const threshold = (i+1) / (leaves.length + 1);
-      leaf.classList.toggle('bloom', progress > threshold * 0.85);
-    });
-  }
-  window.addEventListener('scroll', updateVine);
-  updateVine();
+  
 
   // Animated counters
   const stats = document.querySelectorAll('.stat .num');
