@@ -9,6 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+
+/* ---------- Cookie notice ---------- */
+  #cookie-notice{
+    position:fixed; left:20px; bottom:20px; z-index:180;
+    max-width:280px; background:var(--paper); color:var(--ink);
+    border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
+    font-size:.82rem; line-height:1.5;
+    opacity:0; transform:translateY(14px) scale(.98); pointer-events:none;
+    transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
+  }
+  #cookie-notice.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  #cookie-notice p{ margin:0 0 10px; }
+  #cookie-notice button{
+    background:var(--forest); color:var(--paper); border:none;
+    padding:6px 14px; border-radius:100px; font-size:.78rem; font-weight:600;
+    cursor:pointer; transition:transform .2s ease, background .2s ease;
+  }
+  #cookie-notice button:hover{ transform:translateY(-1px); }
+  @media (max-width:600px){
+    #cookie-notice{ left:14px; right:14px; bottom:14px; max-width:none; }
+  }
+
   :root{
     --cream:#F7F4EC;
     --ink:#16231C;
@@ -993,6 +1016,11 @@
 
 <div id="toast">🌱 A seed for kindness, planted.</div>
 
+<div id="cookie-notice">
+  <p>We use a small cookie to remember your chosen design — nothing else is tracked.</p>
+  <button id="cookieNoticeDismiss">Got it</button>
+</div>
+
 <button id="back-to-top" title="Back to top">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
@@ -1080,6 +1108,17 @@
   const savedTheme = getCookie('site_theme') || 'light';
   themeSelect.value = savedTheme;
   applyTheme(savedTheme);
+
+// Small cookie notice — shows once, dismiss is remembered via cookie, never blocks the page
+  const cookieNotice = document.getElementById('cookie-notice');
+  if(!getCookie('cookie_notice_dismissed')){
+    setTimeout(() => cookieNotice.classList.add('show'), 1400);
+  }
+  document.getElementById('cookieNoticeDismiss').addEventListener('click', () => {
+    cookieNotice.classList.remove('show');
+    setCookie('cookie_notice_dismissed', '1', 365);
+  });
+
 
   // --- Original design: faithful reproduction of its search-and-redirect behavior ---
   function origOpen5(){
