@@ -100,7 +100,7 @@
   }
   .nav-links a:hover::after{width:100%;}
   .nav-cta{
-    background:var(--forest); color:var(--paper); border:none;
+    background:var(--forest); color:white; border:none;
     padding:10px 20px; border-radius:100px; font-weight:600; font-size:.88rem;
     cursor:pointer; transition:transform .25s ease, box-shadow .25s ease;
   }
@@ -145,7 +145,7 @@
   #mobile-menu.open a:nth-child(3){ transition-delay:.2s; }
   #mobile-menu.open a:nth-child(4){ transition-delay:.26s; }
   #mobile-menu .mobile-cta{
-    margin-top:10px; background:var(--forest); color:var(--paper); border:none;
+    margin-top:10px; background:var(--forest); color:white; border:none;
     padding:14px 32px; border-radius:100px; font-weight:600; font-size:1rem; cursor:pointer;
     opacity:0; transform:translateY(14px); transition:opacity .4s ease .32s, transform .4s ease .32s;
   }
@@ -254,7 +254,7 @@
     font-family:'Work Sans'; font-size:1rem; color:var(--ink);
   }
   .search-bar button{
-    background:var(--forest); color:var(--paper); border:none;
+    background:var(--forest); color:white; border:none;
     padding:12px 22px; border-radius:100px; font-weight:600; font-size:.9rem;
     cursor:pointer; white-space:nowrap;
     transition:background .25s ease, transform .2s ease;
@@ -399,7 +399,9 @@
   @media (hover:hover){ #cursor-glow.active{opacity:1;} }
 
   /* ---------- Magnetic buttons ---------- */
-  .magnetic{ transition:transform .2s cubic-bezier(.22,1,.36,1); will-change:transform; }
+  .magnetic{ transition:transform .2s cubic-bezier(.22,1,.36,1); will-change:transform; 
+color:white;
+}
 
   /* ---------- Tilt cards ---------- */
   .tilt{ transform-style:preserve-3d; will-change:transform; }
@@ -441,6 +443,7 @@
   /* Prevent text from clipping if it's long */
   white-space: normal; 
   text-align: center;
+color:white;
 }
 
 .ripple {
@@ -716,7 +719,7 @@
     <span id="nav-indicator"></span>
   </ul>
   <div id="nav-actions">
-    <button class="nav-cta magnetic ripple-btn" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})">Start now</button>
+    <button class="nav-cta magnetic ripple-btn" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})"><font color="white">Start now</font></button>
     <select id="theme-select" title="Choose a design">
       <option value="light">Light</option>
       <option value="dark">Dark</option>
