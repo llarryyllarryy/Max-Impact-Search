@@ -364,6 +364,10 @@ color:white;
   .trust-card h3{color:var(--paper); font-size:1.1rem; margin-bottom:8px;}
   .trust-card p{margin:0; color:rgba(247,244,236,.9); font-size:.92rem; line-height:1.55;}
   .trust-card a{color:var(--gold);}
+body[data-theme="dark"] .h3text{ color:white;}
+body[data-theme="forest"] .h3text{ color:white;}
+
+
 
   .stat-row{
     display:flex; justify-content:center; gap:60px; margin-top:64px; flex-wrap:wrap;
@@ -416,6 +420,8 @@ color:white;
     background:linear-gradient(90deg, var(--gold), var(--ocean), var(--forest-light));
     z-index:200; transition:width .1s linear;
   }
+
+body.no-animations #progress-bar{ display:none !important; }
 
   /* ---------- Cursor glow ---------- */
   #cursor-glow{
@@ -534,6 +540,9 @@ color:white;
 
   /* ---------- Text scramble ---------- */
   .scramble{ display:inline-block; }
+body[data-theme="dark"] .scramble{ color:white;}
+body[data-theme="forest"] .scramble{ color:white;}
+
 
   /* ---------- Glow border on partner cards ---------- */
   .partner-card{ position:relative; }
@@ -730,7 +739,7 @@ color:white;
     <span id="nav-indicator"></span>
   </ul>
   <div id="nav-actions">
-    <button class="nav-cta ripple-btn" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})"><font color="white">Start now</font></button>
+    <button class="nav-cta ripple-btn" onclick="smoothScrollTo(document.querySelector('#cta'))"><font color="white">Start now</font></button>
     <select id="theme-select" title="Choose a design">
       <option value="light">Light</option>
       <option value="dark">Dark</option>
@@ -858,11 +867,11 @@ color:white;
     </div>
     <div class="trust-grid">
       <div class="trust-card reveal">
-        <h3>We take privacy seriously</h3>
+        <h3 class="h3text">We take privacy seriously</h3>
         <p>Your searches are private. We don't collect any data and we don't sell information.</p>
       </div>
       <div class="trust-card reveal" style="transition-delay:.1s">
-        <h3>Financial overview</h3>
+        <h3 class="h3text">Financial overview</h3>
         <p>You can review all financial data through the linked deeds and projects referenced above.</p>
       </div>
     </div>
@@ -1125,6 +1134,7 @@ const waveSvg = document.getElementById('waveSvg');
    if(waveSvg && waveSvg.pauseAnimations){
      disabled ? waveSvg.pauseAnimations() : waveSvg.unpauseAnimations();
    }
+document.documentElement.style.scrollBehavior = disabled ? 'auto' : 'smooth';
  }
  animToggle.addEventListener('click', () => {
    const next = !animationsDisabled;
@@ -1187,7 +1197,7 @@ if(animationsDisabled) return;
   window.addEventListener('scroll', () => {
     backToTop.classList.toggle('show', window.scrollY > 700);
   });
-  backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+  backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior: animationsDisabled ? 'auto' : 'smooth'}));
 
   // "/" keyboard shortcut to jump to search
   const kbdHint = document.getElementById('kbdHint');
@@ -1230,13 +1240,13 @@ if(animationsDisabled) return;
       e.preventDefault();
       closeMobileMenu();
       setTimeout(() => {
-        document.getElementById(a.dataset.target).scrollIntoView({behavior:'smooth'});
+        smoothScrollTo(document.getElementById(a.dataset.target));
       }, 250);
     });
   });
   document.getElementById('mobileCta').addEventListener('click', () => {
     closeMobileMenu();
-    setTimeout(() => document.querySelector('#cta').scrollIntoView({behavior:'smooth'}), 250);
+    setTimeout(() => smoothScrollTo(document.querySelector('#cta')), 250);
   });
   window.addEventListener('resize', () => { if(window.innerWidth > 880) closeMobileMenu(); });
 
@@ -1249,6 +1259,7 @@ if(animationsDisabled) return;
   // Scroll progress bar
   const progressBar = document.getElementById('progress-bar');
   function updateProgress(){
+if(animationsDisabled) return;
     const scrollable = document.documentElement.scrollHeight - window.innerHeight;
     const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
     progressBar.style.width = pct + '%';
@@ -1312,10 +1323,10 @@ if(animationsDisabled) return;
   // Typewriter cycling placeholder for hero search
   const heroSearchInput = document.getElementById('searchInput');
   const placeholders = [
-    'Search & Donate — try "reforestation"…',
-    'Search & Donate — try "ocean cleanup"…',
-    'Search & Donate — try "school supplies"…',
-    'Search & Donate — try anything…'
+    'try "reforestation"…',
+    'try "ocean cleanup"…',
+    'try "school supplies"…',
+    'try anything…'
   ];
   let phIndex = 0, charIndex = 0, deleting = false;
   function typeLoop(){
@@ -1489,6 +1500,7 @@ if(animationsDisabled) return;
 
     
   function burst(container){
+if(animationsDisabled) return;
     const rect = container.getBoundingClientRect();
     for(let i=0;i<8;i++){
       const p = document.createElement('span');
@@ -1547,7 +1559,8 @@ var links = [
   "https://www.ecosia.org/search?method=index&q="+x, 
   "https://oceanhero.today/web?q="+x, 
   "https://rapusia.org/?q="+x,  
-  "https://gexsi.com/search/?q="+x+"#gsc.tab=0&gsc.q="+x+"&gsc.page=1"
+  "https://gexsi.com/search/?q="+x+"#gsc.tab=0&gsc.q="+x+"&gsc.page=1",
+"https://ekoru.org/?q="+x
 ];
 
 
