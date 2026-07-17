@@ -1080,15 +1080,13 @@ body[data-theme="forest"] .scramble{ color:white;}
     document.title = document.hidden ? 'Come back — a search is waiting 🌱' : originalTitle;
   });
 
-  // Theme dropdown, persisted via cookie
-  function setCookie(name, value, days){
-    const maxAge = days * 24 * 60 * 60;
-    document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/; SameSite=Lax`;
-  }
-  function getCookie(name){
-    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-    return match ? decodeURIComponent(match[1]) : null;
-  }
+// Theme dropdown, persisted via localStorage
+ function setStorage(name, value){
+   try{ localStorage.setItem(name, value); }catch(e){ /* storage unavailable (e.g. sandboxed preview) */ }
+ }
+ function getStorage(name){
+   try{ return localStorage.getItem(name); }catch(e){ return null; }
+ }
   const themeSelect = document.getElementById('theme-select');
   const designFancy = document.getElementById('design-fancy');
   const designOriginal = document.getElementById('design-original');
@@ -1100,20 +1098,23 @@ body[data-theme="forest"] .scramble{ color:white;}
   }
   themeSelect.addEventListener('change', () => {
     applyTheme(themeSelect.value);
-    setCookie('site_theme', themeSelect.value, 365);
+    setStorage('site_theme', themeSelect.value);
+
   });
-  const savedTheme = getCookie('site_theme') || 'light';
+const savedTheme = getStorage('site_theme') || 'light';
   themeSelect.value = savedTheme;
   applyTheme(savedTheme);
 
 // Small cookie notice — shows once, dismiss is remembered via cookie, never blocks the page
   const cookieNotice = document.getElementById('cookie-notice');
-  if(!getCookie('cookie_notice_dismissed')){
+  if(!getStorage('cookie_notice_dismissed')){
+
     setTimeout(() => cookieNotice.classList.add('show'), 1400);
   }
   document.getElementById('cookieNoticeDismiss').addEventListener('click', () => {
     cookieNotice.classList.remove('show');
-    setCookie('cookie_notice_dismissed', '1', 365);
+    setStorage('cookie_notice_dismissed', '1');
+
   });
 
 // Animation toggle — disables all motion sitewide, remembered via cookie
@@ -1139,9 +1140,11 @@ document.documentElement.style.scrollBehavior = disabled ? 'auto' : 'smooth';
  animToggle.addEventListener('click', () => {
    const next = !animationsDisabled;
    setAnimationsDisabled(next);
-   setCookie('animations_disabled', next ? '1' : '0', 365);
+   setStorage('animations_disabled', next ? '1' : '0');
+
  });
- setAnimationsDisabled(getCookie('animations_disabled') === '1');
+ setAnimationsDisabled(getStorage('animations_disabled') === '1');
+
 
 
   // --- Original design: faithful reproduction of its search-and-redirect behavior ---
