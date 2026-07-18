@@ -646,7 +646,7 @@ body[data-theme="forest"] .scramble{ color:white;}
     box-shadow:0 1px 0 rgba(0,0,0,.08); padding:10px 5vw !important;
   }
   body[data-theme="original"] #fireflies,
-  ,
+  
   body[data-theme="original"] #cursor-glow,
   body[data-theme="original"] #grain,
   body[data-theme="original"] #progress-bar,
@@ -792,7 +792,7 @@ body[data-theme="forest"] .scramble{ color:white;}
       <form class="search-bar" id="searchForm" style="position:relative;">
         <input type="text" placeholder="Search & Donate" id="searchInput">
         <span class="kbd-hint" id="kbdHint">/</span>
-        <button onclick="javascript:open5()" class="ripple-btn">Search</button>
+        <button onclick="javascript:open5()" type="submit" class="ripple-btn">Search</button>
       </form>
       <div class="subnote">All ad revenue is donated to charity organizations. 🌍</div>
     </div>
@@ -1080,15 +1080,13 @@ body[data-theme="forest"] .scramble{ color:white;}
     document.title = document.hidden ? 'Come back — a search is waiting 🌱' : originalTitle;
   });
 
-  // Theme dropdown, persisted via cookie
-  function setCookie(name, value, days){
-    const maxAge = days * 24 * 60 * 60;
-    document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/; SameSite=Lax`;
-  }
-  function getCookie(name){
-    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-    return match ? decodeURIComponent(match[1]) : null;
-  }
+// Theme dropdown, persisted via localStorage
+ function setStorage(name, value){
+   try{ localStorage.setItem(name, value); }catch(e){ /* storage unavailable (e.g. sandboxed preview) */ }
+ }
+ function getStorage(name){
+   try{ return localStorage.getItem(name); }catch(e){ return null; }
+ }
   const themeSelect = document.getElementById('theme-select');
   const designFancy = document.getElementById('design-fancy');
   const designOriginal = document.getElementById('design-original');
@@ -1100,20 +1098,23 @@ body[data-theme="forest"] .scramble{ color:white;}
   }
   themeSelect.addEventListener('change', () => {
     applyTheme(themeSelect.value);
-    setCookie('site_theme', themeSelect.value, 365);
+    setStorage('site_theme', themeSelect.value);
+
   });
-  const savedTheme = getCookie('site_theme') || 'light';
+const savedTheme = getStorage('site_theme') || 'light';
   themeSelect.value = savedTheme;
   applyTheme(savedTheme);
 
 // Small cookie notice — shows once, dismiss is remembered via cookie, never blocks the page
   const cookieNotice = document.getElementById('cookie-notice');
-  if(!getCookie('cookie_notice_dismissed')){
+  if(!getStorage('cookie_notice_dismissed')){
+
     setTimeout(() => cookieNotice.classList.add('show'), 1400);
   }
   document.getElementById('cookieNoticeDismiss').addEventListener('click', () => {
     cookieNotice.classList.remove('show');
-    setCookie('cookie_notice_dismissed', '1', 365);
+    setStorage('cookie_notice_dismissed', '1');
+
   });
 
 // Animation toggle — disables all motion sitewide, remembered via cookie
@@ -1139,10 +1140,17 @@ document.documentElement.style.scrollBehavior = disabled ? 'auto' : 'smooth';
  animToggle.addEventListener('click', () => {
    const next = !animationsDisabled;
    setAnimationsDisabled(next);
-   setCookie('animations_disabled', next ? '1' : '0', 365);
- });
- setAnimationsDisabled(getCookie('animations_disabled') === '1');
+   setStorage('animations_disabled', next ? '1' : '0');
 
+ });
+ setAnimationsDisabled(getStorage('animations_disabled') === '1');
+
+// Shared helper so every scroll-to-section call respects the animations toggle
+ // (native scrollIntoView/scrollTo 'smooth' ignores CSS scroll-behavior entirely)
+ function smoothScrollTo(el){
+   if(!el) return;
+   el.scrollIntoView({behavior: animationsDisabled ? 'auto' : 'smooth'});
+ }
 
   // --- Original design: faithful reproduction of its search-and-redirect behavior ---
   function origOpen5(){
@@ -1489,11 +1497,11 @@ if(animationsDisabled) return;
   const searchInput = document.getElementById('searchInput');
   const emojiSet = ['🌱','💧','☀️','📚','🌳'];
   searchForm.addEventListener('submit', (e) => {
-e.preventDefault();
+    e.preventDefault();
     burst(searchForm);
     if(searchInput.value.trim()){
-     
-open5();
+      window.open('https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=' + encodeURIComponent(searchInput.value.trim()), '_self');
+
 }
 });
 
@@ -1552,6 +1560,7 @@ function openRandomLink(links) {
   // Option 2: If you want to keep using window.open, use "_self"
   // window.open(links[randomIndex], "_self");
 }
+
 
 // Note: Ensure 'x' is defined before this array, or the code will throw an error!
 
