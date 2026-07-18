@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
+webView.getSettings().setDomStorageEnabled(true); 
+        
         webView.setLongClickable(true);
 
 
