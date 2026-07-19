@@ -646,7 +646,7 @@ body[data-theme="forest"] .scramble{ color:white;}
     box-shadow:0 1px 0 rgba(0,0,0,.08); padding:10px 5vw !important;
   }
   body[data-theme="original"] #fireflies,
-  ,
+  
   body[data-theme="original"] #cursor-glow,
   body[data-theme="original"] #grain,
   body[data-theme="original"] #progress-bar,
@@ -1145,7 +1145,12 @@ document.documentElement.style.scrollBehavior = disabled ? 'auto' : 'smooth';
  });
  setAnimationsDisabled(getStorage('animations_disabled') === '1');
 
-
+// Shared helper so every scroll-to-section call respects the animations toggle
+ // (native scrollIntoView/scrollTo 'smooth' ignores CSS scroll-behavior entirely)
+ function smoothScrollTo(el){
+   if(!el) return;
+   el.scrollIntoView({behavior: animationsDisabled ? 'auto' : 'smooth'});
+ }
 
   // --- Original design: faithful reproduction of its search-and-redirect behavior ---
   function origOpen5(){
