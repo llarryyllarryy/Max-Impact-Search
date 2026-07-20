@@ -1152,29 +1152,27 @@ document.documentElement.style.scrollBehavior = disabled ? 'auto' : 'smooth';
    el.scrollIntoView({behavior: animationsDisabled ? 'auto' : 'smooth'});
  }
 
-  // --- Original design: faithful reproduction of its search-and-redirect behavior ---
-  function origOpen5(){
-    const input = document.getElementById('orig-reg');
-    const val = input.value.trim();
-    if(val === ''){
-      input.focus();
-      input.classList.add('border-red-500');
-      alert('This field cannot be empty.');
-      return;
-    }
-    const x = encodeURIComponent(val);
-    const links = [
-      'https://www.ecosia.org/search?method=index&q=' + x,
-      'https://oceanhero.today/web?q=' + x,
-      'https://rapusia.org/?q=' + x,
-      'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1'
-    ];
-    window.location.href = links[Math.floor(Math.random() * links.length)];
-    input.value = '';
-  }
-  function origClickPress(e){
-    if(e.keyCode === 13) origOpen5();
-  }
+// good-search.org's search page appears defunct (see prior investigation), so it's capped
+ // at 5 redirects/day via localStorage rather than dropped entirely or used unrestricted.
+ function todayStr(){
+   return new Date().toISOString().slice(0, 10);
+ }
+ function getGoodSearchUsage(){
+   try{
+     const raw = localStorage.getItem('good_search_usage');
+     if(!raw) return { date: todayStr(), count: 0 };
+     const data = JSON.parse(raw);
+     if(data.date !== todayStr()) return { date: todayStr(), count: 0 }; // new day, reset
+     return data;
+   }catch(e){ return { date: todayStr(), count: 0 }; }
+ }
+ function recordGoodSearchUse(){
+   const usage = getGoodSearchUsage();
+   usage.count++;
+   try{ localStorage.setItem('good_search_usage', JSON.stringify(usage)); }catch(e){ /* storage unavailable */ }
+ }
+
+  
 
   window.addEventListener('scroll', () => {
 if(animationsDisabled) return;
@@ -1553,8 +1551,13 @@ var x = encodeURIComponent(x);
 
 
 function openRandomLink(links) {
-  var randomIndex = Math.floor(Math.random() * links.length);
-  window.open(links[randomIndex], "_blank");
+const goodSearchUsage = getGoodSearchUsage();
+   if(goodSearchUsage.count < 5){
+     links.push('https://good-search.org/search/?q=' + x);
+   }
+   const chosen = links[Math.floor(Math.random() * links.length)];
+   if(chosen.indexOf('good-search.org') !== -1) recordGoodSearchUse();
+   window.open(chosen, '_blank');
 }
 
 
@@ -1565,8 +1568,7 @@ var links = [
   "https://oceanhero.today/web?q="+x, 
   "https://rapusia.org/?q="+x,  
   "https://gexsi.com/search/?q="+x+"#gsc.tab=0&gsc.q="+x+"&gsc.page=1",
-"https://ekoru.org/?q="+x,
-"https://good-search.org/search/?q="+x
+"https://ekoru.org/?q="+x
 ];
 
 
