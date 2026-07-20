@@ -923,8 +923,9 @@ body[data-theme="forest"] .scramble{ color:white;}
       </p>
       <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-lg mx-auto">
         <input type="text" id="orig-reg" placeholder="What you wanna search today and do good?"
-               class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400" onkeypress="origClickPress(event)" required>
-        <button onclick="origOpen5()"
+               class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400" onkeypress="clickPress(event)" required>
+
+        <button onclick="javascript:open5()"
                 class="bg-yellow-400 hover:bg-yellow-500 text-indigo-800 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 w-full sm:w-auto">
           Search & Donate
         </button>
@@ -1543,9 +1544,17 @@ document.getElementById("searchInput").value = encode;
 setTimeout(function(){ open5(); }, 100);
 
 }
+
+function getActiveSearchInput(){
+   return document.body.getAttribute('data-theme') === 'original'
+     ? document.getElementById('orig-reg')
+     : document.getElementById('searchInput');
+ }
+
 function open5() {
 
-var x = $("#searchInput").val();
+var x = getActiveSearchInput().val ? getActiveSearchInput().value : getActiveSearchInput().value;
+    ;
 var x = encodeURIComponent(x);
 
 
@@ -1572,7 +1581,8 @@ var links = [
 
 
   
- const input = document.querySelector('#searchInput');
+ const input = getActiveSearchInput();
+
  if (input.value.trim() === '') {
  e.preventDefault();
  input.focus();
@@ -1584,7 +1594,7 @@ openRandomLink(links);
    }
 
 
-document.getElementById("searchInput").value = "";
+input.value = "";
 
 }
 
