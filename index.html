@@ -1089,26 +1089,35 @@ body[data-theme="forest"] .scramble{ color:white;}
 <script>
 
 
-// Visitor counter — tallies every visit in localStorage, but is only ever displayed
- // to "GET request visitors": people who landed with query parameters in the URL
- // (e.g. arriving via ?search=... from the custom search engine link), not plain visits.
+// Visitor counter — a REAL shared count across every visitor (not just this browser),
++ // via CountAPI (countapi.xyz): a free, no-signup, no-API-key hit-counter for static
++ // sites. Only shown to "GET request visitors" — people who landed with the site's
++ // ?search= parameter (e.g. via the custom search engine link), not plain visits.
+ 
  (function initVisitorCounter(){
-   let count = parseInt(getStorage('visitor_count') || '0', 10);
-   count += 1;
-   setStorage('visitor_count', String(count));
-
-   // Only counts as a qualifying "GET request visitor" if the URL has this exact
- // parameter — e.g. index.html?search=term — matching how the custom search
- // engine link elsewhere on the site is built. Any other query string is ignored.
+   
  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
  if(!isGetRequestVisitor) return;
 
    const badge = document.createElement('div');
    badge.id = 'visitor-counter';
-   badge.textContent = `👀 Visitor #${count}`;
+   badge.textContent = '👀 Loading visitor count…';
+   
    document.body.appendChild(badge);
    requestAnimationFrame(() => badge.classList.add('show'));
  })();
+
+// Namespace + key together form the counter's unique identity on CountAPI's
+   // servers — keep this specific to this project so it doesn't collide with anyone
+   // else's counter. Every call atomically increments and returns the new total.
+   fetch('https://api.countapi.xyz/hit/maximpactsearch-llarryyllarryy/visits')
+     .then(res => res.json())
+     .then(data => { badge.textContent = `👀 Visitor #${data.value}`; })
+     .catch(() => {
+       // CountAPI is a small free community service and can occasionally be down —
+       // fail quietly rather than showing a stale or made-up number.
+       badge.textContent = '👀 Thanks for visiting!';
+     });
 
 (function initAndroidAppBanner(){
   const isAndroid = /Android/i.test(navigator.userAgent);
