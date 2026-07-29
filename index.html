@@ -10,7 +10,15 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
-
+#android-app-banner{
+  position:fixed; left:0; right:0; top:0; z-index:230;
+  display:flex; align-items:center; gap:12px;
+  background:var(--paper); border-bottom:1px solid var(--line);
+  padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.1);
+  transform:translateY(-110%); transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+#android-app-banner.show{ transform:translateY(0); }
+/* + icon, copy, "Get app" button, and a close "✕" button styling */
 
 /* ---------- Cookie notice ---------- */
   #cookie-notice{
@@ -92,8 +100,11 @@
     padding:18px 5vw;
     background:rgba(247,244,236,0);
     backdrop-filter:blur(0px);
-    transition:background .4s ease, backdrop-filter .4s ease, box-shadow .4s ease, padding .4s ease;
+    transition:background .4s ease, backdrop-filter .4s ease, box-shadow .4s ease, padding .4s ease, top .4s cubic-bezier(.22,1,.36,1);
   }
+ body.android-banner-visible nav{ top: var(--android-banner-height, 0px); }
+ 
+  
   nav.scrolled{
     background:rgba(128, 128, 128, 1);
     backdrop-filter:blur(10px);
@@ -753,6 +764,17 @@ body[data-theme="forest"] .scramble{ color:white;}
   </div>
 </nav>
 
+<div id="android-app-banner">
+  <div class="app-icon">🌱</div>
+  <div class="app-copy">
+    <strong>MaxImpactSearch app</strong>
+    <span>Get the full experience on Android</span>
+  </div>
+  <!-- Placeholder Play Store link — swap in your real listing URL -->
+  <a class="app-get" id="androidAppGetBtn" href="https://play.google.com/store/apps/details?id=com.larry.maximpactsearch" target="_blank" rel="noopener">Get app</a>
+  <button class="app-close" id="androidAppCloseBtn" aria-label="Dismiss">✕</button>
+</div>
+
 <div id="mobile-menu">
   <a href="#hero" data-target="hero">Homepage</a>
   <a href="#how-it-works" data-target="how-it-works">How it works</a>
@@ -1055,7 +1077,34 @@ body[data-theme="forest"] .scramble{ color:white;}
 <script>
 
 
+(function initAndroidAppBanner(){
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if(!isAndroid) return;
+  if(getStorage('android_app_banner_seen')) return;
 
+  const banner = document.getElementById('android-app-banner');
+  const getBtn = document.getElementById('androidAppGetBtn');
+  const closeBtn = document.getElementById('androidAppCloseBtn');
+
+function showBanner(){
+     // Measure the banner's real rendered height so nav slides down by exactly that
+     // much — the banner's height can vary (e.g. copy wrapping to two lines on narrow
+     // screens), so a hardcoded pixel value would drift out of sync.
+     document.documentElement.style.setProperty('--android-banner-height', banner.offsetHeight + 'px');
+     document.body.classList.add('android-banner-visible');
+     banner.classList.add('show');
+   }
+  function dismissBanner(){
+    banner.classList.remove('show');
+document.body.classList.remove('android-banner-visible');
+      
+    setStorage('android_app_banner_seen', '1');
+  }
+
+  setTimeout(showBanner, 800);
+  closeBtn.addEventListener('click', dismissBanner);
+  getBtn.addEventListener('click', dismissBanner); // don't nag again once they've followed the link
+})();
 
   // Clean up intro veil once its animation finishes
   const introVeil = document.getElementById('intro-veil');
