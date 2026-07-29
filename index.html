@@ -713,15 +713,32 @@ body[data-theme="forest"] .scramble{ color:white;}
   #toast.show{ opacity:1; transform:translate(-50%, 0); }
 
 /* ---------- Visitor counter (GET-parameter visitors only) ---------- */
- #visitor-counter{
-   position:fixed; top:76px; right:16px; z-index:150;
-   background:var(--paper); color:var(--ink-soft); border:1px solid var(--line);
-   padding:6px 14px; border-radius:100px; font-size:.76rem; font-family:'Space Mono', monospace;
-   box-shadow:0 8px 18px rgba(0,0,0,.1);
-   opacity:0; transform:translateY(-8px); transition:opacity .4s ease, transform .4s ease;
- }
- #visitor-counter.show{ opacity:1; transform:translateY(0); }
- body.android-banner-visible #visitor-counter{ top: calc(76px + var(--android-banner-height, 0px)); }
+#visitor-counter {
+  position: fixed; 
+  top: 76px; 
+  right: 16px; 
+  z-index: 150;
+  background: var(--paper); 
+  color: var(--ink-soft); 
+  border: 1px solid var(--line);
+  padding: 6px 14px; 
+  border-radius: 100px; 
+  font-size: .76rem; 
+  font-family: 'Space Mono', monospace;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .1);
+  opacity: 0; 
+  transform: translateY(-8px); 
+  transition: opacity .4s ease, transform .4s ease;
+}
+
+#visitor-counter.show { 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+body.android-banner-visible #visitor-counter { 
+  top: calc(76px + var(--android-banner-height, 0px)); 
+}
 
 
   /* ---------- Wave divider between hero and next section ---------- */
@@ -1088,44 +1105,35 @@ body[data-theme="forest"] .scramble{ color:white;}
 
 <script>
 
-  (function initVisitorCounter(){
+  (function initVisitorCounter() {
+  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
+  if (!isGetRequestVisitor) return;
 
-    const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
-    if(!isGetRequestVisitor) return;
+  const badge = document.createElement('div');
+  badge.id = 'visitor-counter';
+  badge.textContent = '👀 Loading visitor count…';
+  document.body.appendChild(badge);
+  
+  requestAnimationFrame(() => badge.classList.add('show'));
 
-    const badge = document.createElement('div');
-    badge.id = 'visitor-counter';
-   badge.textContent = '👀 Loading visitor count…';
-    document.body.appendChild(badge);
-    requestAnimationFrame(() => badge.classList.add('show'));
+  const counterKey = 'maximpactsearch-llarryyllarryy-visits';
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-
-
- // The original countapi.xyz shut down entirely (confirmed dead, no redirect —
- // requests to it just stall rather than failing fast, which is exactly what was
- // leaving the badge stuck on "Loading…"). Switched to countapi.mileshilliard.com,
- // a free community-run drop-in successor built specifically to replace it.
- // It uses a single unique key (no separate namespace) — keep this specific to
- // this project so it doesn't collide with anyone else's counter.
- const counterKey = 'maximpactsearch-llarryyllarryy-visits';
-
- // Belt-and-suspenders: abort and fall back if the service doesn't answer within
- // 5s, so a future outage (of this or any replacement) can never re-cause the
- // "stuck on Loading…" symptom — the badge will always resolve to *something*.
- const controller = new AbortController();
- const timeoutId = setTimeout(() => controller.abort(), 5000);
-
- fetch(`https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`, { signal: controller.signal })
-   .then(res => res.json())
-   .then(data => {
-     clearTimeout(timeoutId);
-     badge.textContent = `👀 Visitor #${data.value}`;
-   })
-   .catch(() => {
-     clearTimeout(timeoutId);
-     badge.textContent = '👀 Thanks for visiting!';
-   });
-});
+  fetch(`https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`, { signal: controller.signal })
+    .then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    })
+    .then(data => {
+      clearTimeout(timeoutId);
+      badge.textContent = `👀 Visitor #${data.value}`;
+    })
+    .catch(() => {
+      clearTimeout(timeoutId);
+      badge.textContent = '👀 Thanks for visiting!';
+    });
+})();
 
 
 (function initAndroidAppBanner(){
