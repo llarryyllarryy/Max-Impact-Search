@@ -1089,35 +1089,32 @@ body[data-theme="forest"] .scramble{ color:white;}
 <script>
 
 
-// Visitor counter — a REAL shared count across every visitor (not just this browser),
-+ // via CountAPI (countapi.xyz): a free, no-signup, no-API-key hit-counter for static
-+ // sites. Only shown to "GET request visitors" — people who landed with the site's
-+ // ?search= parameter (e.g. via the custom search engine link), not plain visits.
- 
- (function initVisitorCounter(){
-   
- const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
- if(!isGetRequestVisitor) return;
+ // The original countapi.xyz shut down entirely (confirmed dead, no redirect —
+ // requests to it just stall rather than failing fast, which is exactly what was
+ // leaving the badge stuck on "Loading…"). Switched to countapi.mileshilliard.com,
+ // a free community-run drop-in successor built specifically to replace it.
+ // It uses a single unique key (no separate namespace) — keep this specific to
+ // this project so it doesn't collide with anyone else's counter.
+ const counterKey = 'maximpactsearch-llarryyllarryy-visits';
 
-   const badge = document.createElement('div');
-   badge.id = 'visitor-counter';
-   badge.textContent = '👀 Loading visitor count…';
-   
-   document.body.appendChild(badge);
-   requestAnimationFrame(() => badge.classList.add('show'));
- })();
+ // Belt-and-suspenders: abort and fall back if the service doesn't answer within
+ // 5s, so a future outage (of this or any replacement) can never re-cause the
+ // "stuck on Loading…" symptom — the badge will always resolve to *something*.
+ const controller = new AbortController();
+ const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-// Namespace + key together form the counter's unique identity on CountAPI's
-   // servers — keep this specific to this project so it doesn't collide with anyone
-   // else's counter. Every call atomically increments and returns the new total.
-   fetch('https://api.countapi.xyz/hit/maximpactsearch-llarryyllarryy/visits')
-     .then(res => res.json())
-     .then(data => { badge.textContent = `👀 Visitor #${data.value}`; })
-     .catch(() => {
-       // CountAPI is a small free community service and can occasionally be down —
-       // fail quietly rather than showing a stale or made-up number.
-       badge.textContent = '👀 Thanks for visiting!';
-     });
+ fetch(`https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`, { signal: controller.signal })
+   .then(res => res.json())
+   .then(data => {
+     clearTimeout(timeoutId);
+     badge.textContent = `👀 Visitor #${data.value}`;
+   })
+   .catch(() => {
+     clearTimeout(timeoutId);
+     badge.textContent = '👀 Thanks for visiting!';
+   });
+
+
 
 (function initAndroidAppBanner(){
   const isAndroid = /Android/i.test(navigator.userAgent);
