@@ -1088,6 +1088,18 @@ body[data-theme="forest"] .scramble{ color:white;}
 
 <script>
 
+  (function initVisitorCounter(){
+
+    const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
+    if(!isGetRequestVisitor) return;
+
+    const badge = document.createElement('div');
+    badge.id = 'visitor-counter';
+   badge.textContent = '👀 Loading visitor count…';
+    document.body.appendChild(badge);
+    requestAnimationFrame(() => badge.classList.add('show'));
+});
+
 
  // The original countapi.xyz shut down entirely (confirmed dead, no redirect —
  // requests to it just stall rather than failing fast, which is exactly what was
