@@ -1106,17 +1106,11 @@ body.android-banner-visible #visitor-counter {
 <script>
 
   (function initVisitorCounter() {
-  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
-  if (!isGetRequestVisitor) return;
-
-  const badge = document.createElement('div');
-  badge.id = 'visitor-counter';
-  badge.textContent = '👀 Loading visitor count…';
-  document.body.appendChild(badge);
-  
-  requestAnimationFrame(() => badge.classList.add('show'));
-
   const counterKey = 'maximpactsearch-llarryyllarryy-visits';
+  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
+
+  // Always fire the hit to count the visit in the background, 
+  // regardless of whether the URL has the parameter or not.
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -1127,11 +1121,27 @@ body.android-banner-visible #visitor-counter {
     })
     .then(data => {
       clearTimeout(timeoutId);
-      badge.textContent = `👀 Visitor #${data.value}`;
+      
+      // Only build and display the badge if the visitor parameter is present
+      if (isGetRequestVisitor) {
+        const badge = document.createElement('div');
+        badge.id = 'visitor-counter';
+        badge.textContent = `👀 Visitor #${data.value}`;
+        document.body.appendChild(badge);
+        requestAnimationFrame(() => badge.classList.add('show'));
+      }
     })
     .catch(() => {
       clearTimeout(timeoutId);
-      badge.textContent = '👀 Thanks for visiting!';
+      
+      // Fallback if fetch fails, but still respect the parameter check
+      if (isGetRequestVisitor) {
+        const badge = document.createElement('div');
+        badge.id = 'visitor-counter';
+        badge.textContent = '👀 Thanks for visiting!';
+        document.body.appendChild(badge);
+        requestAnimationFrame(() => badge.classList.add('show'));
+      }
     });
 })();
 
