@@ -10,7 +10,15 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
-
+#android-app-banner{
+  position:fixed; left:0; right:0; top:0; z-index:230;
+  display:flex; align-items:center; gap:12px;
+  background:var(--paper); border-bottom:1px solid var(--line);
+  padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.1);
+  transform:translateY(-110%); transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+#android-app-banner.show{ transform:translateY(0); }
+/* + icon, copy, "Get app" button, and a close "✕" button styling */
 
 /* ---------- Cookie notice ---------- */
   #cookie-notice{
@@ -64,13 +72,14 @@
     --paper: #FFFEFB;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth; overflow-x:hidden; max-width:100%;}
   body{
     margin:0;
     background:var(--cream);
     color:var(--ink);
     font-family:'Work Sans', sans-serif;
     overflow-x:hidden;
+max-width:100%;
   }
   h1,h2,h3{
     font-family:'Fraunces', serif;
@@ -83,6 +92,8 @@
     letter-spacing:.14em;
     text-transform:uppercase;
     color:var(--forest-light);
+max-width:100%; overflow-wrap:break-word;
+  
   }
 
   /* ---------- Nav ---------- */
@@ -92,8 +103,11 @@
     padding:18px 5vw;
     background:rgba(247,244,236,0);
     backdrop-filter:blur(0px);
-    transition:background .4s ease, backdrop-filter .4s ease, box-shadow .4s ease, padding .4s ease;
+    transition:background .4s ease, backdrop-filter .4s ease, box-shadow .4s ease, padding .4s ease, top .4s cubic-bezier(.22,1,.36,1);
   }
+ body.android-banner-visible nav{ top: var(--android-banner-height, 0px); }
+ 
+  
   nav.scrolled{
     background:rgba(128, 128, 128, 1);
     backdrop-filter:blur(10px);
@@ -209,6 +223,7 @@ color:white;
     text-align:center;
     padding:140px 6vw 80px;
     overflow:hidden;
+max-width:100%;
   }
   .blob{
     position:absolute; border-radius:50%;
@@ -232,6 +247,8 @@ color:white;
     font-size:clamp(2.6rem, 6vw, 5rem);
     font-weight:600; line-height:1.02; margin:18px 0 22px;
     position:relative; z-index:2;
+max-width:100%; overflow-wrap:break-word;
+  
   }
   .hero h1 span{
     display:inline-block;
@@ -244,8 +261,9 @@ color:white;
   @keyframes riseIn{to{opacity:1; transform:translateY(0);}}
 
   .hero p.lede{
-      max-width:520px; font-size:1.08rem; line-height:1.55;
-  color:var(--ink-soft);
+      max-width:min(520px, 100%); box-sizing:border-box; overflow-wrap:break-word;
+   font-size:1.08rem; line-height:1.55; color:var(--ink-soft);
+    
   }
 
   .search-wrap{
@@ -268,9 +286,29 @@ color:white;
     transform:translateY(-2px);
   }
   .search-bar input{
-    flex:1; border:none; outline:none; background:transparent;
-    font-family:'Work Sans'; font-size:1rem; color:var(--ink);
+   flex:1; min-width:100px !important; width:auto !important;
+   border:1px solid transparent !important; outline:none;
+   background:transparent !important;
+   font-family:'Work Sans', sans-serif !important; font-size:1rem !important;
+   color:#16231C !important; color:var(--ink) !important;
+   display:block !important; visibility:visible !important; opacity:1 !important;
+   padding:4px 0; box-sizing:border-box;
+  
   }
+
+  .search-bar input::placeholder{
+
+   color:#5a6b60 !important;
+   color:var(--ink-soft) !important;
+   opacity:1 !important;
+  }
+  .search-bar input::-moz-placeholder{
+
+   color:#5a6b60 !important;
+   color:var(--ink-soft) !important;
+   opacity:1 !important;
+  }
+
   .search-bar button{
     background:var(--forest); color:white; border:none;
     padding:12px 22px; border-radius:100px; font-weight:600; font-size:.9rem;
@@ -289,6 +327,8 @@ color:white;
   .hero .subnote{
       margin-top:14px; font-size:.82rem;
   color:var(--ink-soft);
+max-width:100%; overflow-wrap:break-word;
+    
   }
 
   /* ---------- Reveal on scroll ---------- */
@@ -376,7 +416,7 @@ body[data-theme="forest"] .h3text{ color:white;}
   .stat .num{
     font-family:'Space Mono'; font-size:2.4rem; font-weight:700; color:var(--gold);
   }
-  .stat .label{font-size:.82rem; color:rgba(247,244,236,.85); margin-top:4px;}
+  .stat .label{font-size:.82rem; color:rgba(247,244,236,.85); margin-top:40px;}
 
   /* ---------- CTA ---------- */
   .cta{text-align:center;}
@@ -653,7 +693,7 @@ body[data-theme="forest"] .scramble{ color:white;}
   body[data-theme="original"] #back-to-top{ display:none !important; }
 
   /* ---------- Hero exit parallax ---------- */
-  .hero-content{ will-change:transform, opacity; }
+  .hero-content{ will-change:transform, opacity; max-width:100%; box-sizing:border-box; }
 
   /* ---------- Back to top ---------- */
   #back-to-top{
@@ -680,7 +720,7 @@ body[data-theme="forest"] .scramble{ color:white;}
     transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1);
     transform:rotate(-90deg); transform-origin:50% 50%;
   }
-  .stat .num{ position:relative; z-index:1; padding-top:6px; }
+  .stat .num{ position:relative; z-index:1; padding-top:14px; }
 
   /* ---------- Keyboard shortcut hint ---------- */
   .kbd-hint{
@@ -701,6 +741,35 @@ body[data-theme="forest"] .scramble{ color:white;}
   }
   #toast.show{ opacity:1; transform:translate(-50%, 0); }
 
+/* ---------- Visitor counter (GET-parameter visitors only) ---------- */
+#visitor-counter {
+  position: fixed; 
+  top: 76px; 
+  right: 16px; 
+  z-index: 150;
+  background: var(--paper); 
+  color: var(--ink-soft); 
+  border: 1px solid var(--line);
+  padding: 6px 14px; 
+  border-radius: 100px; 
+  font-size: .76rem; 
+  font-family: 'Space Mono', monospace;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .1);
+  opacity: 0; 
+  transform: translateY(-8px); 
+  transition: opacity .4s ease, transform .4s ease;
+}
+
+#visitor-counter.show { 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+body.android-banner-visible #visitor-counter { 
+  top: calc(76px + var(--android-banner-height, 0px)); 
+}
+
+
   /* ---------- Wave divider between hero and next section ---------- */
   .wave-divider{ position:relative; height:70px; margin-top:-70px; overflow:hidden; pointer-events:none; z-index:2; }
   .wave-divider svg{ width:100%; height:100%; display:block; }
@@ -718,6 +787,43 @@ body[data-theme="forest"] .scramble{ color:white;}
     transition:transform .4s cubic-bezier(.22,1,.36,1);
   }
   .partner-card a:hover::before{ transform:scaleX(1); }
+
+/* ---------- Search engine preferences ---------- */
+ 
+ #engineSettingsBtn{
+   width:40px; height:40px; border-radius:50%; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .2s ease, border-color .2s ease;
+  flex-shrink:0;
+  padding:0;
+ }
+ #engineSettingsBtn:hover{ transform:rotate(25deg); }
+ #engineSettingsBtn.active{ border-color:var(--forest); color:var(--forest); }
+ #engineSettingsPanel{
+   position:fixed; z-index:240;
+width:240px; background:var(--paper); border:1px solid var(--line); border-radius:14px;
+   box-shadow:0 16px 36px rgba(0,0,0,.16); padding:14px 16px;
+   opacity:0; transform:translateY(-8px) scale(.97); pointer-events:none;
+   transition:opacity .25s ease, transform .25s ease;
+ }
+ #engineSettingsPanel.open{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+ #engineSettingsPanel p{ margin:0 0 10px; font-size:.78rem; font-weight:600; color:var(--ink); }
+ #engineSettingsPanel label{
+   display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--ink);
+   padding:6px 0; cursor:pointer;
+ }
+ #engineSettingsPanel input[type="checkbox"]{ width:15px; height:15px; accent-color:var(--forest); cursor:pointer; }
+ #engineSettingsPanel .engine-note{ font-size:.7rem; color:var(--ink-soft); margin-top:8px; line-height:1.4; }
+ #engineSelectAllBtn{
+   margin-top:10px; width:100%; background:none; border:1px solid var(--line); color:var(--ink-soft);
+   padding:6px; border-radius:8px; font-size:.76rem; cursor:pointer; transition:border-color .2s ease;
+ }
+ #engineSelectAllBtn:hover{ border-color:var(--forest); color:var(--forest); background:none; }
+ @media (max-width:880px){
+   #engineSettingsPanel{ position:fixed; top:auto; bottom:20px; left:16px; right:16px; width:auto; }
+ }
+
 </style>
 
 <script type="text/javascript"  src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
@@ -727,6 +833,9 @@ body[data-theme="forest"] .scramble{ color:white;}
 <body>
 
 <nav id="nav">
+
+
+
   <div class="logo">
     <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 6 8 6 13a6 6 0 0012 0c0-5-6-11-6-11z" fill="currentColor"/></svg>
     MaxImpactSearch
@@ -752,6 +861,17 @@ body[data-theme="forest"] .scramble{ color:white;}
     </button>
   </div>
 </nav>
+
+<div id="android-app-banner">
+  <div class="app-icon">🌱</div>
+  <div class="app-copy">
+    <strong>MaxImpactSearch app</strong>
+    <span>Get the full experience on Android</span>
+  </div>
+  <!-- Placeholder Play Store link — swap in your real listing URL -->
+  <a class="app-get" id="androidAppGetBtn" href="https://play.google.com/store/apps/details?id=com.larry.maximpactsearch" target="_blank" rel="noopener">Get app</a>
+  <button class="app-close" id="androidAppCloseBtn" aria-label="Dismiss">✕</button>
+</div>
 
 <div id="mobile-menu">
   <a href="#hero" data-target="hero">Homepage</a>
@@ -790,9 +910,13 @@ body[data-theme="forest"] .scramble{ color:white;}
 
 <div class="search-wrap" id="wrap">
       <form class="search-bar" id="searchForm" style="position:relative;">
-        <input type="text" placeholder="Search & Donate" id="searchInput">
+<input type="text" placeholder="Search & Donate" id="searchInput" style="color:#16231C; min-width:120px;">
         <span class="kbd-hint" id="kbdHint">/</span>
+
+<button type="button" id="engineSettingsBtn" title="Choose search engines" aria-haspopup="true" aria-expanded="false">⚙</button>
+  
         <button onclick="javascript:open5()" type="submit" class="ripple-btn">Search</button>
+
       </form>
       <div class="subnote">All ad revenue is donated to charity organizations. 🌍</div>
     </div>
@@ -1039,6 +1163,18 @@ body[data-theme="forest"] .scramble{ color:white;}
 
 <div id="toast">🌱 A seed for kindness, planted.</div>
 
+<div id="engineSettingsPanel">
+  <p>Search engines to use</p>
+  <label><input type="checkbox" data-engine="ecosia"> Forests</label>
+  <label><input type="checkbox" data-engine="oceanhero"> Ocean</label>
+  <label><input type="checkbox" data-engine="rapusia"> School Materials</label>
+  <label><input type="checkbox" data-engine="gexsi"> Combined Efforts Gexsi</label>
+  <label><input type="checkbox" data-engine="ekoru"> Combined Efforts Ekoru</label>
+  <label><input type="checkbox" data-engine="goodsearch"> Combined Efforts GoodSearch <span style="opacity:.6;">(5/day)</span></label>
+  <button id="engineSelectAllBtn" type="button">Select all</button>
+  <p class="engine-note">Applies to the Original and Classic themes' search redirect. Uncheck all but one to always use just that engine.</p>
+</div>
+
 <div id="cookie-notice">
   <p>We use a small cookie to remember your chosen design — nothing else is tracked.</p>
   <button id="cookieNoticeDismiss">Got it</button>
@@ -1054,8 +1190,186 @@ body[data-theme="forest"] .scramble{ color:white;}
 
 <script>
 
+ const ENGINES = [
+  { key:'ecosia',     label:'Ecosia',     build:x => 'https://www.ecosia.org/search?method=index&q=' + x },
+  { key:'oceanhero',  label:'OceanHero',  build:x => 'https://oceanhero.today/web?q=' + x },
+  { key:'rapusia',    label:'Rapusia',    build:x => 'https://rapusia.org/?q=' + x },
+  { key:'gexsi',      label:'Gexsi',      build:x => 'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1' },
+  { key:'ekoru',      label:'Ekoru',      build:x => 'https://ekoru.org/?q=' + x },
+  // good-search.org's search page appears defunct (see prior investigation), so it's
+  // capped at 5 redirects/day via localStorage rather than dropped entirely or offered
+  // unrestricted — separately from whether the user has it checked on at all.
+  { key:'goodsearch', label:'Good-Search',build:x => 'https://good-search.org/search/?q=' + x, capped:true }
+];
+const ALL_ENGINE_KEYS = ENGINES.map(e => e.key);
+
+function getEnginePrefs(){
+  try{
+    const raw = localStorage.getItem('engine_prefs');
+    if(!raw) return ALL_ENGINE_KEYS.slice(); // no saved preference yet — default to all
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) && arr.length ? arr : ALL_ENGINE_KEYS.slice();
+  }catch(e){ return ALL_ENGINE_KEYS.slice(); }
+}
+function setEnginePrefs(keys){
+  try{ localStorage.setItem('engine_prefs', JSON.stringify(keys)); }catch(e){ /* storage unavailable */ }
+}
 
 
+  (function initVisitorCounter() {
+  const counterKey = 'maximpactsearch-llarryyllarryy-visits';
+  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
+
+  // Always fire the hit to count the visit in the background, 
+  // regardless of whether the URL has the parameter or not.
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+  fetch(`https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`, { signal: controller.signal })
+    .then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    })
+    .then(data => {
+      clearTimeout(timeoutId);
+      
+      // Only build and display the badge if the visitor parameter is present
+      if (isGetRequestVisitor) {
+        const badge = document.createElement('div');
+        badge.id = 'visitor-counter';
+        badge.textContent = `👀 Visitor #${data.value}`;
+        document.body.appendChild(badge);
+        requestAnimationFrame(() => badge.classList.add('show'));
+      }
+    })
+    .catch(() => {
+      clearTimeout(timeoutId);
+      
+      // Fallback if fetch fails, but still respect the parameter check
+      if (isGetRequestVisitor) {
+        const badge = document.createElement('div');
+        badge.id = 'visitor-counter';
+        badge.textContent = '👀 Thanks for visiting!';
+        document.body.appendChild(badge);
+        requestAnimationFrame(() => badge.classList.add('show'));
+      }
+    });
+})();
+
+
+// Search engine preference panel — checkboxes reflect/update localStorage, and the
+// built list (buildEngineLinks, defined further below) is what origOpen5/classicOpen5
+// actually filter against when picking a redirect.
+(function initEngineSettings(){
+try{
+
+  const settingsBtn = document.getElementById('engineSettingsBtn');
+  const panel = document.getElementById('engineSettingsPanel');
+if(!settingsBtn || !panel) return;
+
+  const checkboxes = Array.from(panel.querySelectorAll('input[type="checkbox"]'));
+  const selectAllBtn = document.getElementById('engineSelectAllBtn');
+
+  function loadCheckboxState(){
+    const saved = getEnginePrefs();
+    checkboxes.forEach(cb => { cb.checked = saved.includes(cb.dataset.engine); });
+  }
+  function saveCheckboxState(){
+    setEnginePrefs(checkboxes.filter(cb => cb.checked).map(cb => cb.dataset.engine));
+  }
+
+  loadCheckboxState();
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      const stillChecked = checkboxes.filter(c => c.checked);
+      if(stillChecked.length === 0){
+        // Never allow going down to zero — re-check the box the user just unchecked,
+        // so there's always at least one engine (this is how "select a single one"
+        // is reached: uncheck every box but the last one you want to keep).
+        cb.checked = true;
+        return;
+      }
+      saveCheckboxState();
+    });
+
+  });
+
+  selectAllBtn.addEventListener('click', () => {
+    checkboxes.forEach(cb => { cb.checked = true; });
+    saveCheckboxState();
+  });
+
+function positionPanel(){
+   if(window.innerWidth <= 880) return; // mobile CSS handles a bottom-sheet layout instead
+   const rect = settingsBtn.getBoundingClientRect();
+   panel.style.top = (rect.bottom + 10) + 'px';
+   panel.style.left = 'auto';
+   panel.style.right = (window.innerWidth - rect.right) + 'px';
+ }
+
+  function openPanel(){
+positionPanel();
+    panel.classList.add('open');
+    settingsBtn.classList.add('active');
+    settingsBtn.setAttribute('aria-expanded', 'true');
+  }
+
+window.addEventListener('scroll', () => { if(panel.classList.contains('open')) closePanel(); }, { passive:true });
+ window.addEventListener('resize', () => { if(panel.classList.contains('open')) closePanel(); });
+
+  function closePanel(){
+    panel.classList.remove('open');
+    settingsBtn.classList.remove('active');
+    settingsBtn.setAttribute('aria-expanded', 'false');
+  }
+  settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    panel.classList.contains('open') ? closePanel() : openPanel();
+  });
+  document.addEventListener('click', (e) => {
+    if(panel.classList.contains('open') && !panel.contains(e.target) && e.target !== settingsBtn){
+      closePanel();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closePanel();
+  });
+
+}catch(err){
+    console.error('Engine settings panel failed to initialize:', err);
+  }
+
+})();
+
+(function initAndroidAppBanner(){
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if(!isAndroid) return;
+  if(getStorage('android_app_banner_seen')) return;
+
+  const banner = document.getElementById('android-app-banner');
+  const getBtn = document.getElementById('androidAppGetBtn');
+  const closeBtn = document.getElementById('androidAppCloseBtn');
+
+function showBanner(){
+     // Measure the banner's real rendered height so nav slides down by exactly that
+     // much — the banner's height can vary (e.g. copy wrapping to two lines on narrow
+     // screens), so a hardcoded pixel value would drift out of sync.
+     document.documentElement.style.setProperty('--android-banner-height', banner.offsetHeight + 'px');
+     document.body.classList.add('android-banner-visible');
+     banner.classList.add('show');
+   }
+  function dismissBanner(){
+    banner.classList.remove('show');
+document.body.classList.remove('android-banner-visible');
+      
+    setStorage('android_app_banner_seen', '1');
+  }
+
+  setTimeout(showBanner, 800);
+  closeBtn.addEventListener('click', dismissBanner);
+  getBtn.addEventListener('click', dismissBanner); // don't nag again once they've followed the link
+})();
 
   // Clean up intro veil once its animation finishes
   const introVeil = document.getElementById('intro-veil');
@@ -1172,6 +1486,19 @@ document.documentElement.style.scrollBehavior = disabled ? 'auto' : 'smooth';
    usage.count++;
    try{ localStorage.setItem('good_search_usage', JSON.stringify(usage)); }catch(e){ /* storage unavailable */ }
  }
+
+function buildEngineLinks(x){
+  const enabledKeys = getEnginePrefs();
+  const usage = getGoodSearchUsage();
+  let candidates = ENGINES
+    .filter(e => enabledKeys.includes(e.key))
+    .filter(e => !e.capped || usage.count < 5)
+    .map(e => ({ key: e.key, url: e.build(x) }));
+  if(candidates.length === 0){
+    candidates = ENGINES.filter(e => !e.capped || usage.count < 5).map(e => ({ key: e.key, url: e.build(x) }));
+  }
+  return candidates;
+}
 
 
   window.addEventListener('scroll', () => {
@@ -1559,13 +1886,16 @@ var x = encodeURIComponent(x);
 
 
 function openRandomLink(links) {
-const goodSearchUsage = getGoodSearchUsage();
+  const goodSearchUsage = getGoodSearchUsage();
    if(goodSearchUsage.count < 5){
      links.push('https://good-search.org/search/?q=' + x);
    }
-   const chosen = links[Math.floor(Math.random() * links.length)];
-   if(chosen.indexOf('good-search.org') !== -1) recordGoodSearchUse();
-   window.open(chosen, '_blank');
+const candidates = buildEngineLinks(x);
+
+   const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+  if(chosen.key === 'goodsearch') recordGoodSearchUse();
+  window.open(chosen.url, '_blank');
+  input.value = '';
 }
 
 
