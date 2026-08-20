@@ -741,33 +741,7 @@ body[data-theme="forest"] .scramble{ color:white;}
   }
   #toast.show{ opacity:1; transform:translate(-50%, 0); }
 
-/* ---------- Visitor counter (GET-parameter visitors only) ---------- */
-#visitor-counter {
-  position: fixed; 
-  top: 76px; 
-  right: 16px; 
-  z-index: 150;
-  background: var(--paper); 
-  color: var(--ink-soft); 
-  border: 1px solid var(--line);
-  padding: 6px 14px; 
-  border-radius: 100px; 
-  font-size: .76rem; 
-  font-family: 'Space Mono', monospace;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .1);
-  opacity: 0; 
-  transform: translateY(-8px); 
-  transition: opacity .4s ease, transform .4s ease;
-}
 
-#visitor-counter.show { 
-  opacity: 1; 
-  transform: translateY(0); 
-}
-
-body.android-banner-visible #visitor-counter { 
-  top: calc(76px + var(--android-banner-height, 0px)); 
-}
 
 
   /* ---------- Wave divider between hero and next section ---------- */
@@ -1216,45 +1190,7 @@ function setEnginePrefs(keys){
 }
 
 
-  (function initVisitorCounter() {
-  const counterKey = 'maximpactsearch-llarryyllarryy-visits';
-  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
-
-  // Always fire the hit to count the visit in the background, 
-  // regardless of whether the URL has the parameter or not.
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-  fetch(`https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`, { signal: controller.signal })
-    .then(res => {
-      if (!res.ok) throw new Error('Network response was not ok');
-      return res.json();
-    })
-    .then(data => {
-      clearTimeout(timeoutId);
-      
-      // Only build and display the badge if the visitor parameter is present
-      if (isGetRequestVisitor) {
-        const badge = document.createElement('div');
-        badge.id = 'visitor-counter';
-        badge.textContent = `👀 Visitor #${data.value}`;
-        document.body.appendChild(badge);
-        requestAnimationFrame(() => badge.classList.add('show'));
-      }
-    })
-    .catch(() => {
-      clearTimeout(timeoutId);
-      
-      // Fallback if fetch fails, but still respect the parameter check
-      if (isGetRequestVisitor) {
-        const badge = document.createElement('div');
-        badge.id = 'visitor-counter';
-        badge.textContent = '👀 Thanks for visiting!';
-        document.body.appendChild(badge);
-        requestAnimationFrame(() => badge.classList.add('show'));
-      }
-    });
-})();
+  
 
 
 // Search engine preference panel — checkboxes reflect/update localStorage, and the
