@@ -96,7 +96,6 @@ max-width:100%; overflow-wrap:break-word;
     backdrop-filter:blur(0px);
     transition:background .4s ease, backdrop-filter .4s ease, box-shadow .4s ease, padding .4s ease, top .4s cubic-bezier(.22,1,.36,1);
   }
- body.android-banner-visible nav{ top: var(--android-banner-height, 0px); }
  
   
   nav.scrolled{
@@ -1260,34 +1259,7 @@ window.addEventListener('scroll', () => { if(panel.classList.contains('open')) c
 
 })();
 
-(function initAndroidAppBanner(){
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  if(!isAndroid) return;
-  if(getStorage('android_app_banner_seen')) return;
 
-  const banner = document.getElementById('android-app-banner');
-  const getBtn = document.getElementById('androidAppGetBtn');
-  const closeBtn = document.getElementById('androidAppCloseBtn');
-
-function showBanner(){
-     // Measure the banner's real rendered height so nav slides down by exactly that
-     // much — the banner's height can vary (e.g. copy wrapping to two lines on narrow
-     // screens), so a hardcoded pixel value would drift out of sync.
-     document.documentElement.style.setProperty('--android-banner-height', banner.offsetHeight + 'px');
-     document.body.classList.add('android-banner-visible');
-     banner.classList.add('show');
-   }
-  function dismissBanner(){
-    banner.classList.remove('show');
-document.body.classList.remove('android-banner-visible');
-      
-    setStorage('android_app_banner_seen', '1');
-  }
-
-  setTimeout(showBanner, 800);
-  closeBtn.addEventListener('click', dismissBanner);
-  getBtn.addEventListener('click', dismissBanner); // don't nag again once they've followed the link
-})();
 
   // Clean up intro veil once its animation finishes
   const introVeil = document.getElementById('intro-veil');
