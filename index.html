@@ -182,7 +182,7 @@ body.menu-open{ overflow:hidden; }
   max-width:min(520px, 100%); box-sizing:border-box; overflow-wrap:break-word;
   font-size:1.08rem; line-height:1.55; color:var(--ink-soft);
 }
-.search-wrap{ margin-top:38px; width:100%; max-width:560px; }
+.search-wrap{ margin-top:38px; width:100%; max-width:560px; position:relative; z-index:2; }
 .search-bar{
   display:flex; align-items:center; gap:12px; background:var(--paper);
   border:1.5px solid var(--line); border-radius:100px; padding:8px 8px 8px 22px;
@@ -415,7 +415,7 @@ body[data-theme="original"] #design-original{ padding-top:68px; display:block; }
 body[data-theme="original"] .nav-links, body[data-theme="original"] #nav-actions .nav-cta, body[data-theme="original"] #hamburger{ display:none; }
 body[data-theme="original"] #nav{ background:rgba(255,255,255,.92) !important; backdrop-filter:blur(8px); box-shadow:0 1px 0 rgba(0,0,0,.08); padding:10px 5vw !important; }
 body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow, body[data-theme="original"] #grain, body[data-theme="original"] #progress-bar, body[data-theme="original"] #back-to-top{ display:none !important; }
-.hero-content{ will-change:transform, opacity; max-width:100%; box-sizing:border-box; }
+.hero-content{ will-change:transform, opacity; max-width:100%; box-sizing:border-box; position:relative; z-index:1; }
 #back-to-top{
   position:fixed; right:26px; bottom:26px; z-index:90;
   width:48px; height:48px; border-radius:50%;
@@ -1152,16 +1152,55 @@ function clearSearchHistory(){
   try{ localStorage.removeItem('search_history'); }catch(e){ /* storage unavailable */ }
 }
 
+// Measures the actual resting gap between the bottom of the hero text and the
+// top of the search bar, so the scroll-driven parallax below can never move
+// them far enough to visually collide — this adapts automatically to whatever
+// the real layout is on any given viewport, rather than guessing a fixed number.
+let heroParallaxMaxTravel = 60; // conservative fallback until measured
+function measureHeroParallaxGap(){
+  try{
+    const heroContentEl = document.querySelector('.hero-content');
+    const wrapEl = document.getElementById('wrap');
+    if(!heroContentEl || !wrapEl) return;
+    // Read the gap with any existing scroll-driven transform temporarily cleared,
+    // so we measure the true resting distance rather than an already-shifted one.
+    const prevHeroTransform = heroContentEl.style.transform;
+    const prevWrapTransform = wrapEl.style.transform;
+    heroContentEl.style.transform = 'none';
+    wrapEl.style.transform = 'none';
+    const gap = wrapEl.getBoundingClientRect().top - heroContentEl.getBoundingClientRect().bottom;
+    heroContentEl.style.transform = prevHeroTransform;
+    wrapEl.style.transform = prevWrapTransform;
+    // Each element only travels half the gap at most, and we keep a safety
+    // margin on top of that so they never actually touch even at max scroll.
+    heroParallaxMaxTravel = Math.max(20, Math.floor(gap * 0.4));
+  }catch(err){
+    console.error('measureHeroParallaxGap failed:', err);
+  }
+}
+measureHeroParallaxGap();
+window.addEventListener('resize', measureHeroParallaxGap);
+window.addEventListener('load', measureHeroParallaxGap); // re-check once web fonts have
+                                                           // finished loading and reflowed text
+
 window.addEventListener('scroll', () => {
   if(animationsDisabled) return;
   const scrollY = window.scrollY;
+  const clampedScroll = Math.min(scrollY, 500); // stop the parallax drift once the fade
+                                                 // below has already fully completed —
+                                                 // otherwise the translateY keeps growing
+                                                 // forever no matter how far the page scrolls
   const fade = Math.max(0, 1 - scrollY / 500);
   const heroContent = document.querySelector('.hero-content');
   const wrap = document.getElementById('wrap');
+  // Travel distance is capped at heroParallaxMaxTravel regardless of scroll speed,
+  // so hero-content sliding down can never reach far enough to underflow/collide
+  // with the search bar sliding up toward it from the opposite direction.
+  const travel = Math.min(clampedScroll * 0.25, heroParallaxMaxTravel);
   heroContent.style.opacity = fade;
-  heroContent.style.transform = `translateY(${scrollY * 0.25}px) scale(${1 - (1 - fade) * 0.05})`;
+  heroContent.style.transform = `translateY(${travel}px) scale(${1 - (1 - fade) * 0.05})`;
   wrap.style.opacity = 1;
-  wrap.style.transform = `translateY(-${scrollY * 0.25}px)`;
+  wrap.style.transform = `translateY(-${travel}px)`;
 });
 
 const backToTop = document.getElementById('back-to-top');
