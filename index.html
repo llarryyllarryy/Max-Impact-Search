@@ -1282,19 +1282,67 @@ searchInputEl.addEventListener('blur', () => kbdHint.classList.remove('hide'));
       panel.classList.remove('open');
     }
 
-    searchInputEl.addEventListener('focus', openPanel);
+    let isHovering = false;
+    let isFocusedState = false;
+
+    // Panel should stay open as long as EITHER the input is focused OR the
+    // mouse is over the input or the panel itself — this lets the user simply
+    // hover the search field to preview recent searches without clicking in.
+    function updatePanelVisibility(){
+      if(isHovering || isFocusedState){
+        openPanel();
+      } else {
+        closePanel();
+      }
+    }
+
+    searchInputEl.addEventListener('mouseenter', () => {
+      isHovering = true;
+      updatePanelVisibility();
+    });
+    searchInputEl.addEventListener('mouseleave', () => {
+      isHovering = false;
+      // Delay lets the mouse travel from the input down into the panel
+      // itself without the panel flickering closed in between.
+      setTimeout(updatePanelVisibility, 150);
+    });
+    panel.addEventListener('mouseenter', () => {
+      isHovering = true;
+      updatePanelVisibility();
+    });
+    panel.addEventListener('mouseleave', () => {
+      isHovering = false;
+      setTimeout(updatePanelVisibility, 150);
+    });
+
+    searchInputEl.addEventListener('focus', () => {
+      isFocusedState = true;
+      updatePanelVisibility();
+    });
     searchInputEl.addEventListener('blur', () => {
+      isFocusedState = false;
       // Slight delay so a click landing on the panel (or the Clear button) isn't
       // lost to the input's blur firing first.
-      setTimeout(closePanel, 150);
+      setTimeout(updatePanelVisibility, 150);
     });
+    // Explicit, unconditional trigger: a click always opens the panel directly,
+    // independent of the hover/focus flag bookkeeping above. This guarantees the
+    // very first click into the field shows history even in edge cases where
+    // mouseenter/focus ordering might not behave exactly as expected.
+    searchInputEl.addEventListener('click', openPanel);
     clearBtn.addEventListener('mousedown', (e) => {
       e.preventDefault();
       clearSearchHistory();
       renderList();
     });
     window.addEventListener('resize', () => { if(panel.classList.contains('open')) positionPanel(); });
-    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) closePanel(); }, { passive:true });
+    // Reposition (not close) on scroll — mobile browsers auto-scroll the page to
+    // bring a focused input above the on-screen keyboard the instant you tap it,
+    // which fires a scroll event immediately after opening. Closing on that would
+    // make the panel vanish before the user ever sees it. Keeping it open and
+    // just re-tracking the input's position handles both that case and genuine
+    // user scrolling correctly.
+    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) positionPanel(); }, { passive:true });
   }catch(err){
     console.error('Recent searches panel failed to initialize:', err);
   }
