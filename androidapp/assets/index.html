@@ -574,7 +574,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
     <div class="eyebrow">Your search engine for a good deed</div>
     <h1><span>Search.</span> <span>Find.</span> <span class="shimmer-word">Donate.</span></h1>
     <p class="lede">Make a good deed with every search — free and simple. The search engine that turns everyday clicks into real-world change.</p>
-    <br /><br />
+    
   </div>
 
   <div class="search-wrap" id="wrap">
@@ -937,7 +937,7 @@ function getStorage(name){
       settingsBtn.classList.remove('active');
       settingsBtn.setAttribute('aria-expanded', 'false');
     }
-    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) closePanel(); }, { passive:true });
+    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) positionPanel(); }, { passive:true });
     window.addEventListener('resize', () => { if(panel.classList.contains('open')) closePanel(); });
     settingsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1209,19 +1209,58 @@ searchInputEl.addEventListener('blur', () => kbdHint.classList.remove('hide'));
       panel.classList.remove('open');
     }
 
-    searchInputEl.addEventListener('focus', openPanel);
-    searchInputEl.addEventListener('blur', () => {
-      // Slight delay so a click landing on the panel (or the Clear button) isn't
-      // lost to the input's blur firing first.
-      setTimeout(closePanel, 150);
+ 
+    let isHovering = false;
+    let isFocusedState = false;
+
+    // Panel should stay open as long as EITHER the input is focused OR the
+    // mouse is over the input or the panel itself — this lets the user simply
+    // hover the search field to preview recent searches without clicking in.
+    function updatePanelVisibility(){
+      if(isHovering || isFocusedState){
+        openPanel();
+      } else {
+        closePanel();
+      }
+    }
+
+    searchInputEl.addEventListener('mouseenter', () => {
+      isHovering = true;
+      updatePanelVisibility();
     });
+    searchInputEl.addEventListener('mouseleave', () => {
+      isHovering = false;
+      // Delay lets the mouse travel from the input down into the panel
+      // itself without the panel flickering closed in between.
+      setTimeout(updatePanelVisibility, 150);
+    });
+    panel.addEventListener('mouseenter', () => {
+      isHovering = true;
+      updatePanelVisibility();
+    });
+    panel.addEventListener('mouseleave', () => {
+      isHovering = false;
+      setTimeout(updatePanelVisibility, 150);
+    });
+
+    searchInputEl.addEventListener('focus', () => {
+      isFocusedState = true;
+      updatePanelVisibility();
+    });
+    searchInputEl.addEventListener('blur', () => {
+      isFocusedState = false;
+      setTimeout(updatePanelVisibility, 150);
+    });
+searchInputEl.addEventListener('click', openPanel);
+
+
     clearBtn.addEventListener('mousedown', (e) => {
       e.preventDefault();
       clearSearchHistory();
       renderList();
     });
     window.addEventListener('resize', () => { if(panel.classList.contains('open')) positionPanel(); });
-    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) closePanel(); }, { passive:true });
+    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) positionPanel(); }, { passive:true });
   }catch(err){
     console.error('Recent searches panel failed to initialize:', err);
   }
