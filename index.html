@@ -915,12 +915,27 @@ function getStorage(name){
 }
 
 (function initVisitorCounter() {
-  const counterKey = 'maximpactsearch-llarryyllarryy-visits';
+  const counterNamespace = 'llarryyllarryy-github-io-maximpactsearch';
+   const counterKey = 'visits';
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
-  fetch(`https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`, { signal: controller.signal })
-    .then(res => { if (!res.ok) throw new Error('Network response was not ok'); return res.json(); })
+  fetch(`https://abacus.jasoncameron.dev/hit/${counterNamespace}/${counterKey}`, { signal: controller.signal })
+   
+       .then(res => {
+     const contentType = res.headers.get('content-type') || '';
+     if (!res.ok) {
+       return res.text().then(body => {
+         throw new Error(`HTTP ${res.status} ${res.statusText} — ${body.slice(0, 200)}`);
+       });
+     }
+     if (!contentType.includes('application/json')) {
+       return res.text().then(body => {
+         throw new Error(`Expected JSON, got "${contentType}" — ${body.slice(0, 200)}`);
+       });
+     }
+     return res.json();
+   })
     .then(data => {
       clearTimeout(timeoutId);
       if (isGetRequestVisitor) {
@@ -931,8 +946,10 @@ function getStorage(name){
         requestAnimationFrame(() => badge.classList.add('show'));
       }
     })
-    .catch(() => {
+      .catch((err) => {
       clearTimeout(timeoutId);
+console.error('Visitor counter request failed:', err);
+      
       if (isGetRequestVisitor) {
         const badge = document.createElement('div');
         badge.id = 'visitor-counter';
