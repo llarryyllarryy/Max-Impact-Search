@@ -10,6 +10,44 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
+.howto-open-btn{
+  background:none; border:none; color:var(--forest); text-decoration:underline;
+  cursor:pointer; font:inherit; font-size:.82rem; padding:0;
+}
+#howToOverlay{
+  position:fixed; inset:0; z-index:254; background:rgba(0,0,0,.45);
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+#howToOverlay.open{ opacity:1; pointer-events:auto; }
+#howToPanel{
+  position:fixed; z-index:255; width:380px; max-width:92vw; left:50%; top:50%;
+  transform:translate(-50%,-46%) scale(.96); background:var(--paper); border:1px solid var(--line);
+  border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.3); padding:22px 24px;
+  opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+}
+#howToPanel.open{ opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+#howToPanel .howto-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+#howToPanel .howto-title{ font-size:1.05rem; font-weight:700; color:var(--ink); margin:0; }
+#howToPanel .howto-close{ background:none; border:none; font-size:17px; cursor:pointer; color:var(--ink-soft); padding:4px; }
+#howToPanel .howto-close:hover{ color:var(--ink); }
+#howToInstructions{ font-size:.86rem; color:var(--ink-soft); line-height:1.6; margin-bottom:16px; }
+#howToInstructions b{ color:var(--ink); }
+#howToInstructions ol{ margin:6px 0 0; padding-left:20px; }
+#howToInstructions li{ margin-bottom:5px; }
+.howto-url-row{ display:flex; gap:8px; margin-bottom:14px; }
+#howToUrlField{
+  flex:1; min-width:0; background:var(--cream); border:1px solid var(--line); border-radius:8px;
+  color:var(--ink); font-size:.74rem; padding:9px 10px; font-family:'Space Mono', monospace;
+}
+#howToCopyBtn{
+  background:var(--forest); color:var(--paper); border:none; border-radius:8px; padding:0 16px;
+  font-size:.8rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:opacity .2s ease;
+}
+#howToCopyBtn:hover{ opacity:.88; }
+#howToCopyBtn.copied{ background:var(--gold); }
+.howto-hint{ font-size:.74rem; color:var(--ink-soft); line-height:1.45; margin:0; }
+@media (max-width:480px){ #howToPanel{ width:90vw; padding:18px; } }
+
 body[data-theme="dark"] .scramble, body[data-theme="dark"] h3,
 body[data-theme="forest"] .scramble, body[data-theme="forest"] h3{ color:#D3D3D3 !important; }
 
@@ -720,7 +758,7 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
     <h2>Ready to change your default?</h2>
     <p>Transform your digital footprint. Switch to MaxImpactSearch and begin donating for free — with every single search.</p>
     <p class="text-sm opacity-90">https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=Searchterm</p>
-    <p class="text-sm mt-6 opacity-70">Use this link as custom search engine.</p>
+    <p class="text-sm mt-6 opacity-70">Use this link as custom search engine. <button type="button" class="howto-open-btn">How do I set this up?</button></p>
   </div>
 </section>
 
@@ -837,7 +875,7 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
         Its time to transform your digital footprint. Change now to MaxImpactSearch and begin to donate for free- with every single search.
       </p>
       <p class="text-sm opacity-90">https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=Searchterm</p>
-      <p class="text-sm mt-6 opacity-70">Use this link as custom search engine.</p>
+      <p class="text-sm mt-6 opacity-70">Use this link as custom search engine. <button type="button" class="howto-open-btn" style="color:#fff; text-decoration:underline; background:none; border:none; cursor:pointer; font:inherit;">How do I set this up?</button></p>
     </div>
   </section>
 
@@ -877,6 +915,20 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
 <div id="cookie-notice">
   <p>We use a small cookie to remember your chosen design — nothing else is tracked.</p>
   <button id="cookieNoticeDismiss">Got it</button>
+</div>
+
+<div id="howToOverlay"></div>
+<div id="howToPanel">
+  <div class="howto-header">
+    <p class="howto-title">Set MaxImpactSearch as your default</p>
+    <button type="button" id="howToCloseBtn" class="howto-close" aria-label="Close">✕</button>
+  </div>
+  <div id="howToInstructions"></div>
+  <div class="howto-url-row">
+    <input type="text" id="howToUrlField" readonly value="https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=%s">
+    <button type="button" id="howToCopyBtn">Copy</button>
+  </div>
+  <p class="howto-hint">Every search still routes through a random charity partner — nothing changes about how MaxImpactSearch works, just how you get to it.</p>
 </div>
 
 <button id="anim-toggle" title="Turn off animations" aria-pressed="false">
@@ -1024,6 +1076,88 @@ console.error('Visitor counter request failed:', err);
     document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closePanel(); });
   }catch(err){
     console.error('Engine settings panel failed to initialize:', err);
+  }
+})();
+
+(function initHowToPanel(){
+  try{
+    const openBtns = Array.from(document.querySelectorAll('.howto-open-btn'));
+    const panel = document.getElementById('howToPanel');
+    const overlay = document.getElementById('howToOverlay');
+    const closeBtn = document.getElementById('howToCloseBtn');
+    const instructions = document.getElementById('howToInstructions');
+    const urlField = document.getElementById('howToUrlField');
+    const copyBtn = document.getElementById('howToCopyBtn');
+    if(openBtns.length === 0 || !panel || !overlay || !instructions || !urlField || !copyBtn) return;
+
+    const ua = navigator.userAgent;
+    const isFirefox = /Firefox/.test(ua);
+    const isEdge = /Edg\//.test(ua);
+    const isChrome = /Chrome/.test(ua) && !isEdge;
+    const isSafari = /Safari/.test(ua) && !isChrome && !isEdge;
+
+    if(isFirefox){
+      instructions.innerHTML =
+        '<b>Firefox</b><ol>' +
+        '<li>Bookmark this page (star icon in the address bar)</li>' +
+        '<li>Open <b>Bookmarks → Manage Bookmarks</b>, right-click it and choose <b>Properties</b></li>' +
+        '<li>Paste the URL below into the address field and add a <b>Keyword</b> (e.g. "mis")</li>' +
+        '<li>Type that keyword + your search in the address bar any time to search</li></ol>';
+    } else if(isEdge){
+      instructions.innerHTML =
+        '<b>Edge</b><ol>' +
+        '<li>Go to <b>Settings → Privacy, search, and services → Address bar and search</b></li>' +
+        '<li>Under <b>Manage search engines</b>, click <b>Add</b></li>' +
+        '<li>Paste the URL below into the "URL with %s" field, then set it as default</li></ol>';
+    } else if(isChrome){
+      instructions.innerHTML =
+        '<b>Chrome</b><ol>' +
+        '<li>Go to <b>Settings → Search engine → Manage search engines</b></li>' +
+        '<li>Click <b>Add</b>, name it "MaxImpactSearch", and paste the URL below into the "URL with %s" field</li>' +
+        '<li>Click the three dots next to it and choose <b>"Make default"</b></li></ol>';
+    } else if(isSafari){
+      instructions.innerHTML =
+        '<b>Safari</b> doesn\u2019t support adding custom search engines directly. ' +
+        'The easiest option is to add MaxImpactSearch to your Favorites or set it as your homepage in ' +
+        '<b>Settings → General → Homepage</b>.';
+    } else {
+      instructions.innerHTML =
+        'Most browsers let you add a custom search engine from their settings, using a URL with ' +
+        '<b>%s</b> as a placeholder for your search term — paste the one below.';
+    }
+
+    function openPanel(){
+      panel.classList.add('open');
+      overlay.classList.add('open');
+    }
+    function closePanel(){
+      panel.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+    openBtns.forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); openPanel(); }));
+    closeBtn.addEventListener('click', closePanel);
+    overlay.addEventListener('click', closePanel);
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closePanel(); });
+
+    copyBtn.addEventListener('click', async () => {
+      try{
+        urlField.select();
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(urlField.value);
+        } else {
+          document.execCommand('copy');
+        }
+        const original = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = original; copyBtn.classList.remove('copied'); }, 1800);
+      }catch(err){
+        console.error('Copy to clipboard failed:', err);
+        urlField.select();
+      }
+    });
+  }catch(err){
+    console.error('How-to panel failed to initialize:', err);
   }
 })();
 
