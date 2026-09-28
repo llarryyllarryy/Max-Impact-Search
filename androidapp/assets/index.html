@@ -872,7 +872,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
   <label><input type="checkbox" data-engine="rapusia"> School Materials</label>
   <label><input type="checkbox" data-engine="gexsi"> Combined Efforts Gexsi</label>
   <label><input type="checkbox" data-engine="ekoru"> Combined Efforts Ekoru</label>
-  <label><input type="checkbox" data-engine="goodsearch"> Combined Efforts GoodSearch <span style="opacity:.6;">(5/day)</span></label>
+  
   <button id="engineSelectAllBtn" type="button">Select all</button>
   <p class="engine-note">Applies to the Original theme's search redirect. Uncheck all but one to always use just that engine.</p>
 </div>
@@ -920,8 +920,8 @@ const ENGINES = [
   { key:'oceanhero',  label:'OceanHero',  build:x => 'https://oceanhero.today/web?q=' + x },
   { key:'rapusia',    label:'Rapusia',    build:x => 'https://rapusia.org/?q=' + x },
   { key:'gexsi',      label:'Gexsi',      build:x => 'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1' },
-  { key:'ekoru',      label:'Ekoru',      build:x => 'https://ekoru.org/?q=' + x },
-  { key:'goodsearch', label:'Good-Search',build:x => 'https://good-search.org/search/?q=' + x, capped:true }
+  { key:'ekoru',      label:'Ekoru',      build:x => 'https://ekoru.org/?q=' + x }
+  
 ];
 const ALL_ENGINE_KEYS = ENGINES.map(e => e.key);
 
