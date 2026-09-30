@@ -9,7 +9,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-
+#android-app-banner{
+  position:fixed; left:0; right:0; top:0; z-index:230;
+  display:flex; align-items:center; gap:12px;
+  background:var(--paper); border-bottom:1px solid var(--line);
+  padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.1);
+  transform:translateY(-110%); transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+#android-app-banner.show{ transform:translateY(0); }
+#cookie-notice{
+  position:fixed; left:78px; bottom:20px; z-index:180;
+  max-width:280px; background:var(--paper);
+  border:1px solid var(--line); border-radius:14px;
+  padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
+  font-size:.82rem; line-height:1.5;
+  opacity:0; transform:translateY(14px) scale(.98); pointer-events:none;
+  transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
+}
+#cookie-notice.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+#cookie-notice p{ margin:0 0 10px; }
+#cookie-notice button{
+  background:var(--forest); color:white; border:none;
+  padding:6px 14px; border-radius:100px; font-size:.78rem; font-weight:600;
+  cursor:pointer; transition:transform .2s ease, background .2s ease;
+}
+#cookie-notice button:hover{ transform:translateY(-1px); }
+@media (max-width:600px){
+  #cookie-notice{ left:14px; right:14px; bottom:70px; max-width:none; }
+}
 .howto-open-btn{
   background:none; border:none; color:var(--forest); text-decoration:underline;
   cursor:pointer; font:inherit; font-size:.82rem; padding:0;
@@ -47,38 +74,6 @@
 #howToCopyBtn.copied{ background:var(--gold); }
 .howto-hint{ font-size:.74rem; color:var(--ink-soft); line-height:1.45; margin:0; }
 @media (max-width:480px){ #howToPanel{ width:90vw; padding:18px; } }
-
-body[data-theme="dark"] .scramble, body[data-theme="dark"] h3,
-body[data-theme="forest"] .scramble, body[data-theme="forest"] h3{ color:#D3D3D3 !important; }
-
-#android-app-banner{
-  position:fixed; left:0; right:0; top:0; z-index:230;
-  display:flex; align-items:center; gap:12px;
-  background:var(--paper); border-bottom:1px solid var(--line);
-  padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.1);
-  transform:translateY(-110%); transition:transform .4s cubic-bezier(.22,1,.36,1);
-}
-#android-app-banner.show{ transform:translateY(0); }
-#cookie-notice{
-  position:fixed; left:78px; bottom:20px; z-index:180;
-  max-width:280px; background:var(--paper);
-  border:1px solid var(--line); border-radius:14px;
-  padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
-  font-size:.82rem; line-height:1.5;
-  opacity:0; transform:translateY(14px) scale(.98); pointer-events:none;
-  transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
-}
-#cookie-notice.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-#cookie-notice p{ margin:0 0 10px; }
-#cookie-notice button{
-  background:var(--forest); color:white; border:none;
-  padding:6px 14px; border-radius:100px; font-size:.78rem; font-weight:600;
-  cursor:pointer; transition:transform .2s ease, background .2s ease;
-}
-#cookie-notice button:hover{ transform:translateY(-1px); }
-@media (max-width:600px){
-  #cookie-notice{ left:14px; right:14px; bottom:70px; max-width:none; }
-}
 #anim-toggle{
   position:fixed; left:20px; bottom:20px; z-index:190;
   width:46px; height:46px; border-radius:50%;
@@ -119,7 +114,9 @@ nav{
 }
 body.android-banner-visible nav{ top: var(--android-banner-height, 0px); }
 nav.scrolled{
-  background:rgba(247,244,236,.85); backdrop-filter:blur(10px);
+  background:var(--paper); /* fallback for browsers without color-mix() */
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px);
   box-shadow:0 1px 0 var(--line); padding:12px 5vw;
 }
 .logo{
@@ -222,8 +219,7 @@ body.menu-open{ overflow:hidden; }
 @keyframes riseIn{to{opacity:1; transform:translateY(0);}}
 .hero p.lede{
   max-width:min(520px, 100%); margin-left:auto; margin-right:auto;
-   box-sizing:border-box; overflow-wrap:break-word;
-
+  box-sizing:border-box; overflow-wrap:break-word;
   font-size:1.08rem; line-height:1.55; color:var(--ink-soft);
 }
 .search-wrap{ margin-top:38px; width:100%; max-width:560px; position:relative; z-index:2; }
@@ -436,6 +432,8 @@ body[data-theme="original"]{
 }
 body[data-theme="original"] h1, body[data-theme="original"] h2, body[data-theme="original"] h3{ font-family:'Inter', sans-serif; letter-spacing:normal; }
 body[data-theme="original"] .shimmer-word{ background:none; -webkit-text-fill-color:#FDE68A; color:#FDE68A; animation:none; }
+body[data-theme="dark"] .scramble, body[data-theme="dark"] h3,
+body[data-theme="forest"] .scramble, body[data-theme="forest"] h3{ color:#D3D3D3 !important; }
 body[data-theme="dark"] .logo, body[data-theme="ocean"] .logo, body[data-theme="forest"] .logo{ color:#fff; }
 body[data-theme="original"] .logo{ color:var(--forest); }
 body[data-theme="dark"] .step, body[data-theme="dark"] .partner-card, body[data-theme="dark"] .search-bar,
@@ -898,7 +896,6 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
   <label><input type="checkbox" data-engine="rapusia"> School Materials</label>
   <label><input type="checkbox" data-engine="gexsi"> Combined Efforts Gexsi</label>
   <label><input type="checkbox" data-engine="ekoru"> Combined Efforts Ekoru</label>
-  
   <button id="engineSelectAllBtn" type="button">Select all</button>
   <p class="engine-note">Applies to the Original theme's search redirect. Uncheck all but one to always use just that engine.</p>
 </div>
@@ -947,7 +944,6 @@ const ENGINES = [
   { key:'rapusia',    label:'Rapusia',    build:x => 'https://rapusia.org/?q=' + x },
   { key:'gexsi',      label:'Gexsi',      build:x => 'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1' },
   { key:'ekoru',      label:'Ekoru',      build:x => 'https://ekoru.org/?q=' + x }
-  
 ];
 const ALL_ENGINE_KEYS = ENGINES.map(e => e.key);
 
@@ -971,27 +967,32 @@ function getStorage(name){
 }
 
 (function initVisitorCounter() {
+  // Switched from countapi.mileshilliard.com (unreliable — bot-protected/rate-limited)
+  // to Abacus (abacus.jasoncameron.dev), which was purpose-built as a replacement for
+  // the original CountAPI after it shut down. Verified live before switching.
   const counterNamespace = 'llarryyllarryy-github-io-maximpactsearch';
-   const counterKey = 'visits';
+  const counterKey = 'visits';
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
   fetch(`https://abacus.jasoncameron.dev/hit/${counterNamespace}/${counterKey}`, { signal: controller.signal })
-   
-       .then(res => {
-     const contentType = res.headers.get('content-type') || '';
-     if (!res.ok) {
-       return res.text().then(body => {
-         throw new Error(`HTTP ${res.status} ${res.statusText} — ${body.slice(0, 200)}`);
-       });
-     }
-     if (!contentType.includes('application/json')) {
-       return res.text().then(body => {
-         throw new Error(`Expected JSON, got "${contentType}" — ${body.slice(0, 200)}`);
-       });
-     }
-     return res.json();
-   })
+    .then(res => {
+      // Surface the real status/content-type instead of flattening every failure
+      // into one generic error — a non-2xx status, a rate limit, or a bot-check
+      // challenge page (HTML instead of JSON) all look identical otherwise.
+      const contentType = res.headers.get('content-type') || '';
+      if (!res.ok) {
+        return res.text().then(body => {
+          throw new Error(`HTTP ${res.status} ${res.statusText} — ${body.slice(0, 200)}`);
+        });
+      }
+      if (!contentType.includes('application/json')) {
+        return res.text().then(body => {
+          throw new Error(`Expected JSON, got "${contentType}" — ${body.slice(0, 200)}`);
+        });
+      }
+      return res.json();
+    })
     .then(data => {
       clearTimeout(timeoutId);
       if (isGetRequestVisitor) {
@@ -1002,10 +1003,12 @@ function getStorage(name){
         requestAnimationFrame(() => badge.classList.add('show'));
       }
     })
-      .catch((err) => {
+    .catch((err) => {
       clearTimeout(timeoutId);
-console.error('Visitor counter request failed:', err);
-      
+      // Check DevTools console on the live page for this — it will show the
+      // actual cause (CORS rejection, timeout/abort, non-2xx status, or a
+      // non-JSON response body) instead of guessing.
+      console.error('Visitor counter request failed:', err);
       if (isGetRequestVisitor) {
         const badge = document.createElement('div');
         badge.id = 'visitor-counter';
@@ -1108,16 +1111,16 @@ console.error('Visitor counter request failed:', err);
         '<b>Edge</b><ol>' +
         '<li>Go to <b>Settings → Privacy, search, and services → Address bar and search</b></li>' +
         '<li>Under <b>Manage search engines</b>, click <b>Add</b></li>' +
-        '<li>Paste the URL below into the "URL with %s" field, then set it as default</li></ol>';
+        '<li>Paste the URL below into the “URL with %s” field, then set it as default</li></ol>';
     } else if(isChrome){
       instructions.innerHTML =
         '<b>Chrome</b><ol>' +
         '<li>Go to <b>Settings → Search engine → Manage search engines</b></li>' +
-        '<li>Click <b>Add</b>, name it "MaxImpactSearch", and paste the URL below into the "URL with %s" field</li>' +
-        '<li>Click the three dots next to it and choose <b>"Make default"</b></li></ol>';
+        '<li>Click <b>Add</b>, name it “MaxImpactSearch”, and paste the URL below into the “URL with %s” field</li>' +
+        '<li>Click the three dots next to it and choose <b>“Make default”</b></li></ol>';
     } else if(isSafari){
       instructions.innerHTML =
-        '<b>Safari</b> doesn\u2019t support adding custom search engines directly. ' +
+        '<b>Safari</b> doesn’t support adding custom search engines directly. ' +
         'The easiest option is to add MaxImpactSearch to your Favorites or set it as your homepage in ' +
         '<b>Settings → General → Homepage</b>.';
     } else {
@@ -1259,31 +1262,13 @@ function smoothScrollTo(el){
   el.scrollIntoView({behavior: animationsDisabled ? 'auto' : 'smooth'});
 }
 
-function todayStr(){ return new Date().toISOString().slice(0, 10); }
-function getGoodSearchUsage(){
-  try{
-    const raw = localStorage.getItem('good_search_usage');
-    if(!raw) return { date: todayStr(), count: 0 };
-    const data = JSON.parse(raw);
-    if(data.date !== todayStr()) return { date: todayStr(), count: 0 };
-    return data;
-  }catch(e){ return { date: todayStr(), count: 0 }; }
-}
-function recordGoodSearchUse(){
-  const usage = getGoodSearchUsage();
-  usage.count++;
-  try{ localStorage.setItem('good_search_usage', JSON.stringify(usage)); }catch(e){ }
-}
-
 function buildEngineLinks(x){
   const enabledKeys = getEnginePrefs();
-  const usage = getGoodSearchUsage();
   let candidates = ENGINES
     .filter(e => enabledKeys.includes(e.key))
-    .filter(e => !e.capped || usage.count < 5)
     .map(e => ({ key: e.key, url: e.build(x) }));
   if(candidates.length === 0){
-    candidates = ENGINES.filter(e => !e.capped || usage.count < 5).map(e => ({ key: e.key, url: e.build(x) }));
+    candidates = ENGINES.map(e => ({ key: e.key, url: e.build(x) }));
   }
   return candidates;
 }
@@ -1814,7 +1799,6 @@ function open5() {
   const x = encodeURIComponent(term);
   const candidates = buildEngineLinks(x);
   const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-  if(chosen.key === 'goodsearch') recordGoodSearchUse();
   window.open(chosen.url, '_self');
   input.value = '';
 }
