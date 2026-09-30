@@ -10,6 +10,26 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
+#cookie-notice{
+  position:fixed; left:78px; bottom:20px; z-index:180;
+  max-width:280px; background:var(--paper);
+  border:1px solid var(--line); border-radius:14px;
+  padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
+  font-size:.82rem; line-height:1.5;
+  opacity:0; transform:translateY(14px) scale(.98); pointer-events:none;
+  transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
+}
+#cookie-notice.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+#cookie-notice p{ margin:0 0 10px; }
+#cookie-notice button{
+  background:var(--forest); color:white; border:none;
+  padding:6px 14px; border-radius:100px; font-size:.78rem; font-weight:600;
+  cursor:pointer; transition:transform .2s ease, background .2s ease;
+}
+#cookie-notice button:hover{ transform:translateY(-1px); }
+@media (max-width:600px){
+  #cookie-notice{ left:14px; right:14px; bottom:70px; max-width:none; }
+}
 .howto-open-btn{
   background:none; border:none; color:var(--forest); text-decoration:underline;
   cursor:pointer; font:inherit; font-size:.82rem; padding:0;
@@ -47,30 +67,6 @@
 #howToCopyBtn.copied{ background:var(--gold); }
 .howto-hint{ font-size:.74rem; color:var(--ink-soft); line-height:1.45; margin:0; }
 @media (max-width:480px){ #howToPanel{ width:90vw; padding:18px; } }
-
-body[data-theme="dark"] .scramble, body[data-theme="dark"] h3,
-body[data-theme="forest"] .scramble, body[data-theme="forest"] h3{ color:#D3D3D3 !important; }
-
-#cookie-notice{
-  position:fixed; left:78px; bottom:20px; z-index:180;
-  max-width:280px; background:var(--paper);
-  border:1px solid var(--line); border-radius:14px;
-  padding:14px 16px; box-shadow:0 12px 28px rgba(0,0,0,.14);
-  font-size:.82rem; line-height:1.5;
-  opacity:0; transform:translateY(14px) scale(.98); pointer-events:none;
-  transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
-}
-#cookie-notice.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-#cookie-notice p{ margin:0 0 10px; }
-#cookie-notice button{
-  background:var(--forest); color:white; border:none;
-  padding:6px 14px; border-radius:100px; font-size:.78rem; font-weight:600;
-  cursor:pointer; transition:transform .2s ease, background .2s ease;
-}
-#cookie-notice button:hover{ transform:translateY(-1px); }
-@media (max-width:600px){
-  #cookie-notice{ left:14px; right:14px; bottom:70px; max-width:none; }
-}
 #anim-toggle{
   position:fixed; left:20px; bottom:20px; z-index:190;
   width:46px; height:46px; border-radius:50%;
@@ -111,7 +107,9 @@ nav{
 }
 
 nav.scrolled{
-  background:rgba(247,244,236,.85); backdrop-filter:blur(10px);
+  background:var(--paper); /* fallback for browsers without color-mix() */
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px);
   box-shadow:0 1px 0 var(--line); padding:12px 5vw;
 }
 .logo{
@@ -131,9 +129,10 @@ nav.scrolled{
 }
 .nav-links a:hover::after{width:100%;}
 .nav-cta{
-  background:var(--forest); color:var(--paper); border:none;
+  background:var(--forest); color:#fff !important; border:none;
   padding:10px 20px; border-radius:100px; font-weight:600; font-size:.88rem;
   cursor:pointer; transition:transform .25s ease, box-shadow .25s ease;
+  -webkit-appearance:none; appearance:none;
 }
 .nav-cta:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(27,67,50,.25);}
 #nav-actions{ display:flex; align-items:center; gap:6px; }
@@ -171,7 +170,7 @@ nav.scrolled{
 #mobile-menu.open a:nth-child(3){ transition-delay:.2s; }
 #mobile-menu.open a:nth-child(4){ transition-delay:.26s; }
 #mobile-menu .mobile-cta{
-  margin-top:10px; background:var(--forest); color:var(--paper); border:none;
+  margin-top:10px; background:var(--forest); color:#fff; border:none;
   padding:14px 32px; border-radius:100px; font-weight:600; font-size:1rem; cursor:pointer;
   opacity:0; transform:translateY(14px); transition:opacity .4s ease .32s, transform .4s ease .32s;
 }
@@ -213,8 +212,8 @@ body.menu-open{ overflow:hidden; }
 .hero h1 span:nth-child(3){animation-delay:.49s; color:var(--ocean);}
 @keyframes riseIn{to{opacity:1; transform:translateY(0);}}
 .hero p.lede{
-max-width:min(520px, 100%); margin-left:auto; margin-right:auto;
-   box-sizing:border-box; overflow-wrap:break-word;
+  max-width:min(520px, 100%); margin-left:auto; margin-right:auto;
+  box-sizing:border-box; overflow-wrap:break-word;
   font-size:1.08rem; line-height:1.55; color:var(--ink-soft);
 }
 .search-wrap{ margin-top:38px; width:100%; max-width:560px; position:relative; z-index:2; }
@@ -248,9 +247,10 @@ max-width:min(520px, 100%); margin-left:auto; margin-right:auto;
   opacity:1 !important;
 }
 .search-bar button{
-  background:var(--forest); color:var(--paper); border:none;
+  background:var(--forest); color:#fff !important; border:none;
   padding:12px 22px; border-radius:100px; font-weight:600; font-size:.9rem;
   cursor:pointer; white-space:nowrap; transition:background .25s ease, transform .2s ease;
+  -webkit-appearance:none; appearance:none;
 }
 .search-bar button:hover{background:var(--forest-light); transform:scale(1.03);}
 .particle{ position:absolute; pointer-events:none; font-size:14px; animation:rise-fade 1.1s ease-out forwards; }
@@ -361,7 +361,8 @@ body.no-animations #cursor-glow{ display:none !important; }
   position: relative; overflow: hidden; width: 100%;
   display: flex; justify-content: center; align-items: center;
   padding: 12px 20px; box-sizing: border-box; white-space: normal;
-  text-align: center; color:var(--paper);
+  text-align: center; color:#fff !important;
+  -webkit-appearance:none; appearance:none;
 }
 .ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.5); transform: scale(0); animation: rippleAnim 0.6s ease-out forwards; pointer-events: none; }
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
@@ -427,6 +428,8 @@ body[data-theme="original"]{
 }
 body[data-theme="original"] h1, body[data-theme="original"] h2, body[data-theme="original"] h3{ font-family:'Inter', sans-serif; letter-spacing:normal; }
 body[data-theme="original"] .shimmer-word{ background:none; -webkit-text-fill-color:#FDE68A; color:#FDE68A; animation:none; }
+body[data-theme="dark"] .scramble, body[data-theme="dark"] h3,
+body[data-theme="forest"] .scramble, body[data-theme="forest"] h3{ color:#D3D3D3 !important; }
 body[data-theme="dark"] .logo, body[data-theme="ocean"] .logo, body[data-theme="forest"] .logo{ color:#fff; }
 body[data-theme="original"] .logo{ color:var(--forest); }
 body[data-theme="dark"] .step, body[data-theme="dark"] .partner-card, body[data-theme="dark"] .search-bar,
@@ -479,6 +482,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 }
 #toast.show{ opacity:1; transform:translate(-50%, 0); }
 
+
 .wave-divider{ position:relative; height:70px; margin-top:-70px; overflow:hidden; pointer-events:none; z-index:2; }
 .wave-divider svg{ width:100%; height:100%; display:block; }
 .wave-divider path{ fill:var(--cream); }
@@ -494,13 +498,12 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 }
 .partner-card a:hover::before{ transform:scaleX(1); }
 #engineSettingsBtn{
-  width:40px; height:40px; border-radius:50%; border:1px solid var(--line);
-  background:var(--paper); color:var(--ink); font-size:16px; cursor:pointer;
+  background:var(--paper); color:var(--ink) !important; font-size:16px; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:transform .2s ease, border-color .2s ease; flex-shrink:0; padding:0;
 }
 #engineSettingsBtn:hover{ transform:rotate(25deg); }
-#engineSettingsBtn.active{ border-color:var(--forest); color:var(--forest); }
+#engineSettingsBtn.active{ border-color:var(--forest); color:var(--forest) !important; }
 #engineSettingsPanel{
   position:fixed; z-index:240; width:240px; background:var(--paper); border:1px solid var(--line); border-radius:14px;
   box-shadow:0 16px 36px rgba(0,0,0,.16); padding:14px 16px;
@@ -589,6 +592,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 </nav>
 
 
+
 <div id="mobile-menu">
   <a href="#hero" data-target="hero">Homepage</a>
   <a href="#how-it-works" data-target="how-it-works">How it works</a>
@@ -616,7 +620,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
     <div class="eyebrow">Your search engine for a good deed</div>
     <h1><span>Search.</span> <span>Find.</span> <span class="shimmer-word">Donate.</span></h1>
     <p class="lede">Make a good deed with every search — free and simple. The search engine that turns everyday clicks into real-world change.</p>
-    
+    <br /><br />
   </div>
 
   <div class="search-wrap" id="wrap">
@@ -627,7 +631,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
            cascade issue might otherwise be affecting the .search-bar input rule. -->
       <span class="kbd-hint" id="kbdHint">/</span>
       <button type="button" id="engineSettingsBtn" title="Choose search engines" aria-haspopup="true" aria-expanded="false">⚙</button>
-      <button onclick="javascript:open5()" type="submit" class="ripple-btn">Search</button>
+      <button onclick="javascript:open5()" type="submit" class="ripple-btn text-white">Search</button>
     </form>
     <div class="subnote">All ad revenue is donated to charity organizations. 🌍</div>
   </div>
@@ -756,7 +760,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
         <input type="text" id="orig-reg" placeholder="What you wanna search today and do good?"
                class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400" onkeypress="clickPress(event)" required>
         <button onclick="javascript:open5()"
-                class="bg-yellow-400 hover:bg-yellow-500 text-indigo-800 font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 w-full sm:w-auto">
+                class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 w-full sm:w-auto">
           Search & Donate
         </button>
       </div>
@@ -872,7 +876,6 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
   <label><input type="checkbox" data-engine="rapusia"> School Materials</label>
   <label><input type="checkbox" data-engine="gexsi"> Combined Efforts Gexsi</label>
   <label><input type="checkbox" data-engine="ekoru"> Combined Efforts Ekoru</label>
-  
   <button id="engineSelectAllBtn" type="button">Select all</button>
   <p class="engine-note">Applies to the Original theme's search redirect. Uncheck all but one to always use just that engine.</p>
 </div>
@@ -921,7 +924,6 @@ const ENGINES = [
   { key:'rapusia',    label:'Rapusia',    build:x => 'https://rapusia.org/?q=' + x },
   { key:'gexsi',      label:'Gexsi',      build:x => 'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1' },
   { key:'ekoru',      label:'Ekoru',      build:x => 'https://ekoru.org/?q=' + x }
-  
 ];
 const ALL_ENGINE_KEYS = ENGINES.map(e => e.key);
 
@@ -943,6 +945,7 @@ function setStorage(name, value){
 function getStorage(name){
   try{ return localStorage.getItem(name); }catch(e){ return null; }
 }
+
 
 
 (function initEngineSettings(){
@@ -993,7 +996,7 @@ function getStorage(name){
       settingsBtn.classList.remove('active');
       settingsBtn.setAttribute('aria-expanded', 'false');
     }
-    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) positionPanel(); }, { passive:true });
+    window.addEventListener('scroll', () => { if(panel.classList.contains('open')) closePanel(); }, { passive:true });
     window.addEventListener('resize', () => { if(panel.classList.contains('open')) closePanel(); });
     settingsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1037,16 +1040,16 @@ function getStorage(name){
         '<b>Edge</b><ol>' +
         '<li>Go to <b>Settings → Privacy, search, and services → Address bar and search</b></li>' +
         '<li>Under <b>Manage search engines</b>, click <b>Add</b></li>' +
-        '<li>Paste the URL below into the "URL with %s" field, then set it as default</li></ol>';
+        '<li>Paste the URL below into the “URL with %s” field, then set it as default</li></ol>';
     } else if(isChrome){
       instructions.innerHTML =
         '<b>Chrome</b><ol>' +
         '<li>Go to <b>Settings → Search engine → Manage search engines</b></li>' +
-        '<li>Click <b>Add</b>, name it "MaxImpactSearch", and paste the URL below into the "URL with %s" field</li>' +
-        '<li>Click the three dots next to it and choose <b>"Make default"</b></li></ol>';
+        '<li>Click <b>Add</b>, name it “MaxImpactSearch”, and paste the URL below into the “URL with %s” field</li>' +
+        '<li>Click the three dots next to it and choose <b>“Make default”</b></li></ol>';
     } else if(isSafari){
       instructions.innerHTML =
-        '<b>Safari</b> doesn\u2019t support adding custom search engines directly. ' +
+        '<b>Safari</b> doesn’t support adding custom search engines directly. ' +
         'The easiest option is to add MaxImpactSearch to your Favorites or set it as your homepage in ' +
         '<b>Settings → General → Homepage</b>.';
     } else {
@@ -1088,6 +1091,28 @@ function getStorage(name){
   }catch(err){
     console.error('How-to panel failed to initialize:', err);
   }
+})();
+
+(function initAndroidAppBanner(){
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if(!isAndroid) return;
+  if(getStorage('android_app_banner_seen')) return;
+  const banner = document.getElementById('android-app-banner');
+  const getBtn = document.getElementById('androidAppGetBtn');
+  const closeBtn = document.getElementById('androidAppCloseBtn');
+  function showBanner(){
+    document.documentElement.style.setProperty('--android-banner-height', banner.offsetHeight + 'px');
+    document.body.classList.add('android-banner-visible');
+    banner.classList.add('show');
+  }
+  function dismissBanner(){
+    banner.classList.remove('show');
+    document.body.classList.remove('android-banner-visible');
+    setStorage('android_app_banner_seen', '1');
+  }
+  setTimeout(showBanner, 800);
+  closeBtn.addEventListener('click', dismissBanner);
+  getBtn.addEventListener('click', dismissBanner);
 })();
 
 const introVeil = document.getElementById('intro-veil');
@@ -1166,31 +1191,13 @@ function smoothScrollTo(el){
   el.scrollIntoView({behavior: animationsDisabled ? 'auto' : 'smooth'});
 }
 
-function todayStr(){ return new Date().toISOString().slice(0, 10); }
-function getGoodSearchUsage(){
-  try{
-    const raw = localStorage.getItem('good_search_usage');
-    if(!raw) return { date: todayStr(), count: 0 };
-    const data = JSON.parse(raw);
-    if(data.date !== todayStr()) return { date: todayStr(), count: 0 };
-    return data;
-  }catch(e){ return { date: todayStr(), count: 0 }; }
-}
-function recordGoodSearchUse(){
-  const usage = getGoodSearchUsage();
-  usage.count++;
-  try{ localStorage.setItem('good_search_usage', JSON.stringify(usage)); }catch(e){ }
-}
-
 function buildEngineLinks(x){
   const enabledKeys = getEnginePrefs();
-  const usage = getGoodSearchUsage();
   let candidates = ENGINES
     .filter(e => enabledKeys.includes(e.key))
-    .filter(e => !e.capped || usage.count < 5)
     .map(e => ({ key: e.key, url: e.build(x) }));
   if(candidates.length === 0){
-    candidates = ENGINES.filter(e => !e.capped || usage.count < 5).map(e => ({ key: e.key, url: e.build(x) }));
+    candidates = ENGINES.map(e => ({ key: e.key, url: e.build(x) }));
   }
   return candidates;
 }
@@ -1346,7 +1353,6 @@ searchInputEl.addEventListener('blur', () => kbdHint.classList.remove('hide'));
       panel.classList.remove('open');
     }
 
- 
     let isHovering = false;
     let isFocusedState = false;
 
@@ -1386,17 +1392,27 @@ searchInputEl.addEventListener('blur', () => kbdHint.classList.remove('hide'));
     });
     searchInputEl.addEventListener('blur', () => {
       isFocusedState = false;
+      // Slight delay so a click landing on the panel (or the Clear button) isn't
+      // lost to the input's blur firing first.
       setTimeout(updatePanelVisibility, 150);
     });
-searchInputEl.addEventListener('click', openPanel);
-
-
+    // Explicit, unconditional trigger: a click always opens the panel directly,
+    // independent of the hover/focus flag bookkeeping above. This guarantees the
+    // very first click into the field shows history even in edge cases where
+    // mouseenter/focus ordering might not behave exactly as expected.
+    searchInputEl.addEventListener('click', openPanel);
     clearBtn.addEventListener('mousedown', (e) => {
       e.preventDefault();
       clearSearchHistory();
       renderList();
     });
     window.addEventListener('resize', () => { if(panel.classList.contains('open')) positionPanel(); });
+    // Reposition (not close) on scroll — mobile browsers auto-scroll the page to
+    // bring a focused input above the on-screen keyboard the instant you tap it,
+    // which fires a scroll event immediately after opening. Closing on that would
+    // make the panel vanish before the user ever sees it. Keeping it open and
+    // just re-tracking the input's position handles both that case and genuine
+    // user scrolling correctly.
     window.addEventListener('scroll', () => { if(panel.classList.contains('open')) positionPanel(); }, { passive:true });
   }catch(err){
     console.error('Recent searches panel failed to initialize:', err);
@@ -1712,7 +1728,6 @@ function open5() {
   const x = encodeURIComponent(term);
   const candidates = buildEngineLinks(x);
   const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-  if(chosen.key === 'goodsearch') recordGoodSearchUse();
   window.open(chosen.url, '_blank');
   input.value = '';
 }
