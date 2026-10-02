@@ -973,12 +973,12 @@ function getStorage(name){
   // Switched from countapi.mileshilliard.com (unreliable — bot-protected/rate-limited)
   // to Abacus (abacus.jasoncameron.dev), which was purpose-built as a replacement for
   // the original CountAPI after it shut down. Verified live before switching.
-  const counterNamespace = 'llarryyllarryy-github-io-maximpactsearch';
-  const counterKey = 'visits';
+  const counterEndpoint = 'https://maximpactsearch.page.gd/counter.php';
+
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
-  fetch(`https://abacus.jasoncameron.dev/hit/${counterNamespace}/${counterKey}`, { signal: controller.signal })
+  fetch(counterEndpoint, { signal: controller.signal })
     .then(res => {
       // Surface the real status/content-type instead of flattening every failure
       // into one generic error — a non-2xx status, a rate limit, or a bot-check
