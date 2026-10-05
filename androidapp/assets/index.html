@@ -1742,6 +1742,22 @@ function clickPress(event) {
 // Chrome/Edge/Safari: native SpeechRecognition (live interim text).
 // Firefox etc.: record with MediaRecorder, transcribe on-device with Whisper.
 (function initVoiceSearch(){
+
+if (window.AndroidSpeech) {
+  let active = false;
+  fields.forEach(f => f.addEventListener('click', () => {
+    if (active) { AndroidSpeech.stop(); return; }
+    active = true; setField('listening', 'Listening…');
+    AndroidSpeech.start(navigator.language || 'en-US');
+  }));
+  window.onNativeSpeech = (text, final) => {
+    if (!final) { setField('listening', text); return; }
+    active = false; submitTranscript(text);
+  };
+  window.onNativeSpeechError = () => { active = false; setField('', ''); };
+  return;
+}
+
   const AUTO_SEARCH = false;   // true = search immediately after transcribing
   const fields = document.querySelectorAll('.voice-field');
   if(!fields.length) return;
