@@ -498,12 +498,30 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 }
 .partner-card a:hover::before{ transform:scaleX(1); }
 #engineSettingsBtn{
+  width:40px; height:40px; border-radius:50%; border:1px solid var(--line);
   background:var(--paper); color:var(--ink) !important; font-size:16px; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:transform .2s ease, border-color .2s ease; flex-shrink:0; padding:0;
 }
 #engineSettingsBtn:hover{ transform:rotate(25deg); }
 #engineSettingsBtn.active{ border-color:var(--forest); color:var(--forest) !important; }
+.voice-field{
+  display:flex; align-items:center; gap:12px; width:100%; box-sizing:border-box; margin-bottom:12px;
+  min-height:48px; padding:10px 22px; border-radius:100px; cursor:pointer; text-align:left;
+  background:var(--paper); border:1.5px solid var(--line); color:var(--ink);
+  font-family:'Work Sans', sans-serif; font-size:.95rem; user-select:none;
+  transition:border-color .25s ease, background .25s ease, box-shadow .25s ease;
+}
+.voice-field[hidden]{ display:none; }
+.voice-field:hover, .voice-field:focus-visible{ border-color:var(--gold); outline:none; }
+.voice-icon{ flex-shrink:0; font-size:1.05rem; }
+.voice-text{ flex:1; min-width:0; overflow-wrap:anywhere; line-height:1.35; }
+.voice-text.placeholder{ color:var(--ink-soft); }
+.voice-field.listening{ border-color:#d33; animation:mic-pulse 1.1s ease-in-out infinite; }
+.voice-field.working{ opacity:.7; cursor:progress; }
+.voice-field-orig{ background:#fff; color:#374151; border-color:#e5e7eb; margin-bottom:0; box-shadow:0 10px 15px rgba(0,0,0,.1); }
+.voice-field-orig .voice-text.placeholder{ color:#9ca3af; }
+@keyframes mic-pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(221,51,51,.35);} 50%{ box-shadow:0 0 0 7px rgba(221,51,51,0);} }
 #engineSettingsPanel{
   position:fixed; z-index:240; width:240px; background:var(--paper); border:1px solid var(--line); border-radius:14px;
   box-shadow:0 16px 36px rgba(0,0,0,.16); padding:14px 16px;
@@ -624,6 +642,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
   </div>
 
   <div class="search-wrap" id="wrap">
+    <div class="voice-field" role="button" tabindex="0" aria-label="Search by voice"><span class="voice-icon">🎤</span><span class="voice-text placeholder">Tap to speak…</span></div>
     <form class="search-bar" id="searchForm" style="position:relative;">
       <input type="text" placeholder="Search & Donate" id="searchInput" style="color:#16231C; min-width:120px;">
       <!-- Inline style is a deliberate belt-and-suspenders fallback: guarantees visible
@@ -631,7 +650,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
            cascade issue might otherwise be affecting the .search-bar input rule. -->
       <span class="kbd-hint" id="kbdHint">/</span>
       <button type="button" id="engineSettingsBtn" title="Choose search engines" aria-haspopup="true" aria-expanded="false">⚙</button>
-      <button onclick="javascript:open5()" type="submit" class="ripple-btn text-white">Search</button>
+      <button onclick="javascript:open5()" type="submit" class="ripple-btn">Search</button>
     </form>
     <div class="subnote">All ad revenue is donated to charity organizations. 🌍</div>
   </div>
@@ -756,6 +775,7 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
       <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto opacity-90">
         Make a good Deed with every search - for free and simple. Your Search Engine that changes the world.
       </p>
+      <div class="max-w-lg mx-auto mb-4"><div class="voice-field voice-field-orig" role="button" tabindex="0" aria-label="Search by voice"><span class="voice-icon">🎤</span><span class="voice-text placeholder">Tap to speak…</span></div></div>
       <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-lg mx-auto">
         <input type="text" id="orig-reg" placeholder="What you wanna search today and do good?"
                class="w-full sm:flex-grow p-4 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 text-gray-800 transition duration-300 placeholder-gray-400" onkeypress="clickPress(event)" required>
@@ -1091,28 +1111,6 @@ function getStorage(name){
   }catch(err){
     console.error('How-to panel failed to initialize:', err);
   }
-})();
-
-(function initAndroidAppBanner(){
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  if(!isAndroid) return;
-  if(getStorage('android_app_banner_seen')) return;
-  const banner = document.getElementById('android-app-banner');
-  const getBtn = document.getElementById('androidAppGetBtn');
-  const closeBtn = document.getElementById('androidAppCloseBtn');
-  function showBanner(){
-    document.documentElement.style.setProperty('--android-banner-height', banner.offsetHeight + 'px');
-    document.body.classList.add('android-banner-visible');
-    banner.classList.add('show');
-  }
-  function dismissBanner(){
-    banner.classList.remove('show');
-    document.body.classList.remove('android-banner-visible');
-    setStorage('android_app_banner_seen', '1');
-  }
-  setTimeout(showBanner, 800);
-  closeBtn.addEventListener('click', dismissBanner);
-  getBtn.addEventListener('click', dismissBanner);
 })();
 
 const introVeil = document.getElementById('intro-veil');
@@ -1735,6 +1733,169 @@ function open5() {
 function clickPress(event) {
   if (event.keyCode == 13) { open5(); }
 }
+
+
+// ---- Voice search ----------------------------------------------------------
+// A transcription field above the search bar (same width). Click it to speak;
+// the transcript appears in the field AND is copied into the search input, so
+// it goes through open5() -> buildEngineLinks() with the engines ticked in ⚙.
+// Chrome/Edge/Safari: native SpeechRecognition (live interim text).
+// Firefox etc.: record with MediaRecorder, transcribe on-device with Whisper.
+(function initVoiceSearch(){
+  const AUTO_SEARCH = false;   // true = search immediately after transcribing
+  const fields = document.querySelectorAll('.voice-field');
+  if(!fields.length) return;
+  const IDLE_TEXT = 'Tap to speak…';
+
+  function setField(state, text){   // state: '' | 'listening' | 'working'
+    fields.forEach(f => {
+      f.classList.toggle('listening', state === 'listening');
+      f.classList.toggle('working', state === 'working');
+      f.querySelector('.voice-icon').textContent = state === 'working' ? '⏳' : '🎤';
+      const t = f.querySelector('.voice-text');
+      t.textContent = text || IDLE_TEXT;
+      t.classList.toggle('placeholder', !text);
+    });
+  }
+  function submitTranscript(text){
+    text = (text || '').trim();
+    setField('', text);
+    if(!text) return;
+    getActiveSearchInput().value = text;
+    if(AUTO_SEARCH) open5();
+    else getActiveSearchInput().focus();
+  }
+
+  fields.forEach(f => f.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); f.click(); }
+  }));
+
+  // Firefox can expose SpeechRecognition behind a flag but has no speech service,
+  // so start() silently does nothing — always use the recording fallback there.
+  const isFirefox = /firefox|fxios/i.test(navigator.userAgent);
+  const SR = isFirefox ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+  console.info('Voice search mode:', SR ? 'native SpeechRecognition' : 'recording + Whisper fallback');
+
+  if(SR){
+    const recognition = new SR();
+    recognition.lang = navigator.language || 'en-US';
+    recognition.interimResults = true;     // show words live while speaking
+    recognition.continuous = false;
+    let listening = false, finalText = '';
+    fields.forEach(f => f.addEventListener('click', () => {
+      if(listening){ recognition.stop(); return; }
+      try{ recognition.start(); }catch(e){ console.warn(e); }
+    }));
+    recognition.addEventListener('start', () => { listening = true; finalText = ''; setField('listening', 'Listening…'); });
+    recognition.addEventListener('result', e => {
+      let interim = '';
+      finalText = '';
+      for(let i = 0; i < e.results.length; i++){
+        const r = e.results[i];
+        if(r.isFinal) finalText += r[0].transcript; else interim += r[0].transcript;
+      }
+      setField('listening', (finalText + interim).trim() || 'Listening…');
+    });
+    recognition.addEventListener('end', () => { listening = false; submitTranscript(finalText); });
+    recognition.addEventListener('error', e => {
+      if(e.error === 'no-speech' || e.error === 'aborted') return;
+      setField('', '');
+      alert(e.error === 'not-allowed'
+        ? 'Microphone access was denied. Allow it in your browser settings.'
+        : 'Voice recognition failed (' + e.error + ').');
+    });
+    return;
+  }
+
+  if(!(navigator.mediaDevices && window.MediaRecorder)){
+    fields.forEach(f => { f.hidden = true; });   // no voice support at all
+    return;
+  }
+
+  // ---- Fallback (Firefox): record + on-device Whisper ----
+  let transcriber = null, recorder = null, chunks = [], busy = false;
+
+  async function loadModel(){
+    if(transcriber) return transcriber;
+    let lib;
+    for(const url of [
+      'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3',
+      'https://esm.sh/@huggingface/transformers@3'
+    ]){
+      try{ lib = await import(url); break; }catch(e){ console.warn('Import failed:', url, e); }
+    }
+    if(!lib) throw new Error('Could not load the speech library (blocked or offline?)');
+    lib.env.allowLocalModels = false;
+    const model = /^en/i.test(navigator.language || 'en') ? 'Xenova/whisper-tiny.en' : 'Xenova/whisper-tiny';
+    const opts = { progress_callback: p => {
+      if(p.status === 'progress') setField('working', 'Downloading speech model ' + Math.round(p.progress) + '%');
+    }};
+    setField('working', 'Downloading speech model (first time only)…');
+    try{
+      transcriber = await lib.pipeline('automatic-speech-recognition', model, opts);
+    }catch(e1){
+      lib.env.useBrowserCache = false;   // private window / file:// / blocked storage
+      try{ transcriber = await lib.pipeline('automatic-speech-recognition', model, opts); }
+      catch(e2){ throw new Error('Model download failed: ' + (e2.message || e2) + ' (first attempt: ' + (e1.message || e1) + ')'); }
+    }
+    return transcriber;
+  }
+
+  async function toMono16k(blob){
+    const ctx = new AudioContext();
+    const decoded = await ctx.decodeAudioData(await blob.arrayBuffer());
+    ctx.close();
+    const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * 16000), 16000);
+    const src = off.createBufferSource();
+    src.buffer = decoded; src.connect(off.destination); src.start();
+    return (await off.startRendering()).getChannelData(0);
+  }
+
+  fields.forEach(f => f.addEventListener('click', async () => {
+    if(busy) return;
+    if(recorder && recorder.state === 'recording'){ recorder.stop(); return; }
+    // Instant feedback: Firefox shows its microphone prompt in the address bar,
+    // which is easy to miss — without this the click looks like it did nothing.
+    setField('working', 'Waiting for microphone… click “Allow” in the browser prompt');
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      chunks = [];
+      recorder = new MediaRecorder(stream);
+      recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        busy = true;
+        let step = 'recording';
+        try{
+          const blob = new Blob(chunks, { type: recorder.mimeType });
+          if(blob.size < 1000) throw new Error('Recording is empty. Speak for a second or two before stopping.');
+          setField('working', 'Decoding audio…');
+          step = 'decoding audio';
+          const pcm = await toMono16k(blob);
+          step = 'loading speech model';
+          const asr = await loadModel();
+          step = 'transcribing';
+          setField('working', 'Transcribing…');
+          const out = await asr(pcm);
+          submitTranscript(out.text);
+        }catch(err){
+          console.error('Voice search failed at "' + step + '":', err);
+          setField('', '');
+          alert('Voice search failed at "' + step + '": ' + (err && err.message ? err.message : err));
+        }finally{
+          busy = false;
+        }
+      };
+      recorder.start();
+      setField('listening', 'Recording… click to stop');
+    }catch(err){
+      setField('', '');
+      alert(err.name === 'NotAllowedError'
+        ? 'Microphone access was denied. Allow it in your browser settings.'
+        : 'Could not start recording: ' + err.message);
+    }
+  }));
+})();
 
 </script>
 
