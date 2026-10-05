@@ -975,43 +975,29 @@ function getStorage(name){
 }
 
 (function initVisitorCounter() {
-  // Counting: every visit sends a fire-and-forget POST via navigator.sendBeacon.
-  // Display: only with ?visitor=true, an iframe loads counter.php via GET, which
-  // just renders the current number and does NOT count (no double counting).
+  // JSONP: a <script> tag loads counter.php?cb=..., which counts this visit and
+  // replies with  __showVisitorCount(1234);  — no CORS needed, and the number
+  // can be read. Only counter.php (your own server) should ever be used here,
+  // because a JSONP response runs as code on this page.
   // Requires PHP hosting (GitHub Pages cannot run this).
   const counterEndpoint = 'https://maximpactsearch.page.gd/counter.php';
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
 
-  // 1) Count this visit.
-  let beaconQueued = false;
-  try {
-    beaconQueued = !!(navigator.sendBeacon && navigator.sendBeacon(counterEndpoint));
-  } catch (e) { /* fall through to fetch */ }
-  if (!beaconQueued) {
-    fetch(counterEndpoint, { method: 'POST', keepalive: true, mode: 'no-cors' }).catch(() => {});
-  }
+  window.__showVisitorCount = function (n) {
+    const total = Number(n);
+    if (!isGetRequestVisitor || !Number.isFinite(total)) return;
+    const badge = document.createElement('div');
+    badge.id = 'visitor-counter';
+    badge.textContent = '👀 Visitor #' + total;
+    document.body.appendChild(badge);
+    requestAnimationFrame(() => badge.classList.add('show'));
+  };
 
-  // 2) Show the number only when asked to.
-  if (!isGetRequestVisitor) return;
-
-  const badge = document.createElement('div');
-  badge.id = 'visitor-counter';
-
-  const label = document.createElement('span');
-  label.textContent = '👀 Visitor #';
-  badge.appendChild(label);
-
-  const frame = document.createElement('iframe');
-  frame.title = 'Visitor count';
-  frame.loading = 'eager';
-  badge.appendChild(frame);
-
-  document.body.appendChild(badge);
-  requestAnimationFrame(() => badge.classList.add('show'));
-
-  // Small delay so the beacon's POST reaches the server before the iframe's GET
-  // reads the number (otherwise the badge can lag one visit behind).
-  setTimeout(() => { frame.src = counterEndpoint; }, 400);
+  const script = document.createElement('script');
+  script.src = counterEndpoint + '?cb=__showVisitorCount&_=' + Date.now(); // cache-buster
+  script.async = true;
+  script.onerror = () => console.error('Visitor counter script failed to load:', script.src);
+  document.head.appendChild(script);
 })();
 
 (function initEngineSettings(){
