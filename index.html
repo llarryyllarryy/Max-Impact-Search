@@ -975,37 +975,24 @@ function getStorage(name){
 }
 
 (function initVisitorCounter() {
-  // Self-hosted counter.php, embedded via <iframe> instead of fetch()+JSON.
-  // counter.php now renders ONLY the number itself (no JSON wrapper), so
-  // there's nothing to parse here — the browser just loads it like an image.
+  // Counting: every visit sends a fire-and-forget POST via navigator.sendBeacon.
+  // Display: only with ?visitor=true, an iframe loads counter.php via GET, which
+  // just renders the current number and does NOT count (no double counting).
   // Requires PHP hosting (GitHub Pages cannot run this).
   const counterEndpoint = 'https://maximpactsearch.page.gd/counter.php';
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
 
-  const frame = document.createElement('iframe');
-  frame.src = counterEndpoint;
-  frame.title = 'Visitor count';
-  // Deliberately NOT loading="lazy" — a 0x0, off-screen-positioned iframe
-  // can fail the browser's "near viewport" heuristic and never actually
-  // load, which defeats the whole point of counting the visit immediately.
-  frame.loading = 'eager';
-
-  if (!isGetRequestVisitor) {
-    // Still loads counter.php on every visit (so the count keeps incrementing),
-    // just hidden from view when the badge itself isn't being shown.
-    //
-    // Deliberately 1x1, NOT 0x0 — a 0x0 iframe is treated close to
-    // display:none by some browser engines and can be skipped from ever
-    // actually firing its network request, exactly like 0x0 tracking
-    // pixels are known to silently fail while 1x1 ones reliably work.
-    frame.width = '1';
-    frame.height = '1';
-    frame.style.cssText = 'width:1px; height:1px; border:none; position:absolute; top:0; left:0; opacity:0; overflow:hidden; pointer-events:none;';
-    frame.setAttribute('aria-hidden', 'true');
-    frame.tabIndex = -1;
-    document.body.appendChild(frame);
-    return;
+  // 1) Count this visit.
+  let beaconQueued = false;
+  try {
+    beaconQueued = !!(navigator.sendBeacon && navigator.sendBeacon(counterEndpoint));
+  } catch (e) { /* fall through to fetch */ }
+  if (!beaconQueued) {
+    fetch(counterEndpoint, { method: 'POST', keepalive: true, mode: 'no-cors' }).catch(() => {});
   }
+
+  // 2) Show the number only when asked to.
+  if (!isGetRequestVisitor) return;
 
   const badge = document.createElement('div');
   badge.id = 'visitor-counter';
@@ -1013,10 +1000,18 @@ function getStorage(name){
   const label = document.createElement('span');
   label.textContent = '👀 Visitor #';
   badge.appendChild(label);
+
+  const frame = document.createElement('iframe');
+  frame.title = 'Visitor count';
+  frame.loading = 'eager';
   badge.appendChild(frame);
 
   document.body.appendChild(badge);
   requestAnimationFrame(() => badge.classList.add('show'));
+
+  // Small delay so the beacon's POST reaches the server before the iframe's GET
+  // reads the number (otherwise the badge can lag one visit behind).
+  setTimeout(() => { frame.src = counterEndpoint; }, 400);
 })();
 
 (function initEngineSettings(){
