@@ -982,21 +982,45 @@ function getStorage(name){
   // Requires PHP hosting (GitHub Pages cannot run this).
   const counterEndpoint = 'https://maximpactsearch.page.gd/counter.php';
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
+  let answered = false;
+
+  function showBadge(text) {
+    if (!isGetRequestVisitor) return;
+    const badge = document.createElement('div');
+    badge.id = 'visitor-counter';
+    badge.textContent = text;
+    document.body.appendChild(badge);
+    requestAnimationFrame(() => badge.classList.add('show'));
+  }
 
   window.__showVisitorCount = function (n) {
     const total = Number(n);
-    if (!isGetRequestVisitor || !Number.isFinite(total)) return;
-    const badge = document.createElement('div');
-    badge.id = 'visitor-counter';
-    badge.textContent = '👀 Visitor #' + total;
-    document.body.appendChild(badge);
-    requestAnimationFrame(() => badge.classList.add('show'));
+    if (!Number.isFinite(total)) return;
+    answered = true;
+    showBadge('👀 Visitor #' + total);
   };
 
   const script = document.createElement('script');
   script.src = counterEndpoint + '?cb=__showVisitorCount&_=' + Date.now(); // cache-buster
   script.async = true;
-  script.onerror = () => console.error('Visitor counter script failed to load:', script.src);
+
+  // Script could not be used: network error, ad/privacy blocker, host refusing the
+  // request, or the host answering with an HTML page (e.g. a "verify you're human"
+  // challenge) — browsers refuse to run an HTML response as a script and report
+  // that as an error too.
+  script.onerror = () => {
+    console.error('Visitor counter: script failed, was blocked, or the host returned a non-script page (HTML challenge?). Open this URL in a tab to see what the host sends:', script.src);
+    showBadge('👀 Counter unreachable or blocked');
+  };
+
+  // Script arrived but never called the callback: the host answered with something
+  // other than the counter's JavaScript (e.g. an HTML "verify you're human" page).
+  script.onload = () => {
+    if (answered) return;
+    console.error('Visitor counter: response was not the counter script — open', script.src, 'to see what the host returned.');
+    showBadge('👀 Counter reply invalid');
+  };
+
   document.head.appendChild(script);
 })();
 
