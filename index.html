@@ -975,53 +975,54 @@ function getStorage(name){
 }
 
 (function initVisitorCounter() {
-  // JSONP: a <script> tag loads counter.php?cb=..., which counts this visit and
-  // replies with  __showVisitorCount(1234);  — no CORS needed, and the number
-  // can be read. Only counter.php (your own server) should ever be used here,
-  // because a JSONP response runs as code on this page.
-  // Requires PHP hosting (GitHub Pages cannot run this).
+  // Hidden iframe: loading counter.php?count=1 is a real page navigation, so the
+  // host's browser check can run (fetch / beacon / script requests can't pass it).
+  // The page shows only the number and counts this visit.
+  // On ?visitor=... a badge also shows the number, read via a second iframe
+  // (counter.php without ?count=1) that only displays and never counts.
+  // Blockers may still stop the hidden iframe; those visits are not counted.
   const counterEndpoint = 'https://maximpactsearch.page.gd/counter.php';
   const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
-  let answered = false;
 
-  function showBadge(text) {
-    if (!isGetRequestVisitor) return;
+  function makeFrame(src, visible) {
+    const f = document.createElement('iframe');
+    f.src = src;
+    f.title = 'visitor counter';
+    f.setAttribute('aria-hidden', 'true');
+    f.setAttribute('tabindex', '-1');
+    f.loading = 'eager';
+    f.referrerPolicy = 'no-referrer';
+    if (visible) {
+      f.style.cssText = 'border:none;background:transparent;width:56px;height:16px;overflow:hidden;';
+    } else {
+      // 1x1 + opacity 0 (not 0x0 / display:none) so browsers still load it
+      f.style.cssText = 'position:fixed;bottom:0;left:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none;';
+    }
+    return f;
+  }
+
+  function showBadge() {
     const badge = document.createElement('div');
     badge.id = 'visitor-counter';
-    badge.textContent = text;
+    badge.append('👀 Visitor #');
+    badge.appendChild(makeFrame(counterEndpoint + '?_=' + Date.now(), true));
     document.body.appendChild(badge);
     requestAnimationFrame(() => badge.classList.add('show'));
   }
 
-  window.__showVisitorCount = function (n) {
-    const total = Number(n);
-    if (!Number.isFinite(total)) return;
-    answered = true;
-    showBadge('👀 Visitor #' + total);
-  };
+  function start() {
+    const countFrame = makeFrame(counterEndpoint + '?count=1&_=' + Date.now(), false);
+    if (isGetRequestVisitor) {
+      // show the number only after the counting request finished
+      let shown = false;
+      const go = () => { if (!shown) { shown = true; showBadge(); } };
+      countFrame.addEventListener('load', go);
+      setTimeout(go, 4000);
+    }
+    document.body.appendChild(countFrame);
+  }
 
-  const script = document.createElement('script');
-  script.src = counterEndpoint + '?cb=__showVisitorCount&_=' + Date.now(); // cache-buster
-  script.async = true;
-
-  // Script could not be used: network error, ad/privacy blocker, host refusing the
-  // request, or the host answering with an HTML page (e.g. a "verify you're human"
-  // challenge) — browsers refuse to run an HTML response as a script and report
-  // that as an error too.
-  script.onerror = () => {
-    console.error('Visitor counter: script failed, was blocked, or the host returned a non-script page (HTML challenge?). Open this URL in a tab to see what the host sends:', script.src);
-    showBadge('👀 Counter unreachable or blocked');
-  };
-
-  // Script arrived but never called the callback: the host answered with something
-  // other than the counter's JavaScript (e.g. an HTML "verify you're human" page).
-  script.onload = () => {
-    if (answered) return;
-    console.error('Visitor counter: response was not the counter script — open', script.src, 'to see what the host returned.');
-    showBadge('👀 Counter reply invalid');
-  };
-
-  document.head.appendChild(script);
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
 
 (function initEngineSettings(){
