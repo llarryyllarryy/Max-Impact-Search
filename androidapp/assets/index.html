@@ -10,6 +10,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
+
 #cookie-notice{
   position:fixed; left:78px; bottom:20px; z-index:180;
   max-width:280px; background:var(--paper);
@@ -518,6 +519,8 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 .voice-text{ flex:1; min-width:0; overflow-wrap:anywhere; line-height:1.35; }
 .voice-text.placeholder{ color:var(--ink-soft); }
 .voice-field.listening{ border-color:#d33; animation:mic-pulse 1.1s ease-in-out infinite; }
+.voice-field.error{ border-color:#d33; color:#b42318; }
+.voice-field.error .voice-text{ color:#b42318; }
 .voice-field.working{ opacity:.7; cursor:progress; }
 .voice-field-orig{ background:#fff; color:#374151; border-color:#e5e7eb; margin-bottom:0; box-shadow:0 10px 15px rgba(0,0,0,.1); }
 .voice-field-orig .voice-text.placeholder{ color:#9ca3af; }
@@ -1112,6 +1115,8 @@ function getStorage(name){
     console.error('How-to panel failed to initialize:', err);
   }
 })();
+
+
 
 const introVeil = document.getElementById('intro-veil');
 setTimeout(() => introVeil && introVeil.remove(), 1600);
@@ -1742,28 +1747,13 @@ function clickPress(event) {
 // Chrome/Edge/Safari: native SpeechRecognition (live interim text).
 // Firefox etc.: record with MediaRecorder, transcribe on-device with Whisper.
 (function initVoiceSearch(){
-
-if (window.AndroidSpeech) {
-  let active = false;
-  fields.forEach(f => f.addEventListener('click', () => {
-    if (active) { AndroidSpeech.stop(); return; }
-    active = true; setField('listening', 'Listening…');
-    AndroidSpeech.start(navigator.language || 'en-US');
-  }));
-  window.onNativeSpeech = (text, final) => {
-    if (!final) { setField('listening', text); return; }
-    active = false; submitTranscript(text);
-  };
-  window.onNativeSpeechError = () => { active = false; setField('', ''); };
-  return;
-}
-
   const AUTO_SEARCH = false;   // true = search immediately after transcribing
   const fields = document.querySelectorAll('.voice-field');
   if(!fields.length) return;
   const IDLE_TEXT = 'Tap to speak…';
 
   function setField(state, text){   // state: '' | 'listening' | 'working'
+    if(state) fields.forEach(f => f.classList.remove('error'));
     fields.forEach(f => {
       f.classList.toggle('listening', state === 'listening');
       f.classList.toggle('working', state === 'working');
@@ -1772,6 +1762,19 @@ if (window.AndroidSpeech) {
       t.textContent = text || IDLE_TEXT;
       t.classList.toggle('placeholder', !text);
     });
+  }
+  // Errors are shown inside the field: pop-up dialogs are silently swallowed by many
+  // Android WebViews, which made failures look like "nothing happens".
+  let errTimer = null;
+  function showError(msg){
+    console.error('Voice search:', msg);
+    setField('', msg);
+    fields.forEach(f => f.classList.add('error'));
+    clearTimeout(errTimer);
+    errTimer = setTimeout(() => {
+      fields.forEach(f => f.classList.remove('error'));
+      setField('', '');
+    }, 7000);
   }
   function submitTranscript(text){
     text = (text || '').trim();
@@ -1789,7 +1792,59 @@ if (window.AndroidSpeech) {
   // Firefox can expose SpeechRecognition behind a flag but has no speech service,
   // so start() silently does nothing — always use the recording fallback there.
   const isFirefox = /firefox|fxios/i.test(navigator.userAgent);
-  const SR = isFirefox ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+  // Android WebView (UA contains "wv") has no working SpeechRecognition either.
+  const isWebView = /; wv\)|\bwv\b/i.test(navigator.userAgent);
+  const SR = (isFirefox || isWebView) ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+  // ---- Android app: native recognizer via the AndroidSpeech JavaScript bridge ----
+  // Kotlin side: webView.addJavascriptInterface(SpeechBridge(...), "AndroidSpeech") and it
+  // calls window.onNativeSpeech(text, isFinal) / window.onNativeSpeechError(code).
+  if(window.AndroidSpeech){
+    let active = false, watchdog = null;
+    const done = () => { active = false; clearTimeout(watchdog); };
+    const armWatchdog = () => {
+      clearTimeout(watchdog);
+      watchdog = setTimeout(() => {
+        if(!active) return;
+        active = false;
+        try{ AndroidSpeech.stop(); }catch(e){}
+        showError('The app did not answer. Check the microphone permission and that a speech service is installed.');
+      }, 12000);
+    };
+    window.onNativeSpeech = (text, isFinal) => {
+      armWatchdog();
+      if(!isFinal){ setField('listening', text); return; }
+      done(); submitTranscript(text);
+    };
+    window.onNativeSpeechError = (code) => {
+      done();
+      const msgs = {
+        unavailable: 'No speech service found on this device (Android: install/enable the Google app).',
+        '9': 'Microphone permission missing. Allow it in the Android app settings.',
+        '7': 'Nothing recognized. Try again.',
+        '6': 'No speech heard. Try again.',
+        '2': 'Network problem — speech recognition needs internet.',
+        '3': 'Audio recording error.',
+        '5': 'Speech recognizer client error.',
+        '8': 'Speech recognizer busy. Try again in a moment.',
+        '10': 'Too many requests. Try again in a moment.',
+        '12': 'Language not supported by the speech service.',
+        '13': 'Language pack not installed.'
+      };
+      if(code === '6' || code === '7') { setField('', ''); return; }
+      showError(msgs[String(code)] || ('Speech recognition error (' + code + ').'));
+    };
+    fields.forEach(f => f.addEventListener('click', () => {
+      if(active){ try{ AndroidSpeech.stop(); }catch(e){} return; }
+      active = true;
+      setField('listening', 'Listening…');
+      armWatchdog();
+      try{ AndroidSpeech.start(navigator.language || 'en-US'); }
+      catch(err){ done(); showError('Could not call the app: ' + err.message); }
+    }));
+    console.info('Voice search mode: Android bridge');
+    return;
+  }
+
   console.info('Voice search mode:', SR ? 'native SpeechRecognition' : 'recording + Whisper fallback');
 
   if(SR){
@@ -1816,7 +1871,7 @@ if (window.AndroidSpeech) {
     recognition.addEventListener('error', e => {
       if(e.error === 'no-speech' || e.error === 'aborted') return;
       setField('', '');
-      alert(e.error === 'not-allowed'
+      showError(e.error === 'not-allowed'
         ? 'Microphone access was denied. Allow it in your browser settings.'
         : 'Voice recognition failed (' + e.error + ').');
     });
@@ -1896,8 +1951,7 @@ if (window.AndroidSpeech) {
           submitTranscript(out.text);
         }catch(err){
           console.error('Voice search failed at "' + step + '":', err);
-          setField('', '');
-          alert('Voice search failed at "' + step + '": ' + (err && err.message ? err.message : err));
+          showError('Voice search failed at "' + step + '": ' + (err && err.message ? err.message : err));
         }finally{
           busy = false;
         }
@@ -1905,8 +1959,7 @@ if (window.AndroidSpeech) {
       recorder.start();
       setField('listening', 'Recording… click to stop');
     }catch(err){
-      setField('', '');
-      alert(err.name === 'NotAllowedError'
+      showError(err.name === 'NotAllowedError'
         ? 'Microphone access was denied. Allow it in your browser settings.'
         : 'Could not start recording: ' + err.message);
     }
