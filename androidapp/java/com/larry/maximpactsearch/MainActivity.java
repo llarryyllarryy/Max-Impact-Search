@@ -31,7 +31,8 @@ CookieManager.getInstance().setAcceptCookie(true);
 
 
         webView.setLongClickable(true);
-webView.addJavascriptInterface(SpeechBridge(this,webView), "AndroidSpeech");
+speechBridge = new SpeechBridge(this, webView);
+webView.addJavascriptInterface(speechBridge, "AndroidSpeech");
 
 
 
