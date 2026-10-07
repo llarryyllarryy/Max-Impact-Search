@@ -1,13 +1,12 @@
 package com.larry.maximpactsearch;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.webkit.WebResourceRequest;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,20 +19,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+CookieManager.getInstance().setAcceptCookie(true);
 
         webView = (WebView)findViewById(R.id.web);
 
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setDomStorageEnabled(true);
 
-webView.getSettings().setDomStorageEnabled(true); 
-        
+
+
         webView.setLongClickable(true);
+webView.addJavascriptInterface(SpeechBridge(this,webView), "AndroidSpeech");
 
 
 
-webView.loadUrl("file:///android_asset/index.html"); 
-   }
+        webView.loadUrl("file:///android_asset/index.html");
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
