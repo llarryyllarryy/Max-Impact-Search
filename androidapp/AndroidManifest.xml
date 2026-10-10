@@ -50,7 +50,7 @@
         tools:ignore="MissingClass" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
 
     <!-- Android 11+ (API 30+): lets isRecognitionAvailable() / SpeechRecognizer see the device's speech service -->
     <queries>
