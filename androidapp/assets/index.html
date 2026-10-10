@@ -10,7 +10,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
-
 #cookie-notice{
   position:fixed; left:78px; bottom:20px; z-index:180;
   max-width:280px; background:var(--paper);
@@ -483,7 +482,47 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 }
 #toast.show{ opacity:1; transform:translate(-50%, 0); }
 
+/* personal search counter sits where the visitor pill used to be; the visitor pill (only with ?visitor) moves below it */
+#search-counter{
+  position:fixed; top:76px; right:16px; z-index:150; cursor:pointer;
+  background:var(--paper); color:var(--ink-soft); border:1px solid var(--line);
+  padding:6px 14px; border-radius:100px; font-size:.76rem; font-family:'Space Mono', monospace;
+  box-shadow:0 8px 18px rgba(0,0,0,.1);
+  opacity:0; transform:translateY(-8px); transition:opacity .4s ease, transform .4s ease, border-color .2s ease;
+  -webkit-appearance:none; appearance:none;
+}
+#search-counter.show{ opacity:1; transform:translateY(0); }
+#search-counter:hover{ border-color:var(--gold); }
 
+
+#shareOverlay{
+  position:fixed; inset:0; z-index:254; background:rgba(0,0,0,.45);
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+#shareOverlay.open{ opacity:1; pointer-events:auto; }
+#sharePanel{
+  position:fixed; z-index:255; width:400px; max-width:92vw; max-height:94vh; overflow:auto; left:50%; top:50%;
+  transform:translate(-50%,-46%) scale(.96); background:var(--paper); border:1px solid var(--line);
+  border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.3); padding:20px 22px;
+  opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+}
+#sharePanel.open{ opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+#sharePanel .share-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+#sharePanel .share-title{ font-size:1.05rem; font-weight:700; color:var(--ink); margin:0; }
+#sharePanel .share-close{ background:none; border:none; font-size:17px; cursor:pointer; color:var(--ink-soft); padding:4px; }
+#shareCanvas{ width:100%; height:auto; aspect-ratio:1/1; border-radius:12px; display:block; background:#1B4332; }
+.share-actions{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+.share-actions button{
+  flex:1; min-width:120px; background:var(--forest); color:#fff !important; border:none; border-radius:10px;
+  padding:11px 14px; font-size:.84rem; font-weight:600; cursor:pointer; transition:opacity .2s ease;
+  -webkit-appearance:none; appearance:none;
+}
+.share-actions button:hover{ opacity:.88; }
+.share-actions button:disabled{ opacity:.45; cursor:not-allowed; }
+.share-actions button[hidden]{ display:none; }
+#shareNote{ font-size:.74rem; color:var(--ink-soft); line-height:1.45; margin:12px 0 0; }
+#shareResetBtn{ background:none; border:none; color:var(--ink-soft); text-decoration:underline; cursor:pointer; font:inherit; font-size:.74rem; padding:0; margin-top:8px; }
+ 
 .wave-divider{ position:relative; height:70px; margin-top:-70px; overflow:hidden; pointer-events:none; z-index:2; }
 .wave-divider svg{ width:100%; height:100%; display:block; }
 .wave-divider path{ fill:var(--cream); }
@@ -917,6 +956,20 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
   <button id="cookieNoticeDismiss">Got it</button>
 </div>
 
+<div id="shareOverlay"></div>
+<div id="sharePanel" role="dialog" aria-label="Your impact">
+  <div class="share-header">
+    <p class="share-title">Your impact 🌱</p>
+    <button type="button" id="shareCloseBtn" class="share-close" aria-label="Close">✕</button>
+  </div>
+  <canvas id="shareCanvas" width="1080" height="1080"></canvas>
+  <div class="share-actions">
+    <button type="button" id="shareDownloadBtn">Download image</button>
+    <button type="button" id="shareShareBtn" hidden>Share…</button>
+  </div>
+  <p id="shareNote"></p>
+  <button type="button" id="shareResetBtn">Reset counter</button>
+</div>
 <div id="howToOverlay"></div>
 <div id="howToPanel">
   <div class="howto-header">
@@ -968,7 +1021,6 @@ function setStorage(name, value){
 function getStorage(name){
   try{ return localStorage.getItem(name); }catch(e){ return null; }
 }
-
 
 
 (function initEngineSettings(){
@@ -1728,6 +1780,8 @@ function open5() {
 
   const term = input.value.trim();
   recordSearchHistory(term);
+  try{ localStorage.setItem('search_count', String((parseInt(localStorage.getItem('search_count') || '0', 10) || 0) + 1)); }catch(e){ /* storage unavailable */ }
+  document.dispatchEvent(new Event('searchcountchange'));
   const x = encodeURIComponent(term);
   const candidates = buildEngineLinks(x);
   const chosen = candidates[Math.floor(Math.random() * candidates.length)];
@@ -1739,6 +1793,140 @@ function clickPress(event) {
   if (event.keyCode == 13) { open5(); }
 }
 
+
+// ---- Search counter + shareable "impact" image ------------------------------
+// Counts searches made from this browser (localStorage only, never sent anywhere),
+// shows them in the pill at the top right, and turns the number into a PNG
+// ("I made N searches that donated to good deeds") the visitor can download/share.
+(function initImpactShare(){
+  const SITE_LABEL = 'llarryyllarryy.github.io/Max-Impact-Search';
+  const getCount = () => { try{ return parseInt(localStorage.getItem('search_count') || '0', 10) || 0; }catch(e){ return 0; } };
+  const word = n => n === 1 ? 'search' : 'searches';
+
+  const badge = document.createElement('button');
+  badge.type = 'button';
+  badge.id = 'search-counter';
+  badge.title = 'Click to create a shareable image of your impact';
+  document.body.appendChild(badge);
+  function renderBadge(){
+    badge.textContent = '🌱 ' + getCount() + ' ' + word(getCount());
+  }
+  renderBadge();
+  requestAnimationFrame(() => badge.classList.add('show'));
+  document.addEventListener('searchcountchange', renderBadge);
+
+  const overlay = document.getElementById('shareOverlay');
+  const panel = document.getElementById('sharePanel');
+  const canvas = document.getElementById('shareCanvas');
+  const dlBtn = document.getElementById('shareDownloadBtn');
+  const shBtn = document.getElementById('shareShareBtn');
+  const resetBtn = document.getElementById('shareResetBtn');
+  const closeBtn = document.getElementById('shareCloseBtn');
+  const note = document.getElementById('shareNote');
+  if(!overlay || !panel || !canvas) return;
+
+  function drawImage(n){
+    const S = 1080, ctx = canvas.getContext('2d');
+    canvas.width = S; canvas.height = S;
+    const g = ctx.createLinearGradient(0, 0, S, S);
+    g.addColorStop(0, '#1B4332'); g.addColorStop(1, '#2D6A4F');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+    // soft decorative circles
+    ctx.fillStyle = 'rgba(232,163,61,.16)';
+    ctx.beginPath(); ctx.arc(S - 90, 120, 260, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.06)';
+    ctx.beginPath(); ctx.arc(60, S - 80, 330, 0, Math.PI * 2); ctx.fill();
+
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    const serif = "Fraunces, Georgia, 'Times New Roman', serif";
+    const sans = "'Work Sans', 'Segoe UI', Arial, sans-serif";
+    const mono = "'Space Mono', 'Courier New', monospace";
+
+    ctx.fillStyle = '#E8A33D';
+    ctx.font = '700 34px ' + mono;
+    if('letterSpacing' in ctx) ctx.letterSpacing = '6px';
+    ctx.fillText('MAXIMPACTSEARCH', S / 2, 130);
+    if('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+
+    ctx.font = '140px ' + sans;           // emoji
+    ctx.fillText('🌍', S / 2, 330);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '500 64px ' + serif;
+    ctx.fillText('I made', S / 2, 440);
+
+    // big number, shrunk until it fits the width
+    const numText = String(n);
+    let size = 300;
+    ctx.font = '700 ' + size + 'px ' + serif;
+    while(ctx.measureText(numText).width > 880 && size > 80){ size -= 10; ctx.font = '700 ' + size + 'px ' + serif; }
+    ctx.fillStyle = '#F6C26B';
+    ctx.fillText(numText, S / 2, 440 + 40 + size * 0.78);
+
+    const y = 440 + 40 + size * 0.78 + 90;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '500 66px ' + serif;
+    ctx.fillText(word(n) + ' that donated', S / 2, y);
+    ctx.fillText('to good deeds 🌱', S / 2, y + 84);
+
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.font = '500 30px ' + sans;
+    ctx.fillText('Search & donate at ' + SITE_LABEL, S / 2, S - 70);
+  }
+
+  function toBlob(){ return new Promise(res => canvas.toBlob(res, 'image/png')); }
+
+  async function open(){
+    const n = getCount();
+    try{ await Promise.all([document.fonts.load('700 200px Fraunces'), document.fonts.load('500 40px Fraunces'), document.fonts.load('700 30px "Space Mono"'), document.fonts.load('500 30px "Work Sans"')]); }catch(e){}
+    drawImage(n);
+    dlBtn.disabled = shBtn.disabled = n === 0;
+    note.textContent = n === 0 ? 'Make your first search and your image will show your impact.' :
+      'Counted only in this browser — stored on your device, never sent anywhere.';
+    overlay.classList.add('open'); panel.classList.add('open');
+  }
+  function close(){ overlay.classList.remove('open'); panel.classList.remove('open'); }
+
+  badge.addEventListener('click', open);
+  overlay.addEventListener('click', close);
+  closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
+
+  dlBtn.addEventListener('click', async () => {
+    const blob = await toBlob();
+    if(!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'maximpactsearch-impact.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  });
+
+  // Share sheet (mobile browsers): only offered where files can be shared
+  async function canShareFiles(){
+    if(!navigator.canShare || !navigator.share) return false;
+    try{ return navigator.canShare({ files: [new File([new Blob()], 'x.png', { type: 'image/png' })] }); }catch(e){ return false; }
+  }
+  canShareFiles().then(ok => { shBtn.hidden = !ok; });
+  shBtn.addEventListener('click', async () => {
+    const blob = await toBlob();
+    if(!blob) return;
+    const n = getCount();
+    try{
+      await navigator.share({
+        files: [new File([blob], 'maximpactsearch-impact.png', { type: 'image/png' })],
+        text: 'I made ' + n + ' ' + word(n) + ' that donated to good deeds 🌱 ' + SITE_LABEL
+      });
+    }catch(e){ /* user cancelled */ }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    if(!confirm('Reset your search counter to 0?')) return;
+    try{ localStorage.removeItem('search_count'); }catch(e){}
+    document.dispatchEvent(new Event('searchcountchange'));
+    open();
+  });
+})();
 
 // ---- Voice search ----------------------------------------------------------
 // A transcription field above the search bar (same width). Click it to speak;
