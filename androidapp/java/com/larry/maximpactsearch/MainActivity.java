@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         // sonst findet die Seite window.AndroidSpeech nicht.
         speechBridge = new SpeechBridge(this, webView);
         webView.addJavascriptInterface(speechBridge, "AndroidSpeech");
-
+webView.addJavascriptInterface(new ShareBridge(this), "AndroidShare");
         webView.loadUrl("file:///android_asset/index.html");
     }
 
