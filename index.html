@@ -1849,7 +1849,7 @@ function get(parameterName) {
   var items = location.search.substr(1).split("&");
   for (var index = 0; index < items.length; index++) {
     tmp = items[index].split("=");
-    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    if (tmp[0] === parameterName) result = decodeURIComponent((tmp[1] || '').replace(/\+/g, ' '));  // browsers may send spaces as '+'
   }
   return result;
 }
@@ -1974,6 +1974,12 @@ function clickPress(event) {
 
   function toBlob(){ return new Promise(res => canvas.toBlob(res, 'image/png')); }
 
+  // Android app: WebViews ignore blob: downloads and have no share sheet, so the image
+  // is handed to the app (window.AndroidShare, see ShareBridge.java) as plain base64.
+  const nativeShare = !!(window.AndroidShare && window.AndroidShare.saveImage && window.AndroidShare.shareImage);
+  const toBase64 = () => canvas.toDataURL('image/png').split(',')[1];
+  const shareText = n => 'I made ' + n + ' ' + word(n) + ' that donated to good deeds 🌱 ' + SITE_LABEL;
+
   async function open(){
     const n = getCount();
     try{ await Promise.all([document.fonts.load('700 200px Fraunces'), document.fonts.load('500 40px Fraunces'), document.fonts.load('700 30px "Space Mono"'), document.fonts.load('500 30px "Work Sans"')]); }catch(e){}
@@ -1991,6 +1997,11 @@ function clickPress(event) {
   document.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
 
   dlBtn.addEventListener('click', async () => {
+    if(nativeShare){
+      try{ AndroidShare.saveImage(toBase64(), 'maximpactsearch-impact'); }
+      catch(e){ console.error('AndroidShare.saveImage failed:', e); }
+      return;
+    }
     const blob = await toBlob();
     if(!blob) return;
     const url = URL.createObjectURL(blob);
@@ -2005,15 +2016,21 @@ function clickPress(event) {
     if(!navigator.canShare || !navigator.share) return false;
     try{ return navigator.canShare({ files: [new File([new Blob()], 'x.png', { type: 'image/png' })] }); }catch(e){ return false; }
   }
-  canShareFiles().then(ok => { shBtn.hidden = !ok; });
+  if(nativeShare) shBtn.hidden = false;
+  else canShareFiles().then(ok => { shBtn.hidden = !ok; });
   shBtn.addEventListener('click', async () => {
+    if(nativeShare){
+      try{ AndroidShare.shareImage(toBase64(), shareText(getCount())); }
+      catch(e){ console.error('AndroidShare.shareImage failed:', e); }
+      return;
+    }
     const blob = await toBlob();
     if(!blob) return;
     const n = getCount();
     try{
       await navigator.share({
         files: [new File([blob], 'maximpactsearch-impact.png', { type: 'image/png' })],
-        text: 'I made ' + n + ' ' + word(n) + ' that donated to good deeds 🌱 ' + SITE_LABEL
+        text: shareText(n)
       });
     }catch(e){ /* user cancelled */ }
   });
