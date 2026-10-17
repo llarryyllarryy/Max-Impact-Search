@@ -318,6 +318,13 @@ section{padding:120px 6vw; position:relative;}
 .cta{text-align:center;}
 .cta h2{font-size:clamp(1.9rem,4vw,2.8rem); margin-bottom:16px;}
 .cta p{ max-width:520px; margin:0 auto 40px; line-height:1.6; color:var(--ink-soft); }
+.cta-links{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:26px; }
+.cta-link{
+  display:inline-block; padding:11px 22px; border-radius:100px; font-size:.9rem; font-weight:600;
+  text-decoration:none; color:var(--ink) !important; background:var(--paper); border:1.5px solid var(--line);
+  transition:border-color .25s ease, transform .2s ease, box-shadow .25s ease;
+}
+.cta-link:hover{ border-color:var(--gold); transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.1); }
 footer{ text-align:center; padding:50px 6vw 60px; font-size:.85rem; color:var(--ink-soft); }
 footer .heart{color:var(--gold);}
 @media (max-width: 760px){
@@ -493,7 +500,6 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
 }
 #search-counter.show{ opacity:1; transform:translateY(0); }
 #search-counter:hover{ border-color:var(--gold); }
-
 
 #shareOverlay{
   position:fixed; inset:0; z-index:254; background:rgba(0,0,0,.45);
@@ -680,7 +686,6 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
     <div class="eyebrow">Your search engine for a good deed</div>
     <h1><span>Search.</span> <span>Find.</span> <span class="shimmer-word">Donate.</span></h1>
     <p class="lede">Make a good deed with every search — free and simple. The search engine that turns everyday clicks into real-world change.</p>
-    <br /><br />
   </div>
 
   <div class="search-wrap" id="wrap">
@@ -798,6 +803,10 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
     <p>Transform your digital footprint. Switch to MaxImpactSearch and begin donating for free — with every single search.</p>
     <p class="text-sm opacity-90">https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=Searchterm</p>
     <p class="text-sm mt-6 opacity-70">Use this link as custom search engine. <button type="button" class="howto-open-btn">How do I set this up?</button></p>
+    <div class="cta-links">
+      <a class="cta-link" href="https://chromewebstore.google.com/detail/max-impact-search/gohinaobbiojikbamjlolgngdhlofndi" target="_blank" rel="noopener noreferrer">🧩 Get the Chrome extension</a>
+      <a class="cta-link" href="https://addons.mozilla.org/de/firefox/addon/max-impact-search/" target="_blank" rel="noopener noreferrer">🦊 Get the Firefox add-on</a>
+    </div>
   </div>
 </section>
 
@@ -916,6 +925,10 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
       </p>
       <p class="text-sm opacity-90">https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=Searchterm</p>
       <p class="text-sm mt-6 opacity-70">Use this link as custom search engine. <button type="button" class="howto-open-btn" style="color:#fff; text-decoration:underline; background:none; border:none; cursor:pointer; font:inherit;">How do I set this up?</button></p>
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-3 mt-8">
+        <a href="https://chromewebstore.google.com/detail/max-impact-search/gohinaobbiojikbamjlolgngdhlofndi" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-full transition duration-300">🧩 Get the Chrome extension</a>
+        <a href="https://addons.mozilla.org/de/firefox/addon/max-impact-search/" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-full transition duration-300">🦊 Get the Firefox add-on</a>
+      </div>
     </div>
   </section>
 
@@ -1169,7 +1182,27 @@ function getStorage(name){
   }
 })();
 
-
+(function initAndroidAppBanner(){
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if(!isAndroid) return;
+  if(getStorage('android_app_banner_seen')) return;
+  const banner = document.getElementById('android-app-banner');
+  const getBtn = document.getElementById('androidAppGetBtn');
+  const closeBtn = document.getElementById('androidAppCloseBtn');
+  function showBanner(){
+    document.documentElement.style.setProperty('--android-banner-height', banner.offsetHeight + 'px');
+    document.body.classList.add('android-banner-visible');
+    banner.classList.add('show');
+  }
+  function dismissBanner(){
+    banner.classList.remove('show');
+    document.body.classList.remove('android-banner-visible');
+    setStorage('android_app_banner_seen', '1');
+  }
+  setTimeout(showBanner, 800);
+  closeBtn.addEventListener('click', dismissBanner);
+  getBtn.addEventListener('click', dismissBanner);
+})();
 
 const introVeil = document.getElementById('intro-veil');
 setTimeout(() => introVeil && introVeil.remove(), 1600);
@@ -1752,7 +1785,7 @@ function get(parameterName) {
   var items = location.search.substr(1).split("&");
   for (var index = 0; index < items.length; index++) {
     tmp = items[index].split("=");
-    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    if (tmp[0] === parameterName) result = decodeURIComponent((tmp[1] || '').replace(/\+/g, ' '));  // browsers may send spaces as '+'
   }
   return result;
 }
