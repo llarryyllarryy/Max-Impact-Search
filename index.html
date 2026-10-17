@@ -325,6 +325,13 @@ section{padding:120px 6vw; position:relative;}
 .cta{text-align:center;}
 .cta h2{font-size:clamp(1.9rem,4vw,2.8rem); margin-bottom:16px;}
 .cta p{ max-width:520px; margin:0 auto 40px; line-height:1.6; color:var(--ink-soft); }
+.cta-links{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:26px; }
+.cta-link{
+  display:inline-block; padding:11px 22px; border-radius:100px; font-size:.9rem; font-weight:600;
+  text-decoration:none; color:var(--ink) !important; background:var(--paper); border:1.5px solid var(--line);
+  transition:border-color .25s ease, transform .2s ease, box-shadow .25s ease;
+}
+.cta-link:hover{ border-color:var(--gold); transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.1); }
 footer{ text-align:center; padding:50px 6vw 60px; font-size:.85rem; color:var(--ink-soft); }
 footer .heart{color:var(--gold);}
 @media (max-width: 760px){
@@ -708,7 +715,6 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
     <div class="eyebrow">Your search engine for a good deed</div>
     <h1><span>Search.</span> <span>Find.</span> <span class="shimmer-word">Donate.</span></h1>
     <p class="lede">Make a good deed with every search — free and simple. The search engine that turns everyday clicks into real-world change.</p>
-    <br /><br />
   </div>
 
   <div class="search-wrap" id="wrap">
@@ -826,6 +832,10 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
     <p>Transform your digital footprint. Switch to MaxImpactSearch and begin donating for free — with every single search.</p>
     <p class="text-sm opacity-90">https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=Searchterm</p>
     <p class="text-sm mt-6 opacity-70">Use this link as custom search engine. <button type="button" class="howto-open-btn">How do I set this up?</button></p>
+    <div class="cta-links">
+      <a class="cta-link" href="https://chromewebstore.google.com/detail/max-impact-search/gohinaobbiojikbamjlolgngdhlofndi" target="_blank" rel="noopener noreferrer">🧩 Get the Chrome extension</a>
+      <a class="cta-link" href="https://addons.mozilla.org/de/firefox/addon/max-impact-search/" target="_blank" rel="noopener noreferrer">🦊 Get the Firefox add-on</a>
+    </div>
   </div>
 </section>
 
@@ -944,6 +954,10 @@ body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-ba
       </p>
       <p class="text-sm opacity-90">https://llarryyllarryy.github.io/Max-Impact-Search/index.html?search=Searchterm</p>
       <p class="text-sm mt-6 opacity-70">Use this link as custom search engine. <button type="button" class="howto-open-btn" style="color:#fff; text-decoration:underline; background:none; border:none; cursor:pointer; font:inherit;">How do I set this up?</button></p>
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-3 mt-8">
+        <a href="https://chromewebstore.google.com/detail/max-impact-search/gohinaobbiojikbamjlolgngdhlofndi" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-full transition duration-300">🧩 Get the Chrome extension</a>
+        <a href="https://addons.mozilla.org/de/firefox/addon/max-impact-search/" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-full transition duration-300">🦊 Get the Firefox add-on</a>
+      </div>
     </div>
   </section>
 
