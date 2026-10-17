@@ -4,6 +4,8 @@
 - ⚡ [Start the Search Engine](https://llarryyllarryy.github.io/Max-Impact-Search/?)
 - ⚡ [Start Donating for Free](https://llarryyllarryy.github.io/nocostdonate/)
 - ⚡ Download Android App: [Playstore](https://play.google.com/store/apps/details?id=com.larry.maximpactsearch) | [Github](https://github.com/llarryyllarryy/Max-Impact-Search/raw/main/androidapp/bin/app-release.apk)
+- ⚡ Get the Extension: [Firefox Addon](https://addons.mozilla.org/de/firefox/addon/max-impact-search/) | [Chrome Extension](https://chromewebstore.google.com/detail/max-impact-search/gohinaobbiojikbamjlolgngdhlofndi)
+
 
 - if you dont like the design you can use this page [Groovia](https://github.com/Noorendra9778/Groovia/blob/main/README.md)
 
