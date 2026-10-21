@@ -495,19 +495,6 @@ body[data-theme="original"] #fireflies, body[data-theme="original"] #cursor-glow
   z-index:250; white-space:nowrap;
 }
 #toast.show{ opacity:1; transform:translate(-50%, 0); }
-#visitor-counter {
-  position: fixed; top: 76px; right: 16px; z-index: 150;
-  background: var(--paper); color: var(--ink-soft); border: 1px solid var(--line);
-  padding: 6px 14px; border-radius: 100px; font-size: .76rem; font-family: 'Space Mono', monospace;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .1);
-  opacity: 0; transform: translateY(-8px); transition: opacity .4s ease, transform .4s ease;
-}
-#visitor-counter.show { opacity: 1; transform: translateY(0); }
-#visitor-counter{ display:flex; align-items:center; gap:4px; }
-#visitor-counter iframe{
-  border:none; background:transparent; width:40px; height:14px;
-  overflow:hidden; vertical-align:middle;
-}
 /* personal search counter sits where the visitor pill used to be; the visitor pill (only with ?visitor) moves below it */
 #search-counter{
   position:fixed; top:76px; right:16px; z-index:150; cursor:pointer;
@@ -549,7 +536,6 @@ body.android-banner-visible #visitor-counter{ top:calc(120px + var(--android-ban
 .share-actions button[hidden]{ display:none; }
 #shareNote{ font-size:.74rem; color:var(--ink-soft); line-height:1.45; margin:12px 0 0; }
 #shareResetBtn{ background:none; border:none; color:var(--ink-soft); text-decoration:underline; cursor:pointer; font:inherit; font-size:.74rem; padding:0; margin-top:8px; }
-body.android-banner-visible #visitor-counter { top: calc(76px + var(--android-banner-height, 0px)); }
 .wave-divider{ position:relative; height:70px; margin-top:-70px; overflow:hidden; pointer-events:none; z-index:2; }
 .wave-divider svg{ width:100%; height:100%; display:block; }
 .wave-divider path{ fill:var(--cream); }
@@ -1063,57 +1049,6 @@ function setStorage(name, value){
 function getStorage(name){
   try{ return localStorage.getItem(name); }catch(e){ return null; }
 }
-
-(function initVisitorCounter() {
-  // Hidden iframe: loading counter.php?count=1 is a real page navigation, so the
-  // host's browser check can run (fetch / beacon / script requests can't pass it).
-  // The page shows only the number and counts this visit.
-  // On ?visitor=... a badge also shows the number, read via a second iframe
-  // (counter.php without ?count=1) that only displays and never counts.
-  // Blockers may still stop the hidden iframe; those visits are not counted.
-  const counterEndpoint = 'https://maximpactsearch.page.gd/counter.php';
-  const isGetRequestVisitor = new URLSearchParams(window.location.search).has('visitor');
-
-  function makeFrame(src, visible) {
-    const f = document.createElement('iframe');
-    f.src = src;
-    f.title = 'visitor counter';
-    f.setAttribute('aria-hidden', 'true');
-    f.setAttribute('tabindex', '-1');
-    f.loading = 'eager';
-    f.referrerPolicy = 'no-referrer';
-    if (visible) {
-      f.style.cssText = 'border:none;background:transparent;width:56px;height:16px;overflow:hidden;';
-    } else {
-      // 1x1 + opacity 0 (not 0x0 / display:none) so browsers still load it
-      f.style.cssText = 'position:fixed;bottom:0;left:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none;';
-    }
-    return f;
-  }
-
-  function showBadge() {
-    const badge = document.createElement('div');
-    badge.id = 'visitor-counter';
-    badge.append('👀 Visitor #');
-    badge.appendChild(makeFrame(counterEndpoint + '?_=' + Date.now(), true));
-    document.body.appendChild(badge);
-    requestAnimationFrame(() => badge.classList.add('show'));
-  }
-
-  function start() {
-    const countFrame = makeFrame(counterEndpoint + '?count=1&_=' + Date.now(), false);
-    if (isGetRequestVisitor) {
-      // show the number only after the counting request finished
-      let shown = false;
-      const go = () => { if (!shown) { shown = true; showBadge(); } };
-      countFrame.addEventListener('load', go);
-      setTimeout(go, 4000);
-    }
-    document.body.appendChild(countFrame);
-  }
-
-  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
-})();
 
 (function initEngineSettings(){
   try{
@@ -2285,5 +2220,6 @@ function clickPress(event) {
 
 </script>
 
+<script src="visitor-counter.js" defer data-endpoint="https://maximpactsearch.page.gd/counter.php"></script>
 </body>
 </html>
