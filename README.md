@@ -5,6 +5,7 @@
 - ⚡ [Start Donating for Free](https://llarryyllarryy.github.io/nocostdonate/)
 - ⚡ Download Android App: [Playstore](https://play.google.com/store/apps/details?id=com.larry.maximpactsearch) | [Github](https://github.com/llarryyllarryy/Max-Impact-Search/raw/main/androidapp/bin/app-release.apk)
 - ⚡ Get the Extension: [Firefox Addon](https://addons.mozilla.org/de/firefox/addon/max-impact-search/) | [Chrome Extension](https://chromewebstore.google.com/detail/max-impact-search/gohinaobbiojikbamjlolgngdhlofndi)
+- Add the [Discord Bot](https://discord.com/oauth2/authorize?client_id=1451261211214614695) to your Server
 
 
 - if you dont like the design you can use this page [Groovia](https://github.com/Noorendra9778/Groovia/blob/main/README.md)
