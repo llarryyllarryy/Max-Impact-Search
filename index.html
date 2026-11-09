@@ -764,7 +764,7 @@ body.android-banner-visible #visitor-counter{ top:calc(120px + var(--android-ban
       <div class="icon">🌳</div>
       <div>
         <h3>Environmental Protection</h3>
-        <p>Support for projects that <a href="https://de.blog.ecosia.org/ecosia-finanzberichte-baumplanzbelege/" target="_blank" rel="noopener">rebuild forests</a> and fund <a href="https://oceanhero.today/about-us/certificates" target="_blank" rel="noopener">ocean rescue</a> - <a href="https://ekoru.org/cause/" target="_blank">combined efforts</a> worldwide.</p>
+        <p>Support for projects that <a href="https://de.blog.ecosia.org/ecosia-finanzberichte-baumplanzbelege/" target="_blank" rel="noopener">rebuild forests</a> and fund <a href="https://oceanhero.today/about-us/certificates" target="_blank" rel="noopener">ocean rescue</a></p>
       </div>
     </div>
     <div class="partner-card reveal" style="transition-delay:.1s">
@@ -900,7 +900,7 @@ body.android-banner-visible #visitor-counter{ top:calc(120px + var(--android-ban
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
           <img src="https://placehold.co/100x100/A78BFA/FFFFFF?text=Environmental" alt="Umweltschutz-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
           <h4 class="text-xl font-semibold text-gray-800 mb-2">Environmental Protection</h4>
-          <p class="text-gray-600 text-sm">Support of Projects to <a href="https://de.blog.ecosia.org/ecosia-finanzberichte-baumplanzbelege/" target="_blank">rebuild forests</a> and <a href="https://oceanhero.today/about-us/certificates" target="_blank">Ocean Rescue</a> - <a href="https://ekoru.org/cause/" target="_blank">combined efforts</a></p>
+          <p class="text-gray-600 text-sm">Support of Projects to <a href="https://de.blog.ecosia.org/ecosia-finanzberichte-baumplanzbelege/" target="_blank">rebuild forests</a> and <a href="https://oceanhero.today/about-us/certificates" target="_blank">Ocean Rescue</a></p>
         </div>
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col items-center text-center transition duration-300 hover:shadow-lg">
           <img src="https://placehold.co/100x100/60A5FA/FFFFFF?text=Education" alt="Bildungs-Icon" class="w-24 h-24 mb-4 rounded-full object-cover">
@@ -967,7 +967,7 @@ body.android-banner-visible #visitor-counter{ top:calc(120px + var(--android-ban
   <label><input type="checkbox" data-engine="oceanhero"> Ocean</label>
   <label><input type="checkbox" data-engine="rapusia"> School Materials</label>
   <label><input type="checkbox" data-engine="gexsi"> Combined Efforts Gexsi</label>
-  <label><input type="checkbox" data-engine="ekoru"> Combined Efforts Ekoru</label>
+  
   <button id="engineSelectAllBtn" type="button">Select all</button>
   <p class="engine-note">Applies to the Original theme's search redirect. Uncheck all but one to always use just that engine.</p>
 </div>
@@ -1028,8 +1028,7 @@ const ENGINES = [
   { key:'ecosia',     label:'Ecosia',     build:x => 'https://www.ecosia.org/search?method=index&q=' + x },
   { key:'oceanhero',  label:'OceanHero',  build:x => 'https://oceanhero.today/web?q=' + x },
   { key:'rapusia',    label:'Rapusia',    build:x => 'https://rapusia.org/?q=' + x },
-  { key:'gexsi',      label:'Gexsi',      build:x => 'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1' },
-  { key:'ekoru',      label:'Ekoru',      build:x => 'https://ekoru.org/?q=' + x }
+  { key:'gexsi',      label:'Gexsi',      build:x => 'https://gexsi.com/search/?q=' + x + '#gsc.tab=0&gsc.q=' + x + '&gsc.page=1' }
 ];
 const ALL_ENGINE_KEYS = ENGINES.map(e => e.key);
 
